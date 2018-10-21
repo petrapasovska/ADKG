@@ -137,18 +137,18 @@ bool Draw::importPolygons(std::string &path)
 
 void Draw::generatePolygon(int n_points, int coordinates_max)
 {
+    qDebug() << "Generate polygons start";
     // generate polygons by graham scan- dikobraz
     QPolygonF poly;
     QPointF point;
 
     //generate x points and save into vector
-    for(unsigned int i; i<n_points; i++)
+    for(unsigned int i = 0; i<n_points; i++)
     {
         point.setX(QRandomGenerator::global()->bounded(coordinates_max));
         point.setY(QRandomGenerator::global()->bounded(coordinates_max));
 
         poly.push_back(point);
-        qDebug() << "In generate";
         qDebug() << point.x() << point.y();
     }
 
@@ -156,25 +156,52 @@ void Draw::generatePolygon(int n_points, int coordinates_max)
     QPointF center;
     center.setX(QRandomGenerator::global()->bounded(coordinates_max));
     center.setY(QRandomGenerator::global()->bounded(coordinates_max));
-    //qDebug() << center.x() << center.y();
 
     // parralel axes with axes X
     QPointF centerX;
     centerX.setX(center.x()+coordinates_max);
     centerX.setY(center.y());
-    //qDebug() << centerX.x() << centerX.y();
-
-    // compute angle every point (center-centerX;center-point)
-    std::vector<double> angle;
-    for(unsigned int i; i<n_points; i++)
-    {
-        qDebug() << "In generate angle";
-    }
 
     // sort angle by size with index point
-
     // every polygon will have center and some points
+    QPolygonF polygo;
+    std::vector<double> angles;
+
+    for(unsigned int i = 0; i<n_points;i++)
+    {
+       double angle = Algorithms::get2LinesAngle(center,centerX,center,poly[i]);
+       angles.push_back(angle);
+    }
+
+    for(unsigned int i = 0;i<n_points;i++)
+    {
+        int n = selectMinIndex(angles);
+        polygo.append(poly[n]);
+        angles[n]=999;
+    }
+    polygo.append(center);
+
+    for(unsigned int i = 0;i<n_points;i++)
+    {
+        qDebug() << polygo[i];
+    }
+    qDebug() << center;
+    qDebug() << "Generate polygons stop";
 }
+
+int Draw::selectMinIndex(std::vector<double> v)
+    {
+        int min_position = 0;
+
+        for(unsigned int i = 0; i<v.size();i++)
+        {
+            if (v[i] < v[min_position]) // Found a smaller min
+            {
+                min_position = i;
+            }
+        }
+        return min_position;
+    }
 
 void Draw::fillPolygon(int res)
 {

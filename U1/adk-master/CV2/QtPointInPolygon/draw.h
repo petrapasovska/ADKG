@@ -31,6 +31,7 @@ public:
     bool importPolygons(std::string &path);
     void generatePolygon(int n_points, int coordinates_max);
     void fillPolygon(int res);
+    int selectMinIndex(std::vector<double> v);
 
 
 signals:

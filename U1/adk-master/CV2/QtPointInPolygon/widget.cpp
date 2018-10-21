@@ -74,5 +74,5 @@ void Widget::on_importPolygons_clicked()
 
 void Widget::on_generatePolygon_clicked()
 {
-    ui->Canvas->generatePolygon(10,500); // ui n_points, n_polygons, coordinates_max
+    ui->Canvas->generatePolygon(5,500); // ui n_points, n_polygons, coordinates_max
 }
