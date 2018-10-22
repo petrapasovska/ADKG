@@ -10,8 +10,8 @@ class Algorithms
 {
 public:
     Algorithms();
-    static int getPositionRay(QPointF q, std::vector<QPointF> pol);
-    static int getPositionWinding(QPointF q, std::vector<QPointF> pol);
+    static int getPositionRay(QPointF q, QPolygonF pol);
+    static int getPositionWinding(QPointF q, QPolygonF pol);
     static int getPointLinePosition(QPointF &q, QPointF &a, QPointF &b);
     static double get2LinesAngle(QPointF &p1,QPointF &p2,QPointF &p3, QPointF &p4);
 

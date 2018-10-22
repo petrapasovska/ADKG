@@ -23,38 +23,48 @@ void Draw::paintEvent(QPaintEvent *e)
     QPolygonF p;
 
     //Add points to the polygon
-    for(unsigned int i=0; i<pol.size(); i++)
+    for(int i=0; i<pol.size(); i++)
         p.append(pol[i]);
 
-    for(unsigned j = 0; j < polygons.size(); j++)
+    //Draw import polygons
+    for(int i = 0; i < polygons.size(); i++)
     {
         //Current polygon from file
-        QPolygonF this_polygon = polygons[j];
-        qDebug() << polygons.size();
+        QPolygonF this_polygon = polygons[i];
         //Draw polygon
         painter.drawPolygon(this_polygon);
     }
 
-    // color polygon if point is inside
-    if(result==1)
+    //Draw generate polygon
+    painter.drawPolygon(polygon_generate);
+
+    // set Brush
+    QPolygonF polygon_result;
+    QBrush brush;
+    brush.setColor(Qt::red);
+    brush.setStyle(Qt::SolidPattern);
+    QPainterPath path;
+
+    // Draw polygon with point inside
+    for(int i = 0; i < result.size(); i++)
     {
-        // Brush
-        QBrush brush;
-        brush.setColor(Qt::red);
-        brush.setStyle(Qt::SolidPattern);
-
-        // Fill polygon
-        QPainterPath path;
-        path.addPolygon(p);
-
-        painter.fillPath(path, brush);
+        if(result[i] == 1 /*|| result[i] == 2 || result[i] == 3*/)
+        {
+            for(int j = 0; j < polygons.size(); j++)
+                {
+                    polygon_result << polygons[j];
+                }
+                painter.drawPolygon(polygon_result);
+                painter.fillPath(path, brush);
+                polygon_result.clear();
+        }
     }
 
     // Draw polygon
     painter.drawPolygon(p);
 
     //Draw the points
-    for(unsigned int i=0; i<pol.size(); i++)
+    for(int i=0; i<pol.size(); i++)
         painter.drawEllipse(pol[i].x() - 5, pol[i].y() -5, 10, 10);
 
     //Draw q
@@ -97,7 +107,8 @@ void Draw::clearCanvas()
     pol.clear();
     q.setX(-5);
     q.setY(-5);
-
+    polygons.clear();
+    polygon_generate.clear();
     repaint();
 }
 
@@ -119,20 +130,27 @@ bool Draw::importPolygons(std::string &path)
         {
             if(n == 1)                      // if read vertex of new polygon, push_back vector pol to vector polygons
             {
-               polygons.push_back(polygon);
+               if(polygon.empty() == FALSE)
+               {
+                   polygons.push_back(polygon);
+               }
                polygon.clear();
                polygon << QPointF(x, y);
-               qDebug() << x << y;
             }
             else
             {
                 polygon << QPointF(x, y);
-                qDebug() << x << y;
             }
+        }
+
+        polygons.push_back(polygon); // save last polygon
+        polygon.clear();
+        for(int i = 0;i<polygons.size();i++)
+        {
+            qDebug() << polygons[i];
         }
         myfile.close();
     }
-    qDebug() << polygons.size();
 }
 
 void Draw::generatePolygon(int n_points, int coordinates_max)
@@ -143,13 +161,12 @@ void Draw::generatePolygon(int n_points, int coordinates_max)
     QPointF point;
 
     //generate x points and save into vector
-    for(unsigned int i = 0; i<n_points; i++)
+    for(int i = 0; i<n_points; i++)
     {
         point.setX(QRandomGenerator::global()->bounded(coordinates_max));
         point.setY(QRandomGenerator::global()->bounded(coordinates_max));
 
         poly.push_back(point);
-        qDebug() << point.x() << point.y();
     }
 
     // generate center of polygons
@@ -161,31 +178,31 @@ void Draw::generatePolygon(int n_points, int coordinates_max)
     QPointF centerX;
     centerX.setX(center.x()+coordinates_max);
     centerX.setY(center.y());
+    double sum_x = 0;
+    double sum_y = 0;
 
     // sort angle by size with index point
     // every polygon will have center and some points
-    QPolygonF polygo;
     std::vector<double> angles;
 
-    for(unsigned int i = 0; i<n_points;i++)
+    for(int i = 0; i<n_points;i++)
     {
        double angle = Algorithms::get2LinesAngle(center,centerX,center,poly[i]);
        angles.push_back(angle);
+       sum_x += poly[i].x();
+       sum_y += poly[i].y();
     }
 
-    for(unsigned int i = 0;i<n_points;i++)
+    for(int i = 0;i<n_points;i++)
     {
         int n = selectMinIndex(angles);
-        polygo.append(poly[n]);
+        polygon_generate.append(poly[n]);
         angles[n]=999;
     }
-    polygo.append(center);
+    polygon_generate.append(center);
+    centerX.setX(sum_x/n_points);
+    centerX.setY(sum_y/n_points);
 
-    for(unsigned int i = 0;i<n_points;i++)
-    {
-        qDebug() << polygo[i];
-    }
-    qDebug() << center;
     qDebug() << "Generate polygons stop";
 }
 
@@ -193,7 +210,7 @@ int Draw::selectMinIndex(std::vector<double> v)
     {
         int min_position = 0;
 
-        for(unsigned int i = 0; i<v.size();i++)
+        for(int i = 0; i<v.size();i++)
         {
             if (v[i] < v[min_position]) // Found a smaller min
             {
@@ -202,10 +219,3 @@ int Draw::selectMinIndex(std::vector<double> v)
         }
         return min_position;
     }
-
-void Draw::fillPolygon(int res)
-{
-
-    result = res;
-
-}

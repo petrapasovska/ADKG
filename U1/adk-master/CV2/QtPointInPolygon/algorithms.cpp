@@ -5,7 +5,7 @@ Algorithms::Algorithms()
 
 }
 
-int Algorithms::getPositionRay(QPointF q, std::vector<QPointF> pol)
+int Algorithms::getPositionRay(QPointF q, QPolygonF pol)
 {
     //Analyze point and polygon position
     int k = 0;
@@ -55,7 +55,7 @@ int Algorithms::getPositionRay(QPointF q, std::vector<QPointF> pol)
 }
 
 
-int Algorithms::getPositionWinding(QPointF q, std::vector<QPointF> pol)
+int Algorithms::getPositionWinding(QPointF q, QPolygonF pol)
 {
        int n = pol.size();
        double sum_fi=0.0;

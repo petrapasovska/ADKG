@@ -26,33 +26,27 @@ void Widget::on_pushButton_clicked()
 
 void Widget::on_pushButton_2_clicked()
 {
+
+    //get point
     QPointF q = ui->Canvas->getPoint();
-    std::vector<QPointF> pol = ui->Canvas->getPolygon();
-    int res = ui->comboBox->currentIndex() == 0? Algorithms::getPositionWinding(q, pol) : Algorithms::getPositionRay(q, pol);
 
-    if (res == 1)
-    {
-        ui->label_2->setText("inside");
-        ui->Canvas->fillPolygon(res);
-    }
-    else if (res == 2)
-    {
-        ui->label_2->setText("on boundary");
-        ui->Canvas->fillPolygon(res);
-    }
-    else if (res == 3)
-    {
-        ui->label_2->setText("on the vertex");
-        ui->Canvas->fillPolygon(res);
-    }
-    else
-    {
-        ui->label_2->setText("outside");
-        ui->Canvas->fillPolygon(res);
-    }
-    //    ui->
+    //get polygons one by one
+    int polygon_count = ui->Canvas->getNumberOfPolygons();
 
+    std::vector<int> res;
+
+    //Compute result(in, out, boundary, vertex) by point and polygon
+    for(int i = 0; i < polygon_count; i++)
+    {
+        QPolygonF pol = ui->Canvas->getPolygon(i);
+        int result = ui->comboBox->currentIndex() == 0? Algorithms::getPositionWinding(q, pol) : Algorithms::getPositionRay(q, pol);
+        res.push_back(result);
+        ui->Canvas->setResult(res);
+        qDebug() << "Result " << i << " is " << result;
+
+    }
     ui->Canvas->repaint();
+
 }
 
 void Widget::on_importPolygons_clicked()

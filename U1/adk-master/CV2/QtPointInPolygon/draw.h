@@ -15,10 +15,11 @@ class Draw : public QWidget
 
 private:
     bool draw_point;                //Switch, whether to draw a point or a polygon
-    QPointF q;                       //The analyzed point q
-    std::vector<QPointF> pol;        //The polygon
+    QPointF q;                      //The analyzed point q
+    QPolygonF pol;                  //The polygon
     std::vector<QPolygonF> polygons;
-    int result;
+    std::vector<int> result;
+    QPolygonF polygon_generate;
 
 public:
     void paintEvent(QPaintEvent *e);
@@ -26,12 +27,13 @@ public:
     void clearCanvas();
     void setDrawPoint();
     QPointF getPoint() {return q;}
-    std::vector<QPointF> getPolygon(){return pol;}
+    QPolygonF getPolygon(int index){return polygons[index];}
     explicit Draw(QWidget *parent = nullptr);
     bool importPolygons(std::string &path);
     void generatePolygon(int n_points, int coordinates_max);
-    void fillPolygon(int res);
+    void setResult(std::vector<int> res){result = res;}
     int selectMinIndex(std::vector<double> v);
+    int getNumberOfPolygons(){return polygons.size();}
 
 
 signals:
