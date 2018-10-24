@@ -29,9 +29,6 @@ void Draw::paintEvent(QPaintEvent *e)
         painter.drawPolygon(this_polygon);
     }
 
-    //Draw generate polygon
-    //painter.drawPolygon(polygon_generate);
-
     QPolygonF polygon_result;
     // set Brush
     QBrush brush;
@@ -56,10 +53,6 @@ void Draw::paintEvent(QPaintEvent *e)
         }
     }
 
-    //Draw the points
-    //for(int i=0; i<pol.size(); i++)
-        //painter.drawEllipse(pol[i].x() - 5, pol[i].y() -5, 10, 10);
-
     //Draw q
     painter.drawEllipse(static_cast<int>(q.x()) -10, static_cast<int>(q.y()) -10, 20, 20);
 
@@ -69,23 +62,13 @@ void Draw::paintEvent(QPaintEvent *e)
 
 void Draw::mousePressEvent(QMouseEvent *e)
 {
-    //Set point q
-    if(draw_point)
+    if(!draw_point)
     {
-        q.setX(e->x());
-        q.setY(e->y());
+        return;
     }
-
-    /*Add point to the polygon
-    else
-    {
-        QPointF point(e->x(), e->y());
-        pol.push_back(point);
-    }
-    */
-    //Repaint the screen
+    q.setX(e->x());
+    q.setY(e->y());
     repaint();
-
 }
 
 void Draw::setDrawPoint()
