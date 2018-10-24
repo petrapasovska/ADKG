@@ -143,7 +143,17 @@ bool Draw::importPolygons(std::string &path)
             qDebug() << polygons[i];
         }
         myfile.close();
-    }    
+
+        QMessageBox msgBox;
+        msgBox.setText("File has been succesfully imported!!");
+        msgBox.exec();
+        return true;
+    }
+
+    QMessageBox msgBox;
+    msgBox.setText("Warning: There is unexpected problem with import file!!");
+    msgBox.exec();
+    return false;
 }
 
 void Draw::generatePolygon(int n_points, int coordinates_max)
@@ -238,17 +248,3 @@ void Draw::generatePolygon(int n_points, int coordinates_max)
     polygons.push_back(poly);
     qDebug() << "Generate polygons stop";
 }
-
-int Draw::selectMinIndex(std::vector<double> v)
-    {
-        int min_position = 0;
-
-        for(unsigned int i = 0; i<v.size();i++)
-        {
-            if (v[i] < v[min_position]) // Found a smaller min
-            {
-                min_position = i;
-            }
-        }
-        return min_position;
-    }

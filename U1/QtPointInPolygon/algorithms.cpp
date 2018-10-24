@@ -7,56 +7,6 @@ Algorithms::Algorithms()
 
 int Algorithms::getPositionRay(QPointF q, QPolygonF pol)
 {
-    /*
-    //Analyze point and polygon position
-        int k = 0;
-        int n = pol.size();
-        double eps = 1.0e-10;
-
-        //Initialize the coordinates
-        double xir = pol[0].x() - q.x();
-        double yir = pol[0].y() - q.y();
-
-        if(fabs(xir)<eps && fabs(yir)<eps)
-        {
-            return 1;
-        }
-        else
-        {
-
-            for(int i=1;i<pol.size() + 1; i++)
-            {
-                double xiir = pol[i%n].x() - q.x();
-                double yiir = pol[i%n].y() - q.y();
-
-                if(fabs(xiir)<eps && fabs(yiir)<eps)
-                {
-                    return 1;
-                }
-                else
-                {
-                    //Upper halfplane?
-                    if((yiir > 0) && (yir <= 0) || (yir > 0) && (yiir <= 0))
-                    {
-                        //Right half plane?
-                        double xm = (xiir * yir - xir * yiir) / (yiir - yir);
-
-                        //Increment intersection
-                        if(xm >0)
-                            k++;
-                    }
-
-                    //Assign coordinates
-                    xir = xiir;
-                    yir = yiir;
-
-
-                return k%2;
-                }
-            }
-        }
-        */
-
     //Analyze point and polygon position
     int k = 0;
     int n = pol.size();
@@ -66,19 +16,28 @@ int Algorithms::getPositionRay(QPointF q, QPolygonF pol)
     double xir = pol[0].x() - q.x();
     double yir = pol[0].y() - q.y();
 
+    for(int i=0; i<pol.size(); i++){
+        //vertex?
+        if((fabs(q.x()-pol[i].x()) < eps) && (fabs(q.y()-pol[i].y()) < eps)){
+            return 1;
+        }
+    }
+
 
     for(int i=1;i<pol.size() + 1; i++)
     {
         double xiir = pol[i%n].x() - q.x();
         double yiir = pol[i%n].y() - q.y();
 
+        //find out wheter point lies on the line
         int t = getPointLinePosition(q, pol[i%n], pol[(i+1)%n]);
-        if(t < 0){
+
+        if(t == -2){
             return 1;
         }
 
         //Upper halfplane?
-        if(((yiir > 0) && (yir <= 0)) || ((yir > 0) && (yiir <= 0)))
+        if(((yiir > eps) && (yir <= eps)) || ((yir > eps) && (yiir <= eps)))
         {
             //Right half plane?
             double xm = (xiir * yir - xir * yiir) / (yiir - yir);
@@ -121,6 +80,9 @@ int Algorithms::getPositionWinding(QPointF q, QPolygonF pol)
                 //Get position
                 int t = getPointLinePosition(q, pol[i], pol[(i+1)%n]);
 
+                if(t==-2)
+                    return 1;
+
                 //Point q in the left halfplane
                 if(t > 0)
                     sum_fi += fi;
@@ -146,10 +108,6 @@ int Algorithms::getPositionWinding(QPointF q, QPolygonF pol)
        if (fabs(sum_fi) < eps)
            return 0;
 
-       //Point q on the boundary
-       if (fabs(fabs(sum_fi)-180)<= eps)
-           return 1;
-
        //something else ???
        else
            return -1;
@@ -160,7 +118,7 @@ int Algorithms::getPositionWinding(QPointF q, QPolygonF pol)
 int Algorithms::getPointLinePosition(QPointF &q, QPointF &a, QPointF &b)
 {
     //Point and line position
-    double eps = 1.0e-10;
+    double eps = 1.0e-8;
 
     double ux = b.x() - a.x();
     double uy = b.y() - a.y();
@@ -179,6 +137,17 @@ int Algorithms::getPointLinePosition(QPointF &q, QPointF &a, QPointF &b)
         return 0;
 
     //Point on the line
+    //distance between point q, a, b
+    double eps2 = 2.0;
+    double dist_qa = sqrt((vx*vx)+(vy*vy));
+    double dist_qb = sqrt((q.x()-b.x())*(q.x()-b.x()) + (q.y()-b.y())*(q.y()-b.y()));
+    double dist_ab = sqrt((ux*ux)+(uy*uy));
+    double dist = dist_qa + dist_qb;
+
+    if((fabs(dist-dist_ab))<=eps2){
+        return -2;
+    }
+
     return -1;
 }
 

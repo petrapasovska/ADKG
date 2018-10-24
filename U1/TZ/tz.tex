@@ -85,6 +85,8 @@ Bc. David Zahradník \\
 \newpage
 
 \section{Zadání}
+Níže uvedené zadání je kopie ze stránek předmětu. 
+
 \begin{figure}[h!]
 	\centering
 	\includegraphics[clip, trim=0cm 10cm 0cm 3cm, width=1.2\textwidth]{zadani.pdf}
@@ -231,6 +233,18 @@ Hlavním výstupem této úlohy je grafická aplikace, do níž je možné nahr�
 
 \begin{figure}[h!]
 	\centering
+	\includegraphics[width=10cm]{import_ok.jpg}
+	\caption{Informace pro uživatele při úspěšném importu souřadnic}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{import_error.jpg}
+	\caption{Chybová hláška při nesprávném importu souřadnic}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
 	\includegraphics[width=10cm]{import.jpg}
 	\caption{Naimportované souřadnice a jejich zobrazení v prostředí}
 \end{figure}
@@ -239,6 +253,12 @@ Hlavním výstupem této úlohy je grafická aplikace, do níž je možné nahr�
 	\centering
 	\includegraphics[width=10cm]{analyze_inside.jpg}
 	\caption{Analýza polohy bodu za pomoci Winding Number Algorithm}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{winding_boundary.jpg}
+	\caption{Vyhodnocení Winding Number Algorithm při bodu ležícím na hraně}
 \end{figure}
 
 \begin{figure}[h!]
@@ -279,92 +299,86 @@ Hlavním výstupem této úlohy je grafická aplikace, do níž je možné nahr�
 Třída Algorithms obsahuje celkem 6 metod. Metody jsou určeny pro výpočty použitých algoritmů.
 \\
 
-\textbf{getPositionRay}\\
+\textbf{int getPositionRay(QPointF q, QPolygonF pol)}\\
 Jedná se o funkci, která vypočítá geometrickou polohu bodu vůči polygonu za pomoci paprskového algoritmu (Ray Crossing Algorithm). Do funkce vstupuje určovaný bod \textit{q} a polygon, vůči kterému je poloha zjišťována. V případě, že výsledná hodnota funkce je rovna \textit{1}, znamená to, že bod leží v polygonu, případně na hraně či vrcholu polygonu. V ostatních případech leží bod mimo polygon.\\
 
-\textbf{getPositionWinding}\\
+\textbf{int getPositionWinding(QPointF q, QPolygonF pol)}\\
 Tato funkce určí polohu bodu vůči polygonu metodou ovíjení (Winding Number Algorithm). Vstupem je určovaný bod \textit{q} a polygon, vůči kterému je poloha určována. Výstupem může být některá z následujících hodnot. Pokud je výstupem celé číslo rovno \textit{1}, znamená to, že bod leží buďto ve vrcholu polygonu či na hraně polygonu. V případě, že výstupem je číslo \textit{0}, bod leží mimo polygon. Pokud nenastane žádná z uvedených možností, výstupem je hodnota \textit{-1}. Ve funkci je mimo jiné ošetřena singularita, která může nastat v případě, že bod leží na hraně či ve vrcholu.\\
 
-\textbf{getPointLinePosition}\\
+\textbf{int getPointLinePosition(QPointF q, QPointF a, QPointF b)}\\
 Tato funkce má za úkol určit pozici bodu vůči linii. Do funkce vstupuje určovaný bod \textit{q} a dva body přímky, ve funkci značené \textit{a} a \textit{b}. Ze znalosti dvou bodů přímky jsme schopni určit determinant, jehož hodnotu následně porovnáváme se zvolenou minimální hodnotou, v tomto kódu označenou jako \textit{eps}. Pokud je hodnota determinantu větší než \textit{eps}, funkce vrací hodnotu \textit{1} a znamená to, že bod leží v levé polorovině. Pokud je hodnota determinantu menší než \textit{eps}, funkce vrací hodnotu \textit{0} a znamená to, že bod leží v pravé polorovině. Pokud nenastane ani jeden z výše uvedených závěrů, znamená to, že bod leží na hraně a výstupem je hodnota \textit{-1}.\\
 
-\textbf{get2LinesAngle}\\
+\textbf{double get2LinesAngle(QPointF p1,QPointF p2,QPointF p3, QPointF p4)}\\
 V této funkci je počítán úhel mezi dvěma hranami. Vstupem jsou 4 body typu QPointF. Nejprve je vypočten skalární součin vektorů a velikost obou vektorů. Úhel je poté vypočten jako arcus cosinus poměru skalárního součinu a součinu obou velikostí. Defaultně se v prostředí počítá v radiánech, je tedy zapotřebí na toto brát ohled, z toho důvodu máme veškeré vypočtené hodnoty úhlů převáděny na stupně. \\
 
 
 \subsubsection{Draw}
-Třída Draw obsahuje několik metod.\\
+Třída Draw je dceřiná třída třídy QWidget. Je v ní obsaženo několik metod.\\
 
-\textbf{paintEvent}\\
+\textbf{void paintEvent}\\
 Tato metoda slouží k vykreslení bodu q. Zároveň jsou díky této metodě vykresleny naimportované polygony. V metodě jsou také implementovány způsoby vykreslení polygonu, pokud bod leží uvnitř, případně na hraně či ve vrcholu.\\
 
-\textbf{mousePressEvent}\\
+\textbf{void mousePressEvent}\\
 V této funkci je po kliknutí v okně vytvořen testovaný bod q.\\
 
-\textbf{setDrawPoint}\\
+\textbf{void setDrawPoint}\\
 Po spuštění aplikace je nutné stisknout tlačítko Draw Point pro vykreslení bodu. V případě, že se stiskne tlačítko opětovně, je přivolána tato funkce a není možné bod vykreslit. V kódu, který byl psán na cvičení, sloužilo překlikávání k ruční tvorbě polygonu.\\
 
-\textbf{clearCanvas}\\
-Touto metodou je překleseno okno aplikace. \\
+\textbf{void clearCanvas}\\
+Metoda slouží k vymazání všech polygonů a k překreslení. \\
 
-\textbf{importPolygons}\\
-Tato funkce slouží k importování textového souboru, ve kterém se nachází body polygonů.\\
+\textbf{bool importPolygons}\\
+Tato funkce slouží k importování textového souboru, ve kterém se nachází body polygonů. Textový soubor je blíže popsán v kapitole Vstupní data. Při importu souřadnic se uživateli také zobrazí dialogové okno, které informuje o úspěšném načtení, případně o chybě.\\
 
-\textbf{generatePolygon}\\
+\textbf{void generatePolygon}\\
 V této metodě je hlavním cílem vytvoření nekonvexního polygonu. Do tvorby se může zapojit i uživatel volbou počtu vrcholů polygonu. V případě, že není dodržen limit vstupních hodnot, zobrazí se Message Window, které upozorňuje na chybné vložení dat.
 
 \subsubsection{Widget}
-\textbf{on\_pushButton\_3\_clicked}\\
+\textbf{void on\_pushButton\_3\_clicked}\\
 Díky této funkci se vyčistí okno aplikace. Tlačítko lze považovat za užitečné, při zkoumání většího množství dat by mohl vznikat zmatek. V aplikaci je funkce ukryta pod tlačítkem Clear.\\
 
-\textbf{on\_pushButton\_clicked}\\
+\textbf{void on\_pushButton\_clicked}\\
 Touto funkcí se volá metoda setDrawPoint, která je implementována v Draw. V aplikace se funkce nalézá pod tlačítkem Draw Points. \\
 
-\textbf{on\_pushButton\_2\_clicked}\\
+\textbf{void on\_pushButton\_2\_clicked}\\
 Tato metoda se nachází pod tlačítkem Analyze. Zobrazí nám, zda se bod nachází v polygonu, případně na hraně či vrcholu.\\
 
-\textbf{on\_importPolygons\_clicked}\\
+\textbf{void on\_importPolygons\_clicked}\\
 Funkce se ukrývá pod tlačítkem Import Polygons. V těle funkce je implementován způsob načtení dat.\\
 
-\textbf{on\_generatePolygon\_clicked}\\
+\textbf{void on\_generatePolygon\_clicked}\\
 Při stisknutí tlačítka Generate Polygon je touto funkcí přivolána metoda generatePolygon, která vykreslí dle zadaných parametrů polygon.
 
 
 
 \subsection{Popis bonusových úloh}
 \subsubsection{Ošetření singulárního případu u Winding Number Algorithm, kdy bod leží na hraně polygonu}
-Uvnitř funkce je porovnávána velikost úhlu $\phi$. V případě, že rozdíl hodnoty $\phi$ a přímého úhlu je menší než zvolená mez (\textit{eps}), znamená to, že bod leží na hranici a návratová hodnota je rovna  \textit{1}.
-\\ musíme ošetřit tu vzdálenost!!
+Ve funkci getPositionWinding je určována pozice bodu vůči linii funkcí getPointLinePosition. V této funkci je poté vypočtena vzdálenost určovaného bodu q od obou bodů linie. V případě, že rozdíl vzdálenosti AB a součtu vzdálenosti QA a QB je téměř nulový, můžeme říci, že bod leží na přímce. Pro tento případ však bylo potřeba volit vyšší mezní hodnotu při porovnávání. 
 
 \subsubsection{Ošetření singulárního případu u obou metod, kdy je bod totožný s vrcholem dvou a více polygonů}
-Ve funkci getPositionWinding je na začátku kódu ošetřeno, zda vyhledávaný bod \textit{q} není totožný s některým z vrcholů. V případě, že ano, návratová hodnota je \textit{-1} a úhel ani umístění bodu vůči linii není počítáno. Následně je volena podmínka, pokud je návratová hodnota rovna \textit{-1}, funkce vrací číslo \textit{1} a bod se nachází ve vrcholu některých z polygonů. Ve funkci getPositionRay je využita hotová funkce pro určení pozice bodu vůči linii getPointLinePosition.
+Ve funkci getPositionWinding je na začátku kódu ošetřeno, zda vyhledávaný bod \textit{q} není totožný s některým z vrcholů. Ve funkci getPositionRay je vypočten rozdíl souřadnic bodu \textit{q} a vrcholy polygonů. Pokud je rozdíl menší než zvolená mezní hodnota, je funkce vyhodnocena tak, že bod leží uvnitř testovaného polygonu.
+
 
 \subsubsection{Zvýraznění všech polygonů pro oba výše uvedené singulární případy}
-Pokud je v kódu vyhodnoceno, že bod leží v některém z polygonů, návratová hodnota je rovna \textit{1}. Stejnou návratovou hodnotu mají i případy, kdy bod leží na hraně či ve vrcholu. Stačilo tedy jen napsat for-cyklus, který ověří všechny polygony a zvýrazní ty, pro něž je návratová hodnota rovna \textit{1}. 
+V povinné části bylo nutné vykreslit polygon, ve kterém se určovaný bod nachází. Aby byly vykresleny polygony, na jejichž hranách, případně vrcholech, se bod nalézá, bylo potřeba napsat for-cyklus, který otestuje všechny polygony v aplikaci.
+
 
 \subsubsection{Tvorba nekonvexního polygonu}
 Pro tvorbu polygonu je nutné zvolit počet vrcholů. Defaultně je hodnota nastavena na číslo 5. Ve funkci pro generování polygonů je na začátku uvedena podmínka, že vkládané číslo nesmí být menší než 4, neboť pokud bychom vložili tři body, vznikne trojúhelník a trojúhelník je vždy konvexní. V případě, že uživatel zadá číslo 3 nebo text, zobrazí se okno, které upozorňuje na neplatný vstup. Při generování souřadnic byla původně použita knihovna RandomGenerator, ovšem tato knihovna je podporována pouze vyššími verzemi prostředí. Z toho důvodu je použita existující funkce rand a modulo 500, abychom byli schopni určitým způsobem regulovat oblast, ve které se bod zobrazí.
 
 \clearpage
 \section{Závěr}
-Autoři splnili povinné zadání a některé bonusové úkoly. Vyhotovený program načte soubor polygonů a podle umístění značky stisknutím tlačítka myši spočítá, zda značka leží v polygonu či nikoli. Autoři hodnotí úlohu velmi pozitivně. Za velký přínos považují práci v programovacím jazyce C++. Zároveň mají možnost naučit se spolupracovat v prostředí gitHub, se kterým ani jeden nemá příliš mnoho zkušeností. V neposlední řadě je psaní dokumentace v prostředí LaTeX, díky čemuž je vzhled práce na poměrně dobré úrovni. Úlohu považují autoři za poměrně náročnou vzhledem k jejich zkušenostem. ?? PSÁT TAM TOHLE ČI NE?\\
-
-Ve funkci getPositionWinding jsou porovnány různé výsledky. Pokud není splněna při porovnání úhlu žádná z podmínek, návratová hodnota je rovna -1 a tato část je nadepsána komentářem "something else?". Po zamyšlení, kdy by taková situace mohla nastat, nás napadla akorát taková možnost, kdy si definujeme prostor, ve kterém se polygony vykreslují a analyzovaný bod \textit{q} je umístěn mimo tento prostor (Out of range). V praxi by se mohlo jednat o takový případ, kdy budeme mít na vstupu zeměpisnou mapu Evropy a bod \textit{q} by vyjadřoval místo, které chceme navštívit a zvýrazněný polygon by znázornil zemi, v níž se bod nalézá. V případě, že bychom zvolili místo v oceánu, nebyla by funkce pro tuto oblast definována a výstupem by byla hodnota -1. 
-\\
-(LZE TO TAKTO NAPSAT? NEJSEM SI JISTÁ JESTLI TO ÚPLNĚ DOBŘE CHÁPU, ALE U KOMENTÁŘE JSOU OTAZNÍKY, TAK ASI NENÍ ÚPLNĚ ŠPATNÝ SE NAD TÍM ZAMYSLET :-) 
-\\
-
-
+Autoři splnili povinné zadání a některé bonusové úkoly. Vyhotovený program načte soubor polygonů a podle umístění značky stisknutím tlačítka myši spočítá, zda značka leží v polygonu či nikoli.
 
 \subsection{Náměty na vylepšení}
 \subsubsection{Zobrazení dat}
 Jelikož program má předdefinovanou velikost vykreslovacího okna, načtená data mimo toho okno se nezobrazí. Tento problém by se dal řešit transformací velikosti okna.
 
 \subsubsection{Souřadný systém}
-Vykreslovací okno vývojového prostředí Qt má souřadný systém s definovaný počátkem v levém horním rohu,  kladnou osou X vpravo a kladnou osou Y vzhůru. Souřadný systém v Qt se liší od používaných souřadných systémů (matematických i kartografických), proto se importovaná data nezobrazí, jak by uživatel očekával. Řešením by byla transformace bodů.
+Vykreslovací okno vývojového prostředí Qt má souřadný systém s definovaný počátkem v levém horním rohu,  kladnou osou X vpravo a kladnou osou Y dolů. Souřadný systém v Qt se liší od používaných souřadných systémů (matematických i kartografických), proto se importovaná data nezobrazí, jak by uživatel očekával. Řešením by byla transformace bodů.
 
 \subsubsection{Určovaný bod q}
-Při určování pozice bodu \textit{q} se vždy řeší jeho pozice ve středu. Při testování jednotlivých funkcí a podmínek bylo poměrně náročně trefit vrchol či hranu. Vhodné by bylo, aby byla porovnávána i pozice bodů ležících no hlavních poloosách. Nejideálnější řešení by bylo, pokud bychom byli schopni porovnávat celkovou plochu, kterou bod zaujímá, i pro uživatele by to bylo jednodušší pro představu. Přesto by zde mohl být v některých případech problém s nižší přesností. Zároveň bychom si značně ulehčili práci v případě analýzy, zda se bod nachází na hraně či ve vrcholu. V tom případě by totiž byly analyzovány i krajní body a ve většině případů by problém singularity byl opomenut.
+Při určování pozice bodu \textit{q} se vždy řeší jeho pozice ve středu. Při testování jednotlivých funkcí a podmínek bylo poměrně náročně kurzorem označit vrchol či hranu. Vhodné by bylo, aby byla porovnávána i pozice bodů ležících no hlavních poloosách. Nejideálnější řešení by bylo, pokud bychom byli schopni porovnávat celkovou plochu, kterou bod zaujímá, i pro uživatele by to bylo jednodušší pro představu. Přesto by zde mohl být v některých případech problém s nižší přesností. Zároveň bychom si značně ulehčili práci v případě analýzy, zda se bod nachází na hraně či ve vrcholu. V tom případě by totiž byly analyzovány i krajní body a ve většině případů by problém singularity byl opomenut.
 
 \subsubsection{Datový typ funkcí ve třídě Algorithm}
 Při vyhodnocování jednotlivých funkcí je pro nás podstatné, zda je návratová hodnota rovna jedné. Ostatní případy nás nezajímají. Po zamyšlení by zřejmě bylo vhodné, pokud bychom datový typ zvolili bool místo int. Přesto pokud bychom chtěli brát v úvahu i rozšířené situace, kdy by se bod dostal mimo dosah, je vhodnější použít datový typ int a v případě, že by tak nastalo, přes funkci QMessageBox zobrazit zprávu, že bod se nachází Out of Range. 
