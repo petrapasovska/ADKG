@@ -61,7 +61,7 @@ void Draw::paintEvent(QPaintEvent *e)
         //painter.drawEllipse(pol[i].x() - 5, pol[i].y() -5, 10, 10);
 
     //Draw q
-    painter.drawEllipse(q.x() -10, q.y() -10, 20, 20);
+    painter.drawEllipse(static_cast<int>(q.x()) -10, static_cast<int>(q.y()) -10, 20, 20);
 
     //Stop drawing
     painter.end();
