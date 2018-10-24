@@ -152,7 +152,7 @@ void Draw::generatePolygon(int n_points)
         return;
     }
 
-    n_points = n_points -3;
+    n_points = n_points -1;
 
     // generate polygons by graham scan- dikobraz
     QPolygonF poly;
@@ -167,22 +167,19 @@ void Draw::generatePolygon(int n_points)
         poly.push_back(point);
     }
 
-    QPolygonF polygons;
+    QPolygonF polygon;
 
-    for(int j = 0; j < n_points -1; j++){
-        QPointF min = poly.at(0);
-        int indexSwap = 0;
-
-        for(int i = 1; i < n_points - 1 -j; i++) {
-            if(min.y() > poly.at(i).y())
-            min = poly.at(i);
-        indexSwap = i;
+    while(!poly.empty()){
+        int indexMin = 0;
+        for(int i = 1; i < poly.size(); i++) {
+            if(poly.at(indexMin).y() > poly.at(i).y()){
+                indexMin = i;
+            }
         }
-
-        polygons<<(poly.takeAt(indexSwap));
+        polygon<<(poly.takeAt(indexMin));
     }
 
-    qDebug() << polygons;
+    qDebug() << polygon;
 
     // generate center of polygons
     QPointF center;
@@ -191,18 +188,15 @@ void Draw::generatePolygon(int n_points)
     double prumerY = 0;
 
     for(int i = 0; i < n_points -1; i++){
-        prumerX = prumerX + polygons.at(i).x();
-        prumerY = prumerY + polygons.at(i).y();
+        prumerX = prumerX + polygon.at(i).x();
+        prumerY = prumerY + polygon.at(i).y();
     }
 
     center.setX(prumerX/n_points);
     center.setY(prumerY/n_points);
 
-    polygons<<center;
+    polygon<<center;
 
-    qDebug() << polygons;
-
-    QPainter painter(this);
-    painter.begin(this);
-    painter.drawPolygon(polygons);
+    polygons.push_back(polygon);
+    repaint();
 }
