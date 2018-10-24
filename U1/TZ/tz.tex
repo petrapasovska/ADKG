@@ -219,8 +219,58 @@ Hlavním výstupem této úlohy je grafická aplikace, do níž je možné nahr�
 \\
 + pokud se podaří tvorba nekonvexních polygonů
 
+\clearpage
 \section{Aplikace}
-Sepsat až bude dokončený kód a my s ním budeme spokojený!!!
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{okno.jpg}
+	\caption{Okno aplikace po spuštění kódu}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{import.jpg}
+	\caption{Naimportované souřadnice a jejich zobrazení v prostředí}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{analyze_inside.jpg}
+	\caption{Analýza polohy bodu za pomoci Winding Number Algorithm}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{winding_vertex.jpg}
+	\caption{Vyhodnocení Winding Number Algorithm při bodu totožném s vrcholem}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{ray_inside.jpg}
+	\caption{Analýza polohy bodu za pomoci Ray Crossing Algorithm}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{ray_boundary.jpg}
+	\caption{Analýza polohy bodu na hraně za pomoci Ray Crossing Algorithm}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{ray_vertex.jpg}
+	\caption{Analýza polohy bodu ve vrcholu za pomoci Ray Crossing Algorithm}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{warning.jpg}
+	\caption{Upozornění při vkládání nedefinované hodnoty}
+\end{figure}
+
+\clearpage
 
 \section{Dokumentace}
 \subsection{Třídy}
@@ -255,6 +305,9 @@ Ve funkci getPositionWinding je na začátku kódu ošetřeno, zda vyhledávaný
 
 \subsubsection{Zvýraznění všech polygonů pro oba výše uvedené singulární případy}
 Pokud je v kódu vyhodnoceno, že bod leží v některém z polygonů, návratová hodnota je rovna \textit{1}. Stejnou návratovou hodnotu mají i případy, kdy bod leží na hraně či ve vrcholu. Stačilo tedy jen napsat for-cyklus, který ověří všechny polygony a zvýrazní ty, pro něž je návratová hodnota rovna \textit{1}. 
+
+\subsubsection{Tvorba nekonvexního polygonu}
+Pro tvorbu polygonu je nutné zvolit počet vrcholů. Defaultně je hodnota nastavena na číslo 5. Ve funkci pro generování polygonů je na začátku uvedena podmínka, že vkládané číslo nesmí být menší než 4, neboť pokud bychom vložili tři body, vznikne trojúhelník a trojúhelník je vždy konvexní. V případě, že uživatel zadá číslo 3 nebo třeba text, zobrazí se okno, které upozorňuje na neplatný vstup. Při generování souřadnic byla původně použita knihovna RandomGenerator, ovšem tato knihovna je podporována pouze vyššími verzemi prostředí. Z toho důvodu je použita existující funkce rand a modulo 500, abychom byli schopni určitým způsobem regulovat oblast, ve které se bod zobrazí.
 
 \clearpage
 \section{Závěr}
