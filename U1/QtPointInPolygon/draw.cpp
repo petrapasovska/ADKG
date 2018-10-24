@@ -139,12 +139,11 @@ bool Draw::importPolygons(std::string &path)
     return false;
 }
 
-void Draw::generatePolygon(int n_points, int coordinates_max)
+void Draw::generatePolygon(int n_points)
 {
+
     qDebug() << "Clean canvas " << endl;
     clearCanvas();
-    qDebug() << "Generate polygons start into max " << coordinates_max << endl;
-    qDebug() << "number of points in polyon " << n_points << endl;
 
     if(n_points < 4){
         QMessageBox msgBox;
@@ -153,13 +152,13 @@ void Draw::generatePolygon(int n_points, int coordinates_max)
         return;
     }
 
+    n_points = n_points -3;
 
     // generate polygons by graham scan- dikobraz
     QPolygonF poly;
-    //QPointF point;
+
 
     //generate x points and save into vector
-    /*
     for(int i = 0; i < n_points - 1; i++)
     {
         QPointF point;
@@ -167,67 +166,43 @@ void Draw::generatePolygon(int n_points, int coordinates_max)
         point.setY(rand()%500);
         poly.push_back(point);
     }
-    */
-    QPointF point1;
-    point1.setX(0);
-    point1.setY(0);
-    poly.push_back(point1);
 
-    QPointF point2;
-    point2.setX(0);
-    point2.setY(500);
-    poly.push_back(point2);
+    QPolygonF polygons;
 
-    QPointF point4;
-    point4.setX(500);
-    point4.setY(500);
-    poly.push_back(point4);
+    for(int j = 0; j < n_points -1; j++){
+        QPointF min = poly.at(0);
+        int indexSwap = 0;
 
-    QPointF point3;
-    point3.setX(500);
-    point3.setY(0);
-    poly.push_back(point3);
-    /*
+        for(int i = 1; i < n_points - 1 -j; i++) {
+            if(min.y() > poly.at(i).y())
+            min = poly.at(i);
+        indexSwap = i;
+        }
+
+        polygons<<(poly.takeAt(indexSwap));
+    }
+
+    qDebug() << polygons;
+
     // generate center of polygons
     QPointF center;
-    center.setX(rand()%500);
-    center.setY(rand()%500);
-    //polygon_generate.append(center);
 
-    // parralel axes with axes X
-    QPointF centerX;
-    centerX.setX(center.x()+coordinates_max);
-    centerX.setY(center.y());
-    double sum_x = 0;
-    double sum_y = 0;
+    double prumerX = 0;
+    double prumerY = 0;
 
-    // sort angle by size with index point
-    // every polygon will have center and some points
-    std::vector<double> angles;
-
-    for(int i = 0; i<n_points;i++)
-    {
-       double angle = Algorithms::get2LinesAngle(center,centerX,center,poly[i]);
-       angles.push_back(angle);
-       sum_x += poly[i].x();
-       sum_y += poly[i].y();
+    for(int i = 0; i < n_points -1; i++){
+        prumerX = prumerX + polygons.at(i).x();
+        prumerY = prumerY + polygons.at(i).y();
     }
 
+    center.setX(prumerX/n_points);
+    center.setY(prumerY/n_points);
 
-    for(int i = 0;i<n_points;i++)
-    {
-        int n = selectMinIndex(angles);
-      //  polygon_generate.append(poly[n]);
-        poly.append(poly[n]);
-        angles[n]=999;
-    }
+    polygons<<center;
 
-    centerX.setX(sum_x/n_points);
-    centerX.setY(sum_y/n_points);
-    //polygon_generate.push_back(center);
-    poly.push_back(center);
+    qDebug() << polygons;
 
-    */
-    polygons.push_back(poly);
-    qDebug() << "Generate polygons stop";
+    QPainter painter(this);
+    painter.begin(this);
+    painter.drawPolygon(polygons);
 }

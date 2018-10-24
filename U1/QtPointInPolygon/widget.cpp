@@ -70,7 +70,7 @@ void Widget::on_importPolygons_clicked()
 void Widget::on_generatePolygon_clicked()
 {
     bool b = 0;
-    ui->Canvas->generatePolygon(ui->n_points->text().toInt(&b), 500);
+    ui->Canvas->generatePolygon(ui->n_points->text().toInt(&b));
     // ui n_points, n_polygons, coordinates_max
     ui->Canvas->repaint();
 }

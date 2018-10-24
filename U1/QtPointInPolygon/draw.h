@@ -19,7 +19,7 @@ private:
     QPolygonF pol;                  //The polygon
     std::vector<QPolygonF> polygons;
     std::vector<int> result;
-   // QPolygonF polygon_generate;
+    QPolygonF polygon_generate;
 
 public:
     void paintEvent(QPaintEvent *e);
@@ -30,7 +30,7 @@ public:
     QPolygonF getPolygon(unsigned int index){return polygons.at(index);}
     explicit Draw(QWidget *parent = nullptr);
     bool importPolygons(std::string &path);
-    void generatePolygon(int n_points, int coordinates_max);
+    void generatePolygon(int n_points);
     void setResult(std::vector<int> res){result = res;}
     int selectMinIndex(std::vector<double> v);
     std::vector<QPolygonF> getPolygons(){return polygons;}
