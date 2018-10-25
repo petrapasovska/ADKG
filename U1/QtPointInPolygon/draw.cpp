@@ -175,7 +175,7 @@ void Draw::generatePolygon(int n_points)
     while(!poly.empty()){
         int indexMin = 0;
         for(int i = 1; i < poly.size(); i++) {
-            if(poly.at(indexMin).y() > poly.at(i).y()){
+            if(poly.at(indexMin).x() > poly.at(i).x()){
                 indexMin = i;
             }
         }
@@ -203,10 +203,9 @@ void Draw::generatePolygon(int n_points)
     polygons.push_back(polygon);
     int n = polygon.size();
 
-    qDebug() << n << n_points;
     std::vector<double> angels;
 
-    //(pol[i], q, pol[(i+1)%n], q)
+    // calculate angel between points and the last one = center
     for(int i = 0; i < n - 1; i++){
         double uhel = Algorithms::get2LinesAngle(polygon[i], center, polygon[(i+1)%n_points], center);
         angels.push_back(uhel);
