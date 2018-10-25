@@ -32,7 +32,6 @@ public:
     bool importPolygons(std::string &path);
     void generatePolygon(int n_points);
     void setResult(std::vector<int> res){result = res;}
-    int selectMinIndex(std::vector<double> v);
     std::vector<QPolygonF> getPolygons(){return polygons;}
 
 

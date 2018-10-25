@@ -80,6 +80,7 @@ int Algorithms::getPositionWinding(QPointF q, QPolygonF pol)
                 //Get position
                 int t = getPointLinePosition(q, pol[i], pol[(i+1)%n]);
 
+                // q point on the line
                 if(t==-2)
                     return 1;
 

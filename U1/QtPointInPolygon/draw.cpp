@@ -159,7 +159,6 @@ void Draw::generatePolygon(int n_points)
     // generate polygons by graham scan- dikobraz
     QPolygonF poly;
 
-
     //generate x and y points in interval <0; 499>
     for(int i = 0; i < n_points; i++)
     {
@@ -171,7 +170,7 @@ void Draw::generatePolygon(int n_points)
 
     QPolygonF polygon;
 
-    // sort points and every miminum save into polygon
+    // sort points by minimum and the smallest number save into polygon
     while(!poly.empty()){
         int indexMin = 0;
         for(int i = 1; i < poly.size(); i++) {
@@ -184,7 +183,7 @@ void Draw::generatePolygon(int n_points)
 
     qDebug() << polygon;
 
-    // generate center of polygons
+    // generate center of polygon
     QPointF center;
 
     double prumerX = 0;
@@ -212,6 +211,8 @@ void Draw::generatePolygon(int n_points)
     }
 
     qDebug()<< angels;
+
+    // sort points in polygon by angels
 
 
     repaint();
