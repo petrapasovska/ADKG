@@ -29,7 +29,7 @@ int Algorithms::getPositionRay(QPointF q, QPolygonF pol)
         double xiir = pol[i%n].x() - q.x();
         double yiir = pol[i%n].y() - q.y();
 
-        //find out wheter point lies on the line
+        //find out if point lies on the line
         int t = getPointLinePosition(q, pol[i%n], pol[(i+1)%n]);
 
         if(t == -2){
