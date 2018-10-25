@@ -145,6 +145,7 @@ void Draw::generatePolygon(int n_points)
     qDebug() << "Clean canvas " << endl;
     clearCanvas();
 
+    // error about wrong input
     if(n_points < 4){
         QMessageBox msgBox;
         msgBox.setText("Warning: The input has to be at least 4");
@@ -152,14 +153,15 @@ void Draw::generatePolygon(int n_points)
         return;
     }
 
+    // the last point in polygon would be center
     n_points = n_points -1;
 
     // generate polygons by graham scan- dikobraz
     QPolygonF poly;
 
 
-    //generate x points and save into vector
-    for(int i = 0; i < n_points - 1; i++)
+    //generate x and y points in interval <0; 499>
+    for(int i = 0; i < n_points; i++)
     {
         QPointF point;
         point.setX(rand()%500);
@@ -169,6 +171,7 @@ void Draw::generatePolygon(int n_points)
 
     QPolygonF polygon;
 
+    // sort points and every miminum save into polygon
     while(!poly.empty()){
         int indexMin = 0;
         for(int i = 1; i < poly.size(); i++) {
@@ -187,7 +190,7 @@ void Draw::generatePolygon(int n_points)
     double prumerX = 0;
     double prumerY = 0;
 
-    for(int i = 0; i < n_points -1; i++){
+    for(int i = 0; i < n_points; i++){
         prumerX = prumerX + polygon.at(i).x();
         prumerY = prumerY + polygon.at(i).y();
     }
@@ -198,5 +201,19 @@ void Draw::generatePolygon(int n_points)
     polygon<<center;
 
     polygons.push_back(polygon);
+    int n = polygon.size();
+
+    qDebug() << n << n_points;
+    std::vector<double> angels;
+
+    //(pol[i], q, pol[(i+1)%n], q)
+    for(int i = 0; i < n - 1; i++){
+        double uhel = Algorithms::get2LinesAngle(polygon[i], center, polygon[(i+1)%n_points], center);
+        angels.push_back(uhel);
+    }
+
+    qDebug()<< angels;
+
+
     repaint();
 }
