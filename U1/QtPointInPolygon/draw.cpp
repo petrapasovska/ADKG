@@ -1,8 +1,10 @@
+#include <cmath>
+#include <QtGui>
+#include <QMessageBox>
 #include "draw.h"
 #include "algorithms.h"
-#include <QtGui>
 #include "qdebug.h"
-#include <QMessageBox>
+
 
 Draw::Draw(QWidget *parent) : QWidget(parent)
 {
@@ -141,8 +143,6 @@ bool Draw::importPolygons(std::string &path)
 
 void Draw::generatePolygon(int n_points)
 {
-
-    qDebug() << "Clean canvas " << endl;
     clearCanvas();
 
     // error about wrong input
@@ -174,14 +174,14 @@ void Draw::generatePolygon(int n_points)
     while(!poly.empty()){
         int indexMin = 0;
         for(int i = 1; i < poly.size(); i++) {
-            if(poly.at(indexMin).x() > poly.at(i).x()){
+            if(poly.at(indexMin).y() > poly.at(i).y()){
                 indexMin = i;
             }
         }
         polygon<<(poly.takeAt(indexMin));
     }
 
-    qDebug() << polygon;
+
 
     // generate center of polygon
     QPointF center;
@@ -197,23 +197,56 @@ void Draw::generatePolygon(int n_points)
     center.setX(prumerX/n_points);
     center.setY(prumerY/n_points);
 
-    polygon<<center;
 
-    polygons.push_back(polygon);
-    int n = polygon.size();
+    QPolygonF polygon2;
 
-    std::vector<double> angels;
+    // Sort points in polygon to get topological correct polygon
+    while(!polygon.empty()){
 
-    // calculate angel between points and the last one = center
-    for(int i = 0; i < n - 1; i++){
-        double uhel = Algorithms::get2LinesAngle(polygon[i], center, polygon[(i+1)%n_points], center);
-        angels.push_back(uhel);
+        int indMin = 0;
+        double uhelMin = 360;
+
+        double uhel;
+
+        // Count angel between axis Y and line - this is called SMERNIK in Czech
+        // Sorry for using czech expressions for variables :(
+        for(int i = 0; i < polygon.size(); i++) {
+            double smernik = atan(fabs((polygon[i].x()-center.x()))/fabs(polygon[i].y()-center.y()));
+
+
+            // Check the quadrant and fix the angel
+            if((polygon[i].x()-center.x())<0 && (polygon[i].y()-center.y())>0){
+                uhel = smernik;
+            }
+
+            if((polygon[i].x()-center.x())<0 && (polygon[i].y()-center.y())<0){
+                uhel = 180-smernik;
+            }
+
+            if((polygon[i].x()-center.x())>0 && (polygon[i].y()-center.y())<0){
+                uhel = 180+smernik;
+            }
+
+            if((polygon[i].x()-center.x())>0 && (polygon[i].y()-center.y())>0){
+                uhel = 360-smernik;
+            }
+
+            // find the smallest so the angels would be in clockwise and final polygon would be topological correct
+            if(uhel<uhelMin){
+                uhelMin = uhel;
+                indMin = i;
+            }
+        }
+
+        // Delete minimum and add it to another polygon so you can count with the rest
+        polygon2<<(polygon.takeAt(indMin));
     }
 
-    qDebug()<< angels;
+    polygon2<<center;
 
-    // sort points in polygon by angels
+    polygons.push_back(polygon2);
 
+    qDebug()<<polygons;
 
     repaint();
 }

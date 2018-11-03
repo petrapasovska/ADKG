@@ -16,18 +16,14 @@ int Algorithms::getPositionRay(QPointF q, QPolygonF pol)
     double xir = pol[0].x() - q.x();
     double yir = pol[0].y() - q.y();
 
-    for(int i=0; i<pol.size(); i++){
-        //vertex?
-        if((fabs(q.x()-pol[i].x()) < eps) && (fabs(q.y()-pol[i].y()) < eps)){
-            return 1;
-        }
-    }
-
-
     for(int i=1;i<pol.size() + 1; i++)
     {
         double xiir = pol[i%n].x() - q.x();
         double yiir = pol[i%n].y() - q.y();
+
+        if((fabs(q.x()-pol[i].x()) < eps) && (fabs(q.y()-pol[i].y()) < eps)){
+            return 1;
+        }
 
         //find out if point lies on the line
         int t = getPointLinePosition(q, pol[i%n], pol[(i+1)%n]);
