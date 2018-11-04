@@ -170,6 +170,7 @@ void Draw::generatePolygon(int n_points)
 
     QPolygonF polygon;
 
+
     // sort points by minimum and the smallest number save into polygon
     while(!poly.empty()){
         int indexMin = 0;
@@ -200,13 +201,14 @@ void Draw::generatePolygon(int n_points)
 
     QPolygonF polygon2;
 
+
     // Sort points in polygon to get topological correct polygon
     while(!polygon.empty()){
 
         int indMin = 0;
         double uhelMin = 360;
+        double uhel = 0;
 
-        double uhel;
 
         // Count angel between axis Y and line - this is called SMERNIK in Czech
         // Sorry for using czech expressions for variables :(

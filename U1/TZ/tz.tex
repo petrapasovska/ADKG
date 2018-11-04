@@ -94,7 +94,7 @@ Níže uvedené zadání je kopie ze stránek předmětu.
 
 \subsection{Údaje o bonusových úlohách}
 V úloze byly vypracovány bonusové části týkající se ošetření singulárního případu u Winding Number Algorithm, kdy bod leží na hraně polygonu. Dále byl ošetřen singulární případ u obou algoritmů, kdy bod leží ve vrcholu jednoho či více polygonů. Pro oba výše zmíněné singulární případy byly zvýrazněny polygony. \\
-V rámci bonusových úloh byla i snaha o napsání algoritmu pro generování nekonvexních polygonů. Tato podúloha je poměrně náročná a autorům se jí téměř podařilo vyřešit.
+Zároveň byl v rámci bonusových úloh napsán algoritmus pro generování nekonvexních polygonů v závislosti na volbě počtu vrcholů.
 
 
 \clearpage
@@ -143,7 +143,16 @@ Označme si určovaný bod q. Z tohoto bodu je veden paprsek r (ray). Pokud si p
 \end{figure}
 
 \subsubsection{Problematické situace}
-Při použití Ray Crossing Algorithm může nastat několik problematických situací, které nelze opomenout. Tímto problémem jsou singularity. K singularitě v této metodě může dojít tehdy, pokud bod leží na hraně polygonu či pokud je bod totožný s některým z vrcholů polygonu. Z tohoto důvodu se využívá upravená varianta Ray Crossing Algorithm, kdy je provedena redukce souřadnic bodů. V této úloze byla v části kódu, kde se počítá za pomoci paprskového algoritmu, použita již vytvořená funkce getPointLinePosition. Pokud bod náležel hraně či se nalézal ve vrcholu, byla návratová hodnota funkce rovna 1 a cyklus byl ukončen s vyhodnocením, že se bod v daném polygonu nachází.
+Při použití Ray Crossing Algorithm může nastat několik problematických situací, které nelze opomenout. Tímto problémem jsou singularity. K singularitě v této metodě může dojít tehdy, pokud bod leží na hraně polygonu či pokud je bod totožný s některým z vrcholů polygonu. Z tohoto důvodu se využívá upravená varianta Ray Crossing Algorithm, kdy je provedena redukce souřadnic bodů. V této úloze byla v části kódu, kde se počítá za pomoci paprskového algoritmu, použita již vytvořená funkce getPointLinePosition. Pokud bod náležel hraně či se nalézal ve vrcholu, byla návratová hodnota funkce rovna 1 a cyklus byl ukončen s vyhodnocením, že se bod v daném polygonu nachází. \\
+
+
+Vyjádření problematických situací vzorci. Bod p značí některý z vrcholů polygonu. V případě úsečky označuje bod A počáteční vrchol hrany a B koncový vrchol hrany.
+\begin{enumerate}
+\item Bod q je totožný s vrcholem:  $  q [x_q, y_q] = p_i [x_i, y_i] $ 
+\item Bod q leží na některé hraně polygonu P:   $  q \in \overrightarrow{AB} $ 
+\end{enumerate}
+
+
 
 \subsubsection{Implementace metody}
 \begin{enumerate}
@@ -182,7 +191,13 @@ V závislosti na výsledné hodnotě $\Omega$ lze vyvodit následující závěr
 \end{enumerate}
 
 \subsubsection{Problematické situace}
-Pro Winding Number Algorithm je snadnější řešení singulárních případů. K těm dochází pouze v případě, že $q \approx p_i$, tedy v případě že bod leží na hraně. Z toho důvodu je zapotřebí v kódu ošetřit blízkost obou hodnot. Pokud tomu nastane, vyhodnotí se funkce tak, že bod leží v obou polygonech.
+Pro Winding Number Algorithm je snadnější řešení singulárních případů. K těm dochází pouze v případě, že $q \approx p_i$, tedy v případě že bod je téměř totožný s některým z vrcholů. Z toho důvodu je zapotřebí v kódu ošetřit blízkost obou hodnot. Pokud tomu nastane, vyhodnotí se funkce tak, že bod leží v obou polygonech.\\
+
+
+Vyjádření problematických situací vzorci. Bod p značí některý z vrcholů polygonu. 
+\begin{enumerate}
+\item Bod q je totožný s vrcholem:  $  q [x_q, y_q] \approx p_i [x_i, y_i] $ 
+\end{enumerate}
 
 \subsubsection{Implementace metody}
 \begin{enumerate}
@@ -194,6 +209,22 @@ Pro Winding Number Algorithm je snadnější řešení singulárních případů
 \item Volba podmínky - pokud rozdíl: $(\omega - 2\pi) < \epsilon$, pak platí: $q \in P$
 \item V opačném případě:  $ q { \not \in } P $
 \end{enumerate}
+
+\subsection{Generování nekonvexního polygonu}
+Pro tvorbu nekonvexního polygonu je pro uživatele možnost volby počtu vrcholů. Při zadání neplatného vstupu je zobrazena informace, že počet vrcholů musí být alespoň 4, neboť při volbě tří vrcholů vznikne trojúhelník, který je vždy konvexní. Souřadnice náhodných bodů jsou vymezeny za pomocí funkce modulo, abychom zajistili zobrazení bodů v daném vykreslovacím okně.\\
+
+Uvnitř kódu je náhodně vygenerováno o bod méně, než uživatel zvolí. To je z toho důvodu, že jako n-tý bod je vygenerován střed všech vygenerovaných bodů, aby bylo docíleno konkávnosti. Po určení středu jsou vypočteny všechny směrníky od centru na body a v závislosti na velikosti směrníku jsou body v polygonu seřazeny ve směru hodinových ručiček. Původní smysl generování byl takový, že body byly seřazeny podle y-ové souřadnice a takto vkládány do polygonu. Zde však docházelo k tomu, že vytvořené polygony byly topologicky nekorektní. S výpočtem směrníků je tento problém vyřešen. Je zde ovšem potřeba brát ohledy na jednotlivé kvadranty.\\
+
+
+\subsubsection{Implementace metody}
+\begin{enumerate}
+\item Náhodné generování (n-1) bodů:  $x_{pi} = rand \% 500; y_{pi} = rand \% 500$
+\item Vygenerování středu: $ center[x, y]  = [\sum(x_i)/(n-1)][\sum(y_i)/(n-1)] $
+\item Výpočet směrníků na jednotlivé body v závislosti na osách daného zobrazovacího okna: $\sigma_i = atan(\Delta X_i / \Delta Y_i)$
+\item Určení kvadrantu a případná úprava úhlu.
+\item Seřazení bodů v polygonu podle nejmenšího směrníku.
+\end{enumerate}
+
 
 \section{Vstupní data}
 Mezi vstupní data patří analyzovaný bod q a textový soubor s body jednotlivých polygonů. Bod q je vkládán interaktivně po spuštění aplikace v grafickém okně. 
@@ -364,7 +395,9 @@ V povinné části bylo nutné vykreslit polygon, ve kterém se určovaný bod n
 
 
 \subsubsection{Tvorba nekonvexního polygonu}
-Pro tvorbu polygonu je nutné zvolit počet vrcholů. Defaultně je hodnota nastavena na číslo 5. Ve funkci pro generování polygonů je na začátku uvedena podmínka, že vkládané číslo nesmí být menší než 4, neboť pokud bychom vložili tři body, vznikne trojúhelník a trojúhelník je vždy konvexní. V případě, že uživatel zadá číslo 3 nebo text, zobrazí se okno, které upozorňuje na neplatný vstup. Při generování souřadnic byla původně použita knihovna RandomGenerator, ovšem tato knihovna je podporována pouze vyššími verzemi prostředí. Z toho důvodu je použita existující funkce rand a modulo 500, abychom byli schopni určitým způsobem regulovat oblast, ve které se bod zobrazí. Do funkce vstupuje počet vrcholů, jsou však počítány náhodné souřadnice (n-1) bodů, neboť jeden z vrcholů bude center všech vygenerovaných bodů. Vygenerované body jsou následně seřazeny podle souřadnice x. Poté je přes funkci get2LinesAngel vypočten úhel mezi centrem a všemi body polygonu. Další postup řešení by bylo seřadit body v polygonu podle úhlu, který svírají s centrem. Zde však nastaly komplikace a z technických a časových důvodů nebylo generování dokončeno. Při generování občas dochází k tomu, že se hrany překrývají, což je chyba. 
+Pro tvorbu polygonu je nutné zvolit počet vrcholů. Defaultně je hodnota nastavena na číslo 5. Ve funkci pro generování polygonů je na začátku uvedena podmínka, že vkládané číslo nesmí být menší než 4, neboť pokud bychom vložili tři body, vznikne trojúhelník a trojúhelník je vždy konvexní. V případě, že uživatel zadá číslo 3 nebo text, zobrazí se okno, které upozorňuje na neplatný vstup. Při generování souřadnic byla původně použita knihovna RandomGenerator, ovšem tato knihovna je podporována pouze vyššími verzemi prostředí. Z toho důvodu je použita existující funkce rand a modulo 500, abychom byli schopni určitým způsobem regulovat oblast, ve které se bod zobrazí. \\
+
+
 
  
 \clearpage
@@ -381,8 +414,6 @@ Vykreslovací okno vývojového prostředí Qt má souřadný systém s definova
 \subsubsection{Datový typ funkcí ve třídě Algorithm}
 Při vyhodnocování jednotlivých funkcí je pro nás podstatné, zda je návratová hodnota rovna jedné. Ostatní případy nás nezajímají. Po zamyšlení by zřejmě bylo vhodné, pokud bychom datový typ zvolili bool místo int. Přesto pokud bychom chtěli brát v úvahu i rozšířené situace, kdy by se bod dostal mimo dosah, je vhodnější použít datový typ int a v případě, že by tak nastalo, přes funkci QMessageBox zobrazit zprávu, že bod se nachází Out of Range. 
 
-\subsubsection{Generování nekonvexního polygonu}
-Při generování nekonvexního polygonu dochází v některých případech k tomu, že se hrany polygonu kříží a tím vytváří další polygony. Je zde tedy určitě námět na vylepšení algoritmu, případně ošetření některé části.
 
 \clearpage
 \section{Reference}
