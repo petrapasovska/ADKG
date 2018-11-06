@@ -1,4 +1,6 @@
+#include<cmath>
 #include "draw.h"
+#include <QMessageBox>
 
 
 Draw::Draw(QWidget *parent) : QWidget(parent)
@@ -16,7 +18,7 @@ void Draw::paintEvent(QPaintEvent *e)
    painter.drawPolygon(ch);
 
    //Draw points
-   for(int i = 0; i < points.size(); i++)
+   for(unsigned int i = 0; i < points.size(); i++)
    {
        painter.drawEllipse(points[i].x()-5, points[i].y()-5, 10, 10);
    }
@@ -48,8 +50,22 @@ void Draw::clearCanvas()
 std::vector<QPoint> Draw::generateSquare(int n)
 {
     std::vector<QPoint> random_points;
-    QPoint p(QRandomGenerator::global()->bounded(100)+10,QRandomGenerator::global()->bounded(100)+10);
-    double length = QRandomGenerator::global()->bounded(400);
+
+    if(n<4){
+        QMessageBox msgBox;
+        msgBox.setText("Warning: The input has to be at least 4 to make a square.");
+        msgBox.exec();
+        return random_points;
+    }
+
+    if(!(n%4==0)){
+        QMessageBox msgBox;
+        msgBox.setText("Warning: The input has to be dividing by 4 to make a square. That's why the input is reduced to appropriate number");
+        msgBox.exec();
+    }
+
+    QPoint p(rand()%100+10,rand()%100+10);
+    double length = rand()%400;
 
     QPoint p1(p.x()+length,p.y());
     QPoint p2(p.x()+length,p.y()+length);
@@ -74,10 +90,9 @@ std::vector<QPoint> Draw::generateCircle(int n)
 {
     std::vector<QPoint> random_points;
     QPoint p;
-    QPoint center(QRandomGenerator::global()->bounded(300)+200,QRandomGenerator::global()->bounded(300)+200);
-    double radius = QRandomGenerator::global()->bounded(200);
+    QPoint center(rand()%300+200,rand()%300+200);
+    double radius = rand()%200;
     double fi = (2*M_PI)/n;
-    double x, y;
 
     for(int i = 0;i<n;i++)
     {
@@ -93,9 +108,9 @@ std::vector<QPoint> Draw::generateEclipse(int n)
 {
     std::vector<QPoint> random_points;
     QPoint p;
-    QPoint center(QRandomGenerator::global()->bounded(300)+200,QRandomGenerator::global()->bounded(300)+200);
-    double a = QRandomGenerator::global()->bounded(200);
-    double b = QRandomGenerator::global()->bounded(200);
+    QPoint center(rand()%300+200,rand()%300+200);
+    double a = rand()%200;
+    double b = rand()%200;
     double fi = (2*M_PI)/n;
 
     for(int i = 0;i<n;i++)
@@ -113,9 +128,9 @@ std::vector<QPoint> Draw::generateStarShape(int n)
     std::vector<QPoint> random_points;
     n/=2;
     QPoint p;
-    QPoint center(QRandomGenerator::global()->bounded(300)+200,QRandomGenerator::global()->bounded(300)+200);
-    double a = QRandomGenerator::global()->bounded(200);
-    double b = QRandomGenerator::global()->bounded(200);
+    QPoint center(rand()%300+200,rand()%300+200);
+    double a = rand()%200;
+    double b = rand()%200;
     double fi = (2*M_PI)/n;
 
     for(int i = 0;i<n;i++)
@@ -138,34 +153,52 @@ std::vector<QPoint> Draw::generateRandomPoints(int n)
      QPoint p;
      for(int i = 0;i<n;i++)
      {
-         p.setX(QRandomGenerator::global()->bounded(600));
-         p.setY(QRandomGenerator::global()->bounded(600));
+         p.setX(rand()%600+10);
+         p.setY(rand()%600+10);
          random_points.push_back(p);
      }
      return random_points;
 }
 std::vector<QPoint> Draw::generateGrid(int n)
 {
-     std::vector<QPoint> random_points;
+    std::vector<QPoint> random_points;
+
+    if(n<4){
+        QMessageBox msgBox;
+        msgBox.setText("Warning: The input has to be at least 4 to make a grid.");
+        msgBox.exec();
+        return random_points;
+    }
+
+    if(!(n%4==0)){
+        QMessageBox msgBox;
+        msgBox.setText("Warning: The input has to be reduced to make regular grid");
+        msgBox.exec();
+    }
 
      //generate size of window
-     double a = QRandomGenerator::global()->bounded(600);
-     double b = QRandomGenerator::global()->bounded(600);
+     double a = rand()%200;
+     double b = rand()%200;
 
-     n/=2;
      //size of grid
-     a/=n;
+     int size = sqrt(n);
+     int pocet = 0;
 
      // set first point
-     random_points.push_back(QPoint(0,0));
+     random_points.push_back(QPoint(10,10));
 
-     for(int i = 0;i<n;i++)
+     for(int i = 0;i<size;i++)
      {
 
-         for(int j =0;j<n;j++)
+         for(int j =0;j<size;j++)
          {
-             random_points.push_back(QPoint(random_points[0].x()+i*a,random_points[0].y()+j*a));
+             random_points.push_back(QPoint(random_points[0].x()+i*a,random_points[0].y()+j*b));
+             pocet = pocet +1;
+
          }
      }
+
+     qDebug() << pocet;
+
      return random_points;
 }

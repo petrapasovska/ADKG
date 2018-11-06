@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <QtGui>
 #include <math.h>
-#include <QRandomGenerator>
 #include <QDebug>
 
 class Draw : public QWidget
