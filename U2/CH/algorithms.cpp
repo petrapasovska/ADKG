@@ -337,3 +337,61 @@ void Algorithms::polygonTransform(QPoint p, QPoint k, QPoint p1, QPoint k1, QLin
     pol.setP1(QPoint(p1.x() + b*(second.x()-p.x()) - a*(second.y()-p.y()),p1.y() + a*(second.x()-p.x()) + b*(second.y()-p.y())));
 
 }
+
+QPolygon Algorithms::GrahamScan (vector<QPoint> &points){
+
+   QPolygon graham_ch;
+
+   // sort by Y and add point with smallest Y to the convex hull
+   std::sort(points.begin(), points.end(), sortByYAsc());
+   QPoint q = points[0];
+
+   QPoint pj = q;
+
+   do
+   {
+       int ind_max = 0;
+       double fi_max = 0;
+       double fi = 0;
+
+       //Find sigma = arg max angle(pi, q, x) - for the record - x is point on the axis x
+       for(unsigned int i = 0; i<points.size();i++)
+       {
+           double alfa = atan(fabs((pj.x()-points[i].x()))/fabs(pj.y()-points[i].y()));
+
+           // Check the quadrant and fix the angel according to the axis X
+           if((points[i].x()-q.x())<0 && (points[i].y()-q.y())>0){
+               fi = alfa + 90;
+           }
+
+           if((points[i].x()-q.x())<0 && (points[i].y()-q.y())<0){
+               fi = 270 - alfa;
+           }
+
+           if((points[i].x()-q.x())>0 && (points[i].y()-q.y())<0){
+               fi = 270 + alfa;
+           }
+
+           if((points[i].x()-q.x())>0 && (points[i].y()-q.y())>0){
+               fi = 90 - alfa;
+           }
+
+           // find the biggest angle with axis X
+           if(fi>fi_max){
+               fi_max = fi;
+               ind_max = i;
+           }
+       }
+
+
+       //Add the next point to CH
+       graham_ch.push_back(points[ind_max]);
+
+       //Assign CH verticess
+       pj = points[ind_max];
+
+   } while (!(pj == q));
+
+   return graham_ch;
+
+}

@@ -27,6 +27,7 @@ public:
     static double getPointLineDistance(QPoint &q, QPoint &a, QPoint &b);
     static QPolygon QHull (vector<QPoint> &points);
     static void qh (int s, int e, vector<QPoint> &p, QPolygon &h);
+    static QPolygon GrahamScan (vector<QPoint> &points);
 };
 
 #endif // ALGORITHMS_H
