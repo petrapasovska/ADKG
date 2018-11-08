@@ -13,13 +13,17 @@ class Draw : public QWidget
 private:
     std::vector<QPoint> points;
     QPolygon ch;
+    QPolygon rectangle;
+    QLine direction;
 
 public:
     explicit Draw(QWidget *parent = nullptr);
     void paintEvent(QPaintEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void clearCanvas();
-    void setCH( QPolygon ch_) {ch = ch_;}
+    void setCH(QPolygon ch_) {ch = ch_;}
+    void setRectangle(QPolygon rectangle_) {rectangle = rectangle_;}
+    void setDirection(QLine direction_){direction = direction_;}
     void setPoints(std::vector<QPoint> points_){points = points_;}
     std::vector<QPoint> getPoints(){return points;}
     QPolygon getConvexHull(){return ch;}

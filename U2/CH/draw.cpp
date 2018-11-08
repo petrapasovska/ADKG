@@ -15,7 +15,17 @@ void Draw::paintEvent(QPaintEvent *e)
    //Draw convex hull
    painter.drawPolygon(ch);
 
+   //Draw rectangle minBoundingBox
+   painter.setPen(Qt::green);
+   painter.drawPolygon(rectangle);
+
+
+   //Draw direction minBoundingBox
+   painter.setPen(Qt::blue);
+   painter.drawLine(direction);
+
    //Draw points
+   painter.setPen(Qt::black);
    for(int i = 0; i < points.size(); i++)
    {
        painter.drawEllipse(points[i].x()-5, points[i].y()-5, 10, 10);
@@ -42,6 +52,7 @@ void Draw::clearCanvas()
     //Clear the Canvas
     ch.clear();
     points.clear();
+    rectangle.clear();
     repaint();
 }
 

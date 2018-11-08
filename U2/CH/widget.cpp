@@ -77,6 +77,7 @@ void Widget::on_minimumAreaEnclosingBox_clicked()
     QPolygon rectangle;
     QPolygon ch = ui->Canvas->getConvexHull();
     Algorithms::minimumAreaEnclosingBox(ch, rectangle, direction);
-    ui->Canvas->setCH(rectangle);
+    ui->Canvas->setRectangle(rectangle);
+    ui->Canvas->setDirection(direction);
     repaint();
 }

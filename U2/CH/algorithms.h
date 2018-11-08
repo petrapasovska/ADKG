@@ -15,8 +15,9 @@ class Algorithms
 private:
     static double length2Points(QPoint q, QPoint p){return sqrt( (q.x()-p.x())*(q.x()-p.x())+(q.y()-p.y())*(q.y()-p.y()) );}
     static void polygonTransform(QPoint p, QPoint k, QPoint p1, QPoint k1, QPolygon &pol);
-    static void polygonTransform(QPoint p, QPoint k, QPoint p1, QPoint k1, std::vector<QPoint> &pol);
     static void polygonTransform(QPoint p, QPoint k, QPoint p1, QPoint k1, QLine &pol);
+    static void rotateByAngle(QPolygon &points, double angle);
+    static void rotateByAngle(QLine &points, double angle);
 public:
     Algorithms();
 
