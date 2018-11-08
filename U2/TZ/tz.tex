@@ -129,6 +129,12 @@ Metoda je pojmenována po R. A. Jarvisu, který ji publikoval v roce 1973. \\
 \\
 Abychom byli schopni algoritmus sestavit, je potřeba nalézt pivot, označme jej q. Nalezení pivota má časovou náročnost O(n). Pivota nalezneme jako bod s minimální hodnotou souřadnice Y. Následně porovnáváme úhel, který svírá pivot a bod následující a předcházející pivotu, dokud nenalezneme maximální úhel. Když takovýto úhel nalezeneme, je přidán mezi body konvexní obálky. V algoritmu dojde k přeindexování bodů a jsou porovnávány následující body, dokud nově vložený bod není pivot. 
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{jarvis.jpg}
+	\caption{Princip Jarvis Scan algoritmu [zdroj: 4]}
+\end{figure}
+
 \subsubsection{Problematické situace}
 K chybě v algoritmu může dojít v případě, že tři body budou kolineární. Tedy v případě, že se budou tři body nacházet na jedné přímce. (Jak bychom toto vyřešili hmm??)
 
@@ -144,6 +150,32 @@ K chybě v algoritmu může dojít v případě, že tři body budou kolineárn�
 \subitem Přeindexování bodů: $ p_{j-1} = p_j; p_j = p_{j+1}  $
 \end{enumerate}
 
+\subsection{Quick Hull}
+Metoda Quick Hull slouží k vytvoření konvexní obálky nad konečným počtem bodů. Využívá techniku "Rozděl a panuj", označovanou anglicky "Divide and Conquer". V této metodě lze najít analogii s QuickSortem, odkud také pochází označení algoritmu. Jedná se o poměrně rychlý algoritmus, časová náročnost je O(n*log(n)), v nejhorším případě je však časová náročnost kvadratická O($n^2$). \\
+
+Pro výpočet metodou Quick Hull je nejprve zapotřebí nalézt extrémní body, v aplikaci byly souřadnice setříděny podle x-ové souřadnice. Bod s nejnižší a nejvyšší hodnotou x-ové souřadnice je vložen do množiny, do které uchováváme body konvexní obálky. Těmito body je vedena pomyslná přímka, která množinu bodů rozdělí na dvě množiny - horní a dolní. V každé polorovině nalezneme nejvzdálenější bod od přímky, tento bod přidáme do množiny bodů patřících do konvexní obálky a vytvoříme přímky tohoto bodu a krajních bodů předešlé přímky. Následně pokračujeme analogicky a nad každou nově vzniklou přímkou nalezneme nejvzdálenější bod.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{quickhull.jpg}
+	\caption{Princip Quick Hull algoritmu [zdroj: 5]}
+\end{figure}
+
+\subsubsection{Implementace globální metody}
+\begin{enumerate}
+\item Vytvoření množiny konvexní obálky, horní a dolní množiny:  $H = 0; S_U = 0; S_L = 0 $ 
+\item Nalezení extrémních hodnot:  $ q_1 =  min_{\forall p_i \in S}(x_i); q_3 =  max_{\forall p_i \in S}(x_i) $ 
+\item Přidání extrémních bodů do horní a dolní množiny: $S_U \leftarrow q_1; S_U \leftarrow q_3; S_L \leftarrow q_1; S_L \leftarrow q_3 $
+\item Pro všechny body množiny: $\forall p_i \in S  $
+\subitem Rozhodnutí, zda bod patří do horní množiny: $ if(p_i \in \sigma_l(q_1, q_3)) S_U \leftarrow p_i  $
+\subitem V opačném případě: $ S_L \leftarrow p_i  $
+\item Přidání krajního bodu do konvexní obálky: $H \leftarrow q_3$
+\item Nalezení nejvzdálenějšího bodu $c$ v horní části od přímky, přidání do množiny konvexní obálky a opakování vůči nově vzniklé přímce.
+\item Přidání krajního bodu do konvexní obálky: $H \leftarrow q_1$
+\item Opakování hledání nejvzdálenějšího bodu v dolní části.
+\end{enumerate}
+
+Tady nevím, jestli nerozepsat i implementaci lokální metody??? Možná by to pak bylo pochopitelnější
 
 \section{Vstupní data}
 
@@ -177,6 +209,13 @@ Dostupné z: https://medium.com/@harshitsikchi/convex-hulls-explained-baab662c4e
 
 \item Convex-hull mass estimates of the dodo (Raphus cucullatus). [online][cit. 31.10.2018]\\
 Dostupné z: https://www.semanticscholar.org/paper/Convex-hull-mass-estimates-of-the-dodo-(Raphus-of-a-Brassey-O\'Mahoney/12e07d3b712561cad16501ac8096120e14901eb8
+
+\item GeeksforGeeks: Convex Hull - Set 1 (Jarvis's Algorithm or Wrapping. [online][cit. 5.11.2018]\\
+Dostupné z: https://www.geeksforgeeks.org/convex-hull-set-1-jarviss-algorithm-or-wrapping/
+
+\item  BAYER, Tomáš. Geometrické vyhledávání [online][cit. 5.11.2018]. \\
+Dostupné z: https://web.natur.cuni.cz/~bayertom/images/courses/Adk/adk4.pdf  \\
+
 
 
 \end{enumerate}

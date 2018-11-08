@@ -31,7 +31,7 @@ void Widget::on_pushButton_clicked()
 
     //End time
     clock_t e = std::clock();
-    clock_t time = float (e - s) / CLOCKS_PER_SEC;
+    clock_t time = clock_t (e - s) / CLOCKS_PER_SEC;
 
     qDebug()<<time;
     //Write time
