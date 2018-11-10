@@ -188,10 +188,132 @@ Tady nevím, jestli nerozepsat i implementaci lokální metody??? Možná by to 
 
 
 \section{Dokumentace}
+\subsection{Třídy}
+\subsubsection{Algorithms}
+Třída Algorithms obsahuje celkem xx metod. Metody jsou určeny pro výpočty použitých algoritmů.
+\\
 
+\textbf{double length2Points(QPoint q, QPoint p)}\\
+Metoda jejíž návratová hodnota je typu double vrací velikost spojnice mezi dvěma body.\\
 
+\textbf{void polygonTransform(QPoint p, QPoint k, QPoint p1, QPoint k1, QPolygon &pol)}\\
+Metoda je přetížená pro  podobnostní transformaci QPolygon a QLine. Transformační klíč je dán dvěma body se souřadnicemi v obou souřadných soustavách. Body p a k jsou v souřadné soustavě, ze které pochází pol. Body p1 a k1 jsou v souřadné soustavě, do které chceme transformovat. Výsledek transformace přeuloží do proměnné pol.\\
 
- 
+\textbf{rotateByAngle(QPolygon &points, double angle)}\\
+Metoda je přetížená pro rotaci QPolygon a QLine. Prvky proměnné pol se pouze rotují podle úhlu angle. Proměnná úhel je v radiánech. Výsledek transformace přeuloží do proměnné pol.
+\\
+
+\textbf{TPosition getPointLinePosition(QPoint &q, QPoint &a, QPoint &b)}\\
+
+\\
+
+\textbf{double get2LinesAngle(QPoint &p1,QPoint &p2,QPoint &p3, QPoint &p4)}\\
+
+\\
+
+\textbf{QPolygon CHJarvis (vector<QPoint> &points)}\\
+Metoda pro výpočet konvexní obálky nad vektorem bodů metodou Jarvis Scan. Metoda vrácí konvexní obálku s typem QPolygon.
+\\
+
+\textbf{QPolygon QHull (vector<QPoint> &points)}\\
+Metoda pro výpočet konvexní obálky nad vektorem bodů metodou Quick Hull. Metoda vrácí konvexní obálku s typem QPolygon.
+\\
+
+\textbf{void qh (int s, int e, vector<QPoint> &p, QPolygon &h)}\\
+Pomocná metoda pro rekurzi v metodě Qhull. Na vstupu jsou indexi bodů s a e, které určují přímku, podle níž se určí zda bod p patří do konvexní obálky h a nebo ne. Metoda nic nevrací, pouze ukládá body, které patří do konvexní obálky.
+\\
+
+\textbf{void minimumAreaEnclosingBox (QPolygon &ch, QPolygon &rectangle, QLine &direction)}\\
+Metoda pro výpočet hlavních směrů budovy. Na vstupu je konvexní obálka ch a prázdné proměnné rectangle a direction. Do rectangle se uloží minimální ohraničující obdélník a do direction hlavní směr budovy.
+\\
+
+\subsubsection{Draw}
+Třída Draw obsahuje celkem xx metod. Metody jsou určeny pro generování a vykreslování proměných.
+\\
+
+\textbf{void paintEvent(QPaintEvent *e)}\\
+Metoda slouží k vykreslení vytvořených, generovaných bodů a zobrazení výsledků použitých algoritmů.
+\\
+
+\textbf{void mousePressEvent(QMouseEvent *e)}\\
+Po stisknutí levého tlačítka myší na zobrazovací okno, metoda uloží bod se souřadnicemi místa kliknutí.
+\\
+
+\textbf{void clearCanvas()}\\
+Metoda slouží k vymazání proměnných a k překreslení
+\\
+
+\textbf{std::vector<QPoint> generateGrid(int n)}\\
+Metoda generuje pravidelnou mřížku. Na vstupu je počet generovaných bodů. Návratová hodnota je vektor bodů.\\
+
+\textbf{std::vector<QPoint> generateRandomPoints(int n)}\\
+Metoda generuje náhodné body. Na vstupu je počet generovaných bodů. Návratová hodnota je vektor bodů.\\
+
+\textbf{std::vector<QPoint> generateStarShape(int n)}\\
+Metoda generuje body do tvaru hvězdy. Na vstupu je počet generovaných bodů. Návratová hodnota je vektor bodů.\\
+
+\textbf{std::vector<QPoint> generateSquare(int n)}\\
+Metoda generuje body do tvaru čtverce. Na vstupu je počet generovaných bodů, změna v počtu bodů se projení s násobkem čtyř. Návratová hodnota je vektor bodů.\\
+
+\textbf{std::vector<QPoint> generateEclipse(int n)}\\
+Metoda generuje body do tvaru elipsy. Na vstupu je počet generovaných bodů. Návratová hodnota je vektor bodů.\\
+
+\textbf{std::vector<QPoint> generateCircle(int n)}\\
+Metoda generuje body do tvaru kruhu. Na vstupu je počet generovaných bodů. Návratová hodnota je vektor bodů.\\
+
+\textbf{void setCH(QPolygon ch_)}\\
+Metoda slouží pro převod konvexní obálky do vykreslovacího okna.\\
+
+\textbf{setRectangle(QPolygon rectangle_)}\\
+Metoda slouží pro převod minimální ohraničujícího obdélníku do vykreslovacího okna.\\
+
+\textbf{setDirection(QLine direction_)}\\
+Metoda slouží pro převod hlavního směru budovy do vykreslovacího okna.\\
+
+\textbf{setPoints(std::vector<QPoint> points_)}\\
+Metoda slouží pro převod vektoru bodů do vykreslovacího okna.\\
+
+\textbf{std::vector<QPoint> getPoints()}\\
+Metoda slouží pro převod vektoru bodů z vykreslovacího okna.\\
+
+\textbf{QPolygon getConvexHull()}\\
+Metoda slouží pro převod konvexní obálky z vykreslovacího okna.\\
+
+\subsubsection{SortByXAsc}
+Třída SortByXAsc slouží k porovnání souřadnic v ose x.
+\\
+
+\textbf{bool operator()(QPoint &p1, QPoint &p2)}\\
+Přetížený operátor () vrátí bod s větší souřadnicí x z dvojice bodů.
+\\
+
+\subsubsection{sortByYAsc}
+Třída SortByXAsc slouží k porovnání souřadnic v ose y.
+\\
+
+\textbf{bool operator()(QPoint &p1, QPoint &p2)}\\
+Přetížený operátor () vrátí bod s větší souřadnicí y z dvojice bodů.
+\\
+
+\subsubsection{Widget}
+\\
+
+\textbf{void on_pushButton_clicked()}\\
+Při stisknutí tlačítka Create CH se volají metody třídy Algorithms dle metody vybrané v comboboxu.
+\\
+
+\textbf{void on_generate_clicked()}\\
+Při stisknutí tlačítka Generate se volají metody třídy Draw dle metody vybrané v comboboxu.
+\\
+
+\void on_pushButton_2_clicked()}\\
+Při stisknutí tlačítka Clear se zavolá metoda třídy Draw clearCanvas.
+\\
+
+\void on_minimumAreaEnclosingBox_clicked();}\\
+Při stisknutí tlačítka MinEndBox se nad konvexní obálkou zavolá metoda třídy Algorithms minimumAreaEnclosingBox.
+\\
+
 \clearpage
 \section{Závěr}
 
