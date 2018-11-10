@@ -56,22 +56,21 @@ QPolygon Algorithms::CHJarvis (vector<QPoint> &points)
     QPolygon ch;
     std::vector<QPoint> q_points;
     std::vector<QPoint> s_points;
+    int index = 0;
     qDebug()<<"points is"<<points;
 
     //Find pivot q
     std::sort(points.begin(), points.end(), sortByYAsc());
-    QPoint q = points[0];
 
     //Reduce singulary case  by kolinear points
     for(int i = 1;i<points.size();i++)
     {
         if(q.y()== points[i].y())
         {
-            q_points.push_back(points[i]);
+            index++;
         }
     }
-    std::sort(q_points.begin(), q_points.end(), SortByXAsc());
-    q = q_points[q_points.size()-1];
+    QPoint q = points[index];
 
     //Find s
     std::sort(points.begin(), points.end(), SortByXAsc());
