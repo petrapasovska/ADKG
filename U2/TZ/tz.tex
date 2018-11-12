@@ -93,7 +93,7 @@ Níže uvedené zadání je kopie ze stránek předmětu.
 \end{figure}
 
 \subsection{Údaje o bonusových úlohách}
-Z bonusových úloh byl vytvořen algoritmus pro automatické generování množin bodů různých tvarů. Uživatel si může v aplikaci sám zvolit, zda chce vygenerovat kruh, elipsu, čtverec, star-shaped či grid. Byla vložena i možnost náhodného rozmístění bodů v daném zobrazovacím okně. Dále byl vytvořen algoritmus pro výpočet konvexní obálky metodou Graham Scan.
+Z bonusových úloh byl vytvořen algoritmus pro automatické generování množin bodů různých tvarů. Uživatel si může v aplikaci sám zvolit, zda chce vygenerovat kruh, elipsu, čtverec, star-shaped či grid. Byla vložena i možnost náhodného rozmístění bodů v daném zobrazovacím okně. Dále byl vytvořen algoritmus pro výpočet konvexní obálky metodou Graham Scan. V rámci aplikace je i fungující výpočet konstrukce Minimum Area Enclosing Box. V neposlední řadě byly všechny vytvořené konvexní obálky zredukovány tak, aby vytvářely striktně konvexní obálky.
 
 
 \clearpage
@@ -136,7 +136,10 @@ Abychom byli schopni algoritmus sestavit, je potřeba nalézt pivot, označme je
 \end{figure}
 
 \subsubsection{Problematické situace}
-K chybě v algoritmu může dojít v případě, že tři body budou kolineární. Tedy v případě, že se budou tři body nacházet na jedné přímce. (Jak bychom toto vyřešili hmm??)
+K chybě v algoritmu může dojít v případě, že tři body budou kolineární. Tedy v případě, že se budou tři následující body nacházet na jedné přímce:  $ p_i, p_{i+1}, p_{i+2} \in \vec{x} $.
+\\
+napsat řešení 
+
 
 
 \subsubsection{Implementace metody}
@@ -234,6 +237,66 @@ Pro výpočet je nejprve nutné body seřadit dle námi zvoleného kritéria, v 
 \item V opačném případě přidej bod do konvexní obálky: $ p_{j}  \rightarrow H $
 \end{enumerate}
 
+\section{Informace o bonusových úlohách}
+V podkapitolách jsou blíže popsány bonusové úlohy kromě algoritmu Graham Scan, ten byl již vysvětlem a popsán v rámci použitých algoritmů. Zároveň není blíže popsán stav kolineárních bodů při metodě Jarvis Scan. Tento stav je specifikován v rámci kapitoly zabývající se algoritmem Jarvis Scan v podkapitole Problematické situace.
+
+\subsection{Automatické generování množin bodů}
+Pro tvorbu automatického generování množin bodů je možné zvolit útvar, v němž budou generované body vykresleny. V rámci aplikaci si může uživatel vybrat mezi kruhem, čtvercem, elipsou, gridem, náhodném rozmístění či star shaped útvarem. Veškeré body jsou odsazeny, aby elipsy, které bod reprezentují, nebyly nějakým způsobem oříznuté.
+
+\subsubsection{Circle}
+Pro tvorbu kruhu byl nejprve náhodně vygenerován střed kružnice a její poloměr. V závislosti na počtu bodů byl určen středový úhel po sobě jdoucích bodů. Po znalosti těchto hodnot bylo snadné vygenerovat body na kružnici:\\
+$ X = X_0 + r * cos(\phi)$ \\
+$ Y = Y_0 + r * sin(\phi) $
+
+\subsubsection{Ellipse}
+Elipsa byla generována obdobně jako kruh s tím rozdílem, že nebyl generován poloměr, ale hodnota hlavní poloosy (a) a vedlejší poloosy (b). 
+$ X = X_0 + a * cos(\phi)$ \\
+$ Y = Y_0 + b * sin(\phi) $
+
+\subsubsection{Square}
+Při tvorbě čtverce je nejprve vygenerováno náhodné umístění levého horního rohu. Poté je náhodně vypočtena délka hrany. Se znalostí délky hrany jsme schopni určit zbylé vrcholy čtverce a zároveň zobrazit body na hranách. Při generování čtverce je vstupní množství zredukováno tak, aby počet bodů odpovídal počtu nutnému pro zobrazení čtverce. Pro představu - z pěti bodů čtverec nesestavíte, tudíž pokud to je nutné, tak dochází k přepočítání počtu bodů. Na tento fakt je uživatel aplikací upozorněn.
+
+\subsubsection{Star Shaped}
+Při tvorbě Star Shaped polygonu je automaticky vygenerován střed a poloosy a, b. Pro polygony typu star shaped je typické, že z jeho středu lze vidět do všech vrcholů. Dva po sobě jdoucí body budou vytvořeny s různou vzdáleností od středu, čímž této podmínky docílíme. Středový úhel mezi dvěma následujícími body bude opět určen v závislosti na vstupnímu množství dat.\\
+$ X_i = X_0 + a * cos(\phi)$ \\
+$ Y_i = Y_0 + a * sin(\phi) $ \\
+$ X_{i+1} = X_0 + b * cos(\phi)$ \\
+$ Y_{i+1} = Y_0 + b * sin(\phi) $
+
+\subsubsection{Grid}
+Pro tvorbu pravidelné mřížky je zapotřebí, aby vstupní počet bodů byl druhu mocninou nějakého přirozeného čísla. Pokud tato podmínka není splněna, je počet redukován a uživatel je o změně informován. Takovýto případ může nastat například při zadání 18 bodů. Počet je v tomto případě zredukován na 16 a vytvořený grid má velikost 4 x 4. Podobně jako při tvorbě čtverce je vygenerován první bod, od nějž jsou následně zbylé body vypočteny.
+
+\subsubsection{Random}
+Body byly náhodně rozmístěny v rámci zobrazovacího okna.
+
+\subsection{Konstrukce striktně konvexních obálek}
+Striktně konvexní obálky jsou takové, že po sobě následující 3 body neleží na stejné přímce. V případě vygenerovaného čtverce o sto bodech bude striktně konvexní obálka obsahovat pouze 4 body, a to vrcholy. Pro tvorbu striktně konvexních obálek byla po vygenerování klasických obálek volána funkce na určení pozice bodu vůči linii. Pokud byl následující bod vyhodnocen tak, že leží na orientované úsečce $\overrightarrow{AB}$, bod B byl z množiny odebrán a následně byla testována další trojice bodů. Zároveň bylo nutné odebrat duplicitní body.
+
+
+\subsection{Konstrukce Minimum Area Enclosing Box}
+V rámci bonusových úloh bylo i sestrojení obdélníku s minimální plochou s využitím konvexní obálky. Tvorba takovýchto obdélníků se využívá v kartografii pro detekci tvaru a natočení budov. Případně by se mohla metoda používat v rámci generalizace, zde by však bylo zapotřebí ošetřit, aby výsledná data byla topologicky čistá. Při tvorbě minimálního obdélníku s využitím konvexní obálky se vychází z předpokladu, že nejméně jedna strana obdélníka je kolineární se stranou konvexní obálky. Složitost takovéto konstrukce má časovou náročnost O(n). 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{mbr.jpg}
+	\caption{Princip tvorby Minimum Bounding Rectangle včetně znázornění úhlů a stran, které jsou tímto způsobem také popsány v následné implementaci metody. [zdroj: 5]}
+\end{figure}
+
+\subsubsection{Implementace metody}
+\begin{enumerate}
+\item Inicializuj: $ A_{min} = \infty; rot = 0; \Phi_{sum} = 0$
+\item Nalezení Minimum Bounding Rectangle, který se dotýká konvexní obálky v extrémních bodech (min X, max X, min Y, max Y)
+\item Výpočet úhlů a plochy: $ \phi_j, \phi_k, A(R)$
+\item Vložení vypočtené plochy do minimální: $A_{min} = A$
+\item Opakuj dokud: $\Phi_{sum} \textless  {\pi/4}$
+\subitem Výpočet úhlů $\Phi_i, \Phi_j, \Phi_k, \Phi_l$ a stran $l_1, l_2$
+\subitem Nalezni nejmenší úhel: $\Phi = min(\Phi_i, \Phi_j, \Phi_k, \Phi_l)$
+\subitem Otočení obdélníku o úhel $\Phi$
+\subitem Výpočet plochy obdélníku a porovnání s dosavadní minimální plochou.
+\subitem Při nalezení menší plochy: $A_{min} = A; rot = rot + \Phi; L_1 = l_1; L_2 = l_2$
+\subitem $\Phi_{sum} = \Phi_{sum} + \Phi$
+\end{enumerate}
+
 \section{Vstupní data}
 Vstupními daty je množina bodů, která je vygenerovaná uživatelem. Uživatel může v tomto případě generovat body sám za pomoci kurzoru. Případně je v aplikaci implementována funkce pro automatické generování bodů. Uživatel má navíc možnost vlastní volby, jakým způsobem budou body generovány, zda budou body v kruhu, ve čtverci, elipse či v gridu. \\
 \\
@@ -246,7 +309,7 @@ Výstupem této úlohy je grafická aplikace, ve které jsou vstupní data analy
 \\
 Zároveň jsou výstupem data s porovnáním jednotlivých dob výpočtů na různém množství dat. Tyto hodnoty jsou vzájemně porovnány za pomoci tabulek a grafů.
 
-
+\clearpage
 \section{Aplikace}
 \begin{figure}[h!]
 	\centering
@@ -459,6 +522,17 @@ Při stisknutí tlačítka MinEndBox se nad konvexní obálkou zavolá metoda t�
 
 \clearpage
 \section{Závěr}
+V rámci úlohy byla vytvořena aplikace, která je schopna na vygenerovaných bodech zkonstruovat konvexní obálku. Zároveň je v rámci aplikace možné náhodně vygenerovat téměř libovolné množství bodů do určitého tvaru. Na výběr je poměrně široké spektrum běžných tvarů, což jistě uživatel ocení.
+
+\section{Náměty na vylepšení}
+\subsection{Graham Scan}
+V algoritmu Graham Scan pro výpočet konvexní obálky je po zamyšlení zřejmě použit příliš složitý postup výpočtu úhlu s osou x. Zároveň víme, že velikosti směrnic budou vždy dosahovat hodnot od 0 do 180, neboť se jedná o úhel mezi pivotem a osou X. Tudíž některé řádky týkající se určení kvadrantů jsou zbytečné.
+
+\subsection{Generování množin bodů}
+Při tvorbě generování gridu napadla autory myšlenka, že by se body generovaly v některém ze známých kartografických zobrazení. Z bakalářského studia znají velké množství zobrazovacích rovnic, pomocí nichž by se body zobrazovaly. Zajímavé rozmístění by měla zejména kuželová zobrazení. Při zobrazení bodů v rámci některého kartografického zobrazení by výsledná konvexní obálka představovala celý svět, případně polokouli, záleželo by na typu zvoleného zobrazení.
+
+\subsection{Testování algoritmů}
+V rámci této úlohy bylo provedeno několik testování nad odlišným množstvím bodů a na jejich odlišném zobrazení. Časově bylo testování poměrně náročné, za úvahu jistě stojí popřemýšlení, zda by nebylo výhodnější vytvořit takovou funkci, která by pro předem definované tvary a množství bodů sama provedla testování. Zároveň obsahuje platforma Qt i knihovnu grafů, časová úspora by tedy byla velmi výrazná.
 
 
 

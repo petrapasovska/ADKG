@@ -181,6 +181,13 @@ QPolygon Algorithms::QHull (vector<QPoint> &points)
     //Process SL
     qh(0, 1, sl, ch);
 
+    //Delete duplicit points
+    for(int j = 0; j<(ch.size()-1); j++){
+        if((ch[j].x() == ch[j+1].x())&&(ch[j].y() == ch[j+1].y())){
+            ch.remove(j);
+            j--;
+        }
+    }
 
     //Delete points on the same line
     for(int i=0; i<(ch.size()-2); i++){
@@ -436,13 +443,14 @@ QPolygon Algorithms::GrahamScan (vector<QPoint> &points){
 
             // check points with the same angel and remove point which is closer
 
-            /*
+
             if(fabs((fi-fi_max))<0.001){
                 double distNew = sqrt((q.x()-poly[i].x())*(q.x()-poly[i].x()) + (q.y()-poly[i].y())*(q.y()-poly[i].y()));
                 double distOld = sqrt((q.x()-poly[ind_max].x())*(q.x()-poly[ind_max].x()) + (q.y()-poly[ind_max].y())*(q.y()-poly[ind_max].y()));
 
                 if(distOld<distNew){
                     poly.remove(ind_max);
+                    ind_max = i;
 
                 }
                 else{
@@ -452,7 +460,7 @@ QPolygon Algorithms::GrahamScan (vector<QPoint> &points){
                 i--;
 
             }
-            */
+
 
             // find the biggest angle with axis X
             if(fi>fi_max){
@@ -499,9 +507,6 @@ QPolygon Algorithms::GrahamScan (vector<QPoint> &points){
             i--;
         }
     }
-
-    qDebug() << ch;
-
 
     return ch;
 
@@ -603,10 +608,12 @@ QPolygon Algorithms::CHSweep (vector<QPoint> &points)
     }
 
     //Delete duplicit points
-    for(int j = 0; j<(ch.size()-1); j++){
-        if((ch[j].x() == ch[j+1].x())&&(ch[j].y() == ch[j+1].y())){
-            ch.remove(j);
-            j--;
+    for(int i = 0; i<(ch.size()-1); i++){
+        for(int j = i+1; j<(ch.size()); j++){
+            if((ch[j].x() == ch[i].x())&&(ch[j].y() == ch[i].y())){
+                ch.remove(j);
+                j--;
+            }
         }
     }
 
@@ -618,5 +625,6 @@ QPolygon Algorithms::CHSweep (vector<QPoint> &points)
         }
     }
 
+    qDebug() << ch;
     return ch;
 }

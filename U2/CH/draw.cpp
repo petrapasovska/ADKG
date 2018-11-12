@@ -97,6 +97,8 @@ std::vector<QPoint> Draw::generateSquare(int n)
         random_points.push_back(QPoint(p.x()+(i*length_small),p.y()+length));
         random_points.push_back(QPoint(p.x(),p.y()+(i*length_small)));
     }
+
+    qDebug() << random_points;
     return random_points;
 }
 
@@ -184,19 +186,19 @@ std::vector<QPoint> Draw::generateGrid(int n)
         return random_points;
     }
 
-    if(!(n%4==0)){
+    int m = (sqrt(n));
+    if(!(n-m*m)==0){
         QMessageBox msgBox;
         msgBox.setText("Warning: The input has to be reduced to make regular grid");
         msgBox.exec();
     }
 
      //generate size of window
-     double a = rand()%200;
-     double b = rand()%200;
+     double a = rand()%100;
+     double b = rand()%100;
 
      //size of grid
      int size = sqrt(n);
-     int pocet = 0;
 
      // set first point
      random_points.push_back(QPoint(10,10));
@@ -207,15 +209,10 @@ std::vector<QPoint> Draw::generateGrid(int n)
          for(int j =0;j<size;j++)
          {
              random_points.push_back(QPoint(random_points[0].x()+i*a,random_points[0].y()+j*b));
-             pocet = pocet +1;
 
          }
      }
 
-     qDebug() << pocet;
-
      return random_points;
 }
-
-
 
