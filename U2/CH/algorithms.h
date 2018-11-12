@@ -29,6 +29,7 @@ public:
     static QPolygon QHull (vector<QPoint> &points);
     static void qh (int s, int e, vector<QPoint> &p, QPolygon &h);
     static QPolygon GrahamScan (vector<QPoint> &points);
+    static QPolygon CHSweep (vector<QPoint> &points);
 };
 
 #endif // ALGORITHMS_H

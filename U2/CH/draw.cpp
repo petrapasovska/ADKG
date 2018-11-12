@@ -27,12 +27,9 @@ void Draw::paintEvent(QPaintEvent *e)
    painter.drawLine(direction);
 
    //Draw points
-<<<<<<< HEAD
    painter.setPen(Qt::black);
-   for(int i = 0; i < points.size(); i++)
-=======
    for(unsigned int i = 0; i < points.size(); i++)
->>>>>>> 4b17dee0f5ef86c31fdf1d773ba7edb88bc7735d
+
    {
        painter.drawEllipse(points[i].x()-5, points[i].y()-5, 10, 10);
    }
@@ -59,6 +56,8 @@ void Draw::clearCanvas()
     ch.clear();
     points.clear();
     rectangle.clear();
+    direction.setLine(0,0,0,0);
+
     repaint();
 }
 
@@ -119,7 +118,7 @@ std::vector<QPoint> Draw::generateCircle(int n)
     return random_points;
 }
 
-std::vector<QPoint> Draw::generateEclipse(int n)
+std::vector<QPoint> Draw::generateEllipse(int n)
 {
     std::vector<QPoint> random_points;
     QPoint p;
@@ -217,3 +216,6 @@ std::vector<QPoint> Draw::generateGrid(int n)
 
      return random_points;
 }
+
+
+

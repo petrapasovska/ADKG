@@ -27,7 +27,7 @@ public:
     std::vector<QPoint> getPoints(){return points;}
     QPolygon getConvexHull(){return ch;}
     static std::vector<QPoint> generateCircle(int n);
-    static std::vector<QPoint> generateEclipse(int n);
+    static std::vector<QPoint> generateEllipse(int n);
     static std::vector<QPoint> generateSquare(int n);
     static std::vector<QPoint> generateStarShape(int n);
     static std::vector<QPoint> generateRandomPoints(int n);

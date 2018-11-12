@@ -62,6 +62,8 @@ QPolygon Algorithms::CHJarvis (vector<QPoint> &points)
     //Find pivot q
     std::sort(points.begin(), points.end(), sortByYAsc());
 
+    QPoint q = points[index];
+
     //Reduce singulary case  by kolinear points
     for(int i = 1;i<points.size();i++)
     {
@@ -70,7 +72,7 @@ QPolygon Algorithms::CHJarvis (vector<QPoint> &points)
             index++;
         }
     }
-    QPoint q = points[index];
+
 
     //Find s
     std::sort(points.begin(), points.end(), SortByXAsc());
@@ -178,6 +180,17 @@ QPolygon Algorithms::QHull (vector<QPoint> &points)
 
     //Process SL
     qh(0, 1, sl, ch);
+
+
+    //Delete points on the same line
+    for(int i=0; i<(ch.size()-2); i++){
+        if(getPointLinePosition(ch[i+2],ch[i],ch[i+1])==ON){
+            ch.remove(i+1);
+            i--;
+        }
+    }
+
+    qDebug() << ch;
 
     return ch;
 }
@@ -376,58 +389,234 @@ void Algorithms::rotateByAngle(QLine &points, double angle)
 
 QPolygon Algorithms::GrahamScan (vector<QPoint> &points){
 
-   QPolygon graham_ch;
+    // sort by Y and add point with smallest Y to the convex hull
+    //
 
-   // sort by Y and add point with smallest Y to the convex hull
-   std::sort(points.begin(), points.end(), sortByYAsc());
-   QPoint q = points[0];
+    std::sort(points.begin(), points.end(), sortByYAsc());
+    QPoint q = points[0];
 
-   QPoint pj = q;
+    QPolygon poly;
 
-   do
-   {
-       int ind_max = 0;
-       double fi_max = 0;
-       double fi = 0;
+    for(unsigned int j =1; j < points.size(); j++){
+        poly.push_back(points[j]);
+    }
 
-       //Find sigma = arg max angle(pi, q, x) - for the record - x is point on the axis x
-       for(unsigned int i = 0; i<points.size();i++)
+
+    QPolygon pointsByAngle;
+
+    // sort by angle
+    while(!poly.empty()){
+
+        int ind_max = -1;
+        double fi_max = 0;
+        double fi = 0;
+
+        for (int i =0; i<poly.size(); i++){
+
+            // count the angel with axis X according to quadrant
+            double alfa = (atan(fabs((q.x()-poly[i].x()))/fabs(q.y()-poly[i].y())))*180/M_PI;
+
+            // Check the quadrant and fix the angel according to the axis X
+            if((poly[i].x()-q.x())<0 && (poly[i].y()-q.y())>0){
+                fi = 90 + alfa;
+            }
+
+            if((poly[i].x()-q.x())<0 && (poly[i].y()-q.y())<0){
+                fi = 270 - alfa;
+            }
+
+            if((poly[i].x()-q.x())>0 && (poly[i].y()-q.y())<0){
+                fi = 270 + alfa;
+            }
+
+            if((poly[i].x()-q.x())>0 && (poly[i].y()-q.y())>0){
+                fi = 90 - alfa;
+            }
+
+
+            // check points with the same angel and remove point which is closer
+
+            /*
+            if(fabs((fi-fi_max))<0.001){
+                double distNew = sqrt((q.x()-poly[i].x())*(q.x()-poly[i].x()) + (q.y()-poly[i].y())*(q.y()-poly[i].y()));
+                double distOld = sqrt((q.x()-poly[ind_max].x())*(q.x()-poly[ind_max].x()) + (q.y()-poly[ind_max].y())*(q.y()-poly[ind_max].y()));
+
+                if(distOld<distNew){
+                    poly.remove(ind_max);
+
+                }
+                else{
+                    poly.remove(i);
+
+                }
+                i--;
+
+            }
+            */
+
+            // find the biggest angle with axis X
+            if(fi>fi_max){
+                fi_max = fi;
+                ind_max = i;
+            }
+
+        }
+
+        pointsByAngle<<(poly.takeAt(ind_max));
+    }
+
+
+    QPolygon ch;
+
+    // add pivot and the first point from sorted points
+    ch.push_back(q);
+    ch.push_back(pointsByAngle[0]);
+
+    // find out the position of point to line
+    for(int i = 1; i < pointsByAngle.size(); i++)
        {
-           double alfa = atan(fabs((pj.x()-points[i].x()))/fabs(pj.y()-points[i].y()));
+           bool doEvaluation  = true;
 
-           // Check the quadrant and fix the angel according to the axis X
-           if((points[i].x()-q.x())<0 && (points[i].y()-q.y())>0){
-               fi = alfa + 90;
-           }
+           while(doEvaluation )
+           {
+               if(getPointLinePosition(ch[ch.size()-1], ch[ch.size()-2], pointsByAngle[i]) == RIGHT)
+                   ch.pop_back();
 
-           if((points[i].x()-q.x())<0 && (points[i].y()-q.y())<0){
-               fi = 270 - alfa;
-           }
+               else if(getPointLinePosition(ch[ch.size()-1], ch[ch.size()-2], pointsByAngle[i]) == ON)
+                   ch.pop_back();
 
-           if((points[i].x()-q.x())>0 && (points[i].y()-q.y())<0){
-               fi = 270 + alfa;
+               else
+                   doEvaluation  = false;
            }
-
-           if((points[i].x()-q.x())>0 && (points[i].y()-q.y())>0){
-               fi = 90 - alfa;
-           }
-
-           // find the biggest angle with axis X
-           if(fi>fi_max){
-               fi_max = fi;
-               ind_max = i;
-           }
+           ch.push_back(pointsByAngle[i]);
        }
 
 
-       //Add the next point to CH
-       graham_ch.push_back(points[ind_max]);
+    //Delete points on the same line
+    for(int i=0; i<(ch.size()-2); i++){
+        if(getPointLinePosition(ch[i+2],ch[i],ch[i+1])==ON){
+            ch.remove(i+1);
+            i--;
+        }
+    }
 
-       //Assign CH verticess
-       pj = points[ind_max];
+    qDebug() << ch;
 
-   } while (!(pj == q));
 
-   return graham_ch;
+    return ch;
 
+}
+
+
+
+QPolygon Algorithms::CHSweep (vector<QPoint> &points)
+{
+    //Create convex hull using the sweepline procedure
+    QPolygon ch;
+
+    //sort by X
+    std::sort(points.begin(), points.end(), SortByXAsc());
+
+    //Create list of predecessors
+    std::vector<int> p(points.size());
+
+    //Create list of successors
+    std::vector<int> n(points.size());
+
+    /*
+    //Create triangle (0, 1, 2) from the first 3 points
+    //Change i to 3 in the next for loop
+    if(getPointLinePosition(points[2], points[0], points[1])==LEFT)
+    {
+        n[0] = 1;
+        n[1] = 2;
+        n[2] = 0;
+        p[0] = 2;
+        p[1] = 0;
+        p[2] = 1;
+    }
+    //Create triangle (0, 2, 1) from the first 3 points
+    else
+    {
+        n[0] = 2;
+        n[2] = 1;
+        n[1] = 0;
+        p[0] = 1;
+        p[2] = 0;
+        p[1] = 2;
+    }
+    */
+
+    //Create an initial biangle (0, 1)
+    //Change i to 2 in the next for loop
+    n[0]=1;
+    n[1]=0;
+
+    p[0]=1;
+    p[1]=0;
+
+    for (int i = 2; i < points.size(); i++)
+    {
+        //Point in the upper halfplane
+        //Link i with predecessor/successor
+        if(points[i].y() > points[i-1].y())
+        {
+            p[i]=i-1;
+            n[i]=n[i-1];
+        }
+
+        //Point in the lower halfplane
+        else
+        {
+            n[i]=i-1;
+            p[i]=p[i-1];
+
+        }
+
+        //Link predecessor/successor with i-th point
+        n[p[i]] = i;
+        p[n[i]] = i;
+
+        //Fix the upper tangent
+        while(getPointLinePosition(points[n[n[i]]], points[i], points[n[i]])==RIGHT)
+        {
+            p[n[n[i]]] = i;
+            n[i] = n[n[i]];
+        }
+
+        //Fix the lower tangent
+        while(getPointLinePosition(points[p[p[i]]], points[i], points[p[i]])==LEFT)
+        {
+            n[p[p[i]]] = i;
+            p[i] = p[p[i]];
+        }
+    }
+
+    // Convert to the polygon
+    ch.push_back(points[0]);
+    int i = n[0];
+
+    while (i != 0)
+    {
+       ch.push_back(points[i]);
+       i = n[i];
+    }
+
+    //Delete duplicit points
+    for(int j = 0; j<(ch.size()-1); j++){
+        if((ch[j].x() == ch[j+1].x())&&(ch[j].y() == ch[j+1].y())){
+            ch.remove(j);
+            j--;
+        }
+    }
+
+    //Delete points on the same line
+    for(int i=0; i<(ch.size()-2); i++){
+        if(getPointLinePosition(ch[i+2],ch[i],ch[i+1])==ON){
+            ch.remove(i+1);
+            i--;
+        }
+    }
+
+    return ch;
 }

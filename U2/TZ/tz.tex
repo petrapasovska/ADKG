@@ -93,7 +93,7 @@ Níže uvedené zadání je kopie ze stránek předmětu.
 \end{figure}
 
 \subsection{Údaje o bonusových úlohách}
-
+Z bonusových úloh byl vytvořen algoritmus pro automatické generování množin bodů různých tvarů. Uživatel si může v aplikaci sám zvolit, zda chce vygenerovat kruh, elipsu, čtverec, star-shaped či grid. Byla vložena i možnost náhodného rozmístění bodů v daném zobrazovacím okně. Dále byl vytvořen algoritmus pro výpočet konvexní obálky metodou Graham Scan.
 
 
 \clearpage
@@ -120,7 +120,7 @@ Konvexní obálky využívá celá řada vědních oborů. Zajímavé bylo využ
 
 
 \section{Popis použitých algoritmů}
-Existuje několik způsobů jak vytvořit konvexní obálku. V této úloze byly použity pro tovrbu 3 metody. ( 4 když se povede bonus????)
+Existuje několik způsobů jak vytvořit konvexní obálku. V této úloze byly použity pro tovrbu 4 metody - Jarvis Scan, Quick Hull, Sweep Line a Graham Scan.
 
 \subsection{Jarvis Scan}
 Tato metoda bývá přirovnávána ke způsobu balení dárků (alternativní název Gift Wrapping Algorithm). Předpokladem pro algoritmus Jarvis Scan je, že 3 body nesmí ležet na jedné přímce. Metoda je poměrně snadná pro zápis, velkou nevýhodou je však časová náročnost O($n^2$), které lze dosáhnout, pokud body z množiny S leží na kružnici. Běžný čas výpočtu bývá O(n*h), kde n je počet vstupních bodů a h je počet bodů, které tvoří obálku. [zdroj: 1]\\
@@ -177,15 +177,156 @@ Pro výpočet metodou Quick Hull je nejprve zapotřebí nalézt extrémní body,
 
 Tady nevím, jestli nerozepsat i implementaci lokální metody??? Možná by to pak bylo pochopitelnější
 
+
+\subsection{Sweep line}
+Metoda Sweep line, v češtině označovaná také jako metoda zametací přímky, využívá strategii inkrementální konstrukce. Množinu bodů si v dané dimenzi rozdělíme na zpracovanou a nezpracovanou část. Rozdělovací kritérium je ve většině případů jedna ze souřadnicových os. Je zde tedy nutné body podle této osy seřadit a následně vyhodnocovat každý následující nezpracovaný bod. Body se vyhodnocují v závislosti na jejich poloze vůči tečně. Časová složitost této metody je O(n log(n)). 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{sweep_line.jpg}
+	\caption{Princip algoritmu zametací přímky [zdroj: 5]}
+\end{figure}
+
+\subsubsection{Implementace metody}
+\begin{enumerate}
+\item Seřazení bodů množiny podle osy x: $ Sort P_s = sort(P) by x $ 
+\item Vyhodnocení v případě, že bod $p_3$ leží v levé polorovině od přímky$ p_1, p_2$:  $ if (p_3 \in \sigma_L (p_1, p_2)) $ 
+\subitem Změna indexů následovníků: $ n[1] = 2; n[2] = 3; n[3] = 1  $
+\subitem Změna indexů předchůdců: $ p[1] = 3; p[2] = 1; p[3] = 2  $
+\item Vyhodnocení v případě, že bod$ p_3$ leží v levé polorovině od přímky$ p_1, p_2$:  $ if (p_3 \in \sigma_P (p_1, p_2)) $ 
+\subitem Změna indexů následovníků: $ n[1] = 3; n[3] = 2; n[2] = 1  $
+\subitem Změna indexů předchůdců: $ p[1] = 2; p[3] = 1; p[2] = 3  $
+\item Vyhodnocování následujících bodů: $ for  p_i \in P_S, i \textgreater 3$
+\subitem Porovnání hodnoty souřadnice y: $ if (y_i \textgreater y_{i-1})  $
+\subsubitem Změna indexů při splnění podmínky: $ p[i] = i-1; n[i] = n[i-1]$
+\subsubitem V opačném případě: $ p[i] = p[i-1]; n[i] = i-1$
+\subitem Přeindexování následníka předchůdce a předchůdce následníka: \\
+$ n[p[i]] = i; p[n[i]] = i  $
+\subitem Zhodnocení polohy následníka následníka vůči přímce bodu a následníka: \\
+$ while (n[n[i]]) \in \sigma_R (i, n[i])  $
+\subsubitem Změna indexů: $ p[n[n[i]]] = i; n[i] = n[n[i]]$
+\subitem Zhodnocení polohy předchůdce předchůdce vůči přímce bodu a předchůdce: \\
+$ while (p[p[i]]) \in \sigma_L (i, p[i])  $
+\subsubitem Změna indexů: $ n[p[p[i]]] = i; p[i] = p[p[i]]$
+\end{enumerate}
+
+ta implementace vypadá trošku chaoticky, když zbyde čas tak nějak upravíme :-)
+
+\subsection{Graham Scan}
+Algoritmus Graham Scan slouží k vytvoření konvexní obálky nad konečným množstvím bodů. Metoda je pojmenována po Ronaldu Grahamovi, který ji publikoval v roce 1972. Časová náročnost metody je O(n log(n)). Hlavní myšlenka algoritmu je taková, že každá uspořádaná trojice bodů musí splňovat kritérium levotočivosti (uvažujeme uspořádání hran v CCW orientaci - proti směru hodinových ručiček).\\
+\\
+Pro výpočet je nejprve nutné body seřadit dle námi zvoleného kritéria, v tomto případě podle souřadnice Y. Bod s nejnižší souřadnicí Y označíme jako pivot. Následně je vypočtena směrnice s osou X vůči pivotu všech ostatních bodů. Body jsou následně podle tohoto úhlu setříděny. Po setřídění je možné přejít k vyhodnocování polohy bodů, kde jsou vždy testovány 2 poslední přidané body v polygonu konvexních obálek a následující setříděný bod.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{graham_scan.jpg}
+	\caption{Princip vyhodnocení polohy bodu v metodě Graham Scan [zdroj: 6]}
+\end{figure}
+
+\subsubsection{Implementace metody}
+\begin{enumerate}
+\item Nalezení pivota q:  $ q = min_{\forall p_i \in S} (y_i), q \in H $ 
+\item Setřídění bodů dle úhlu s osou x: $ {\forall p_i \in S}$ sort by $ \omega_i = \angle (p_i, q, x)$
+\item Při nalezení stejného úhlu: $ \omega_k = \omega_l \rightarrow $ delete the closer point 
+\item Vložení pivota a prvního bodu do množiny: $ H \leftarrow q; H \leftarrow p_1$
+\item Opakuj pro všechna: $ for j < n $
+\item Vyhodnocení polohy bodu: if $ p_j $ vpravo od předešlých bodů $ \rightarrow pop S$
+\item V opačném případě přidej bod do konvexní obálky: $ p_{j}  \rightarrow H $
+\end{enumerate}
+
 \section{Vstupní data}
+Vstupními daty je množina bodů, která je vygenerovaná uživatelem. Uživatel může v tomto případě generovat body sám za pomoci kurzoru. Případně je v aplikaci implementována funkce pro automatické generování bodů. Uživatel má navíc možnost vlastní volby, jakým způsobem budou body generovány, zda budou body v kruhu, ve čtverci, elipse či v gridu. \\
+\\
+Při automatickém generování bodů je nutné nastavit i počet bodů, ze kterých bude daný útvar tvořen. Ne všechny tvary však lze vytvořit z vloženého množství bodů. V případě, že vstup nebude zcela odpovídat zvolenému útvaru, zobrazí se uživateli vyskakovací okno, které upozorní na nevhodný vstup a případnou modifikaci vloženého počtu. Tento případ nastane například při vložení tří bodů, ze kterých by uživatel chtěl vytvořit čtverec. 
+
 
 
 \section{Výstupní data}
+Výstupem této úlohy je grafická aplikace, ve které jsou vstupní data analyzovány a následně je v závislosti na jejich vzájemně poloze vytvořena konvexní obálka. Konvexní obálku je možné vytvořit čtyřmi způsoby za pomoci nejznámějších algoritmů - Jarvis Scan, Quick Hull, Sweep Line a Graham Scan.\\
+\\
+Zároveň jsou výstupem data s porovnáním jednotlivých dob výpočtů na různém množství dat. Tyto hodnoty jsou vzájemně porovnány za pomoci tabulek a grafů.
 
 
 \section{Aplikace}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{vstup.jpg}
+	\caption{Zobrazené okno po spuštění aplikace}
+\end{figure}
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{circle.jpg}
+	\caption{Vygenerované body v kruhu}
+\end{figure}
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{square.jpg}
+	\caption{Vygenerované body ve čtverci}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{ellipse.jpg}
+	\caption{Vygenerované body v elipse}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{grid.jpg}
+	\caption{Vygenerované body v pravidelné mřížce}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{random.jpg}
+	\caption{Náhodně vygenerované body}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{star_shaped.jpg}
+	\caption{Vygenerované body ve tvaru Star Shaped}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{warning_grid.jpg}
+	\caption{Varování na redukci vloženého počtu bodů při tvorbě gridu }
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{warning_square.jpg}
+	\caption{Varování při neplatném vstupu při tvorbě čtverce}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{warning_square2.jpg}
+	\caption{Varování na redukci vloženého počtu bodů při tvorbě čtverce}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{hint.jpg}
+	\caption{Nápověda, pokud si uživatel nebude jistý, jak v aplikaci postupovat}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{tooltip.jpg}
+	\caption{Po přiložení kurzoru se zobrazí informace o objektu}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{close.jpg}
+	\caption{Vyskakovací okno při ukončování aplikace}
+\end{figure}
+
+\clearpage
 
 \section{Dokumentace}
 \subsection{Třídy}
@@ -193,37 +334,39 @@ Tady nevím, jestli nerozepsat i implementaci lokální metody??? Možná by to 
 Třída Algorithms obsahuje celkem xx metod. Metody jsou určeny pro výpočty použitých algoritmů.
 \\
 
-\textbf{double length2Points(QPoint q, QPoint p)}\\
-Metoda jejíž návratová hodnota je typu double vrací velikost spojnice mezi dvěma body.\\
+\textbf{double length2Points(QPoint q, QPoint p)}
+Metoda jejíž návratová hodnota je typu double vrací velikost spojnice mezi dvěma body.
+\\
 
-\textbf{void polygonTransform(QPoint p, QPoint k, QPoint p1, QPoint k1, QPolygon &pol)}\\
-Metoda je přetížená pro  podobnostní transformaci QPolygon a QLine. Transformační klíč je dán dvěma body se souřadnicemi v obou souřadných soustavách. Body p a k jsou v souřadné soustavě, ze které pochází pol. Body p1 a k1 jsou v souřadné soustavě, do které chceme transformovat. Výsledek transformace přeuloží do proměnné pol.\\
+\textbf{void polygonTransform(QPoint p, QPoint k, QPoint p1, QPoint k1, QPolygon \&pol)}
+Metoda je přetížená pro  podobnostní transformaci QPolygon a QLine. Transformační klíč je dán dvěma body se souřadnicemi v obou souřadných soustavách. Body p a k jsou v souřadné soustavě, ze které pochází pol. Body p1 a k1 jsou v souřadné soustavě, do které chceme transformovat. Výsledek transformace přeuloží do proměnné pol.
+\\
 
-\textbf{rotateByAngle(QPolygon &points, double angle)}\\
+\textbf{rotateByAngle(QPolygon \&points, double angle)}
 Metoda je přetížená pro rotaci QPolygon a QLine. Prvky proměnné pol se pouze rotují podle úhlu angle. Proměnná úhel je v radiánech. Výsledek transformace přeuloží do proměnné pol.
 \\
 
-\textbf{TPosition getPointLinePosition(QPoint &q, QPoint &a, QPoint &b)}\\
-
+\textbf{TPosition getPointLinePosition(QPoint \&q, QPoint \&a, QPoint \&b)}
 \\
 
-\textbf{double get2LinesAngle(QPoint &p1,QPoint &p2,QPoint &p3, QPoint &p4)}\\
 
+\textbf{double get2LinesAngle(QPoint \&p1,QPoint \&p2,QPoint \&p3, QPoint \&p4)}
 \\
 
-\textbf{QPolygon CHJarvis (vector<QPoint> &points)}\\
+
+\textbf{QPolygon CHJarvis (vector\textless QPoint \textgreater \&points)}
 Metoda pro výpočet konvexní obálky nad vektorem bodů metodou Jarvis Scan. Metoda vrácí konvexní obálku s typem QPolygon.
 \\
 
-\textbf{QPolygon QHull (vector<QPoint> &points)}\\
+\textbf{QPolygon QHull (vector\textless QPoint \textgreater \&points)}
 Metoda pro výpočet konvexní obálky nad vektorem bodů metodou Quick Hull. Metoda vrácí konvexní obálku s typem QPolygon.
 \\
 
-\textbf{void qh (int s, int e, vector<QPoint> &p, QPolygon &h)}\\
+\textbf{void qh (int s, int e, vector\textless QPoint \textgreater \&p, QPolygon \&h)}
 Pomocná metoda pro rekurzi v metodě Qhull. Na vstupu jsou indexi bodů s a e, které určují přímku, podle níž se určí zda bod p patří do konvexní obálky h a nebo ne. Metoda nic nevrací, pouze ukládá body, které patří do konvexní obálky.
 \\
 
-\textbf{void minimumAreaEnclosingBox (QPolygon &ch, QPolygon &rectangle, QLine &direction)}\\
+\textbf{void minimumAreaEnclosingBox (QPolygon \&ch, QPolygon \&rectangle, QLine \&direction)}
 Metoda pro výpočet hlavních směrů budovy. Na vstupu je konvexní obálka ch a prázdné proměnné rectangle a direction. Do rectangle se uloží minimální ohraničující obdélník a do direction hlavní směr budovy.
 \\
 
@@ -231,86 +374,86 @@ Metoda pro výpočet hlavních směrů budovy. Na vstupu je konvexní obálka ch
 Třída Draw obsahuje celkem xx metod. Metody jsou určeny pro generování a vykreslování proměných.
 \\
 
-\textbf{void paintEvent(QPaintEvent *e)}\\
+\textbf{void paintEvent(QPaintEvent *e)}
 Metoda slouží k vykreslení vytvořených, generovaných bodů a zobrazení výsledků použitých algoritmů.
 \\
 
-\textbf{void mousePressEvent(QMouseEvent *e)}\\
+\textbf{void mousePressEvent(QMouseEvent *e)}
 Po stisknutí levého tlačítka myší na zobrazovací okno, metoda uloží bod se souřadnicemi místa kliknutí.
 \\
 
-\textbf{void clearCanvas()}\\
+\textbf{void clearCanvas()}
 Metoda slouží k vymazání proměnných a k překreslení
 \\
 
-\textbf{std::vector<QPoint> generateGrid(int n)}\\
+\textbf{std::vector\textless QPoint \textgreater generateGrid(int n)}
 Metoda generuje pravidelnou mřížku. Na vstupu je počet generovaných bodů. Návratová hodnota je vektor bodů.\\
-
-\textbf{std::vector<QPoint> generateRandomPoints(int n)}\\
+\\
+\textbf{std::vector\textless QPoint \textgreater generateRandomPoints(int n)}
 Metoda generuje náhodné body. Na vstupu je počet generovaných bodů. Návratová hodnota je vektor bodů.\\
-
-\textbf{std::vector<QPoint> generateStarShape(int n)}\\
+\\
+\textbf{std::vector\textless QPoint \textgreater generateStarShape(int n)}
 Metoda generuje body do tvaru hvězdy. Na vstupu je počet generovaných bodů. Návratová hodnota je vektor bodů.\\
-
-\textbf{std::vector<QPoint> generateSquare(int n)}\\
+\\
+\textbf{std::vector\textless QPoint \textgreater generateSquare(int n)}
 Metoda generuje body do tvaru čtverce. Na vstupu je počet generovaných bodů, změna v počtu bodů se projení s násobkem čtyř. Návratová hodnota je vektor bodů.\\
-
-\textbf{std::vector<QPoint> generateEclipse(int n)}\\
+\\
+\textbf{std::vector\textless QPoint \textgreater generateEclipse(int n)}
 Metoda generuje body do tvaru elipsy. Na vstupu je počet generovaných bodů. Návratová hodnota je vektor bodů.\\
-
-\textbf{std::vector<QPoint> generateCircle(int n)}\\
+\\
+\textbf{std::vector\textless QPoint \textgreater generateCircle(int n)}
 Metoda generuje body do tvaru kruhu. Na vstupu je počet generovaných bodů. Návratová hodnota je vektor bodů.\\
-
-\textbf{void setCH(QPolygon ch_)}\\
+\\
+\textbf{void setCH(QPolygon ch\_)}
 Metoda slouží pro převod konvexní obálky do vykreslovacího okna.\\
-
-\textbf{setRectangle(QPolygon rectangle_)}\\
+\\
+\textbf{setRectangle(QPolygon rectangle\_)}
 Metoda slouží pro převod minimální ohraničujícího obdélníku do vykreslovacího okna.\\
-
-\textbf{setDirection(QLine direction_)}\\
+\\
+\textbf{setDirection(QLine direction\_)}
 Metoda slouží pro převod hlavního směru budovy do vykreslovacího okna.\\
-
-\textbf{setPoints(std::vector<QPoint> points_)}\\
+\\
+\textbf{setPoints(std::vector\textless QPoint \textgreater points\_)}
 Metoda slouží pro převod vektoru bodů do vykreslovacího okna.\\
-
-\textbf{std::vector<QPoint> getPoints()}\\
+\\
+\textbf{std::vector\textless QPoint \textgreater getPoints()}
 Metoda slouží pro převod vektoru bodů z vykreslovacího okna.\\
-
-\textbf{QPolygon getConvexHull()}\\
+\\
+\textbf{QPolygon getConvexHull()}
 Metoda slouží pro převod konvexní obálky z vykreslovacího okna.\\
-
+\\
 \subsubsection{SortByXAsc}
-Třída SortByXAsc slouží k porovnání souřadnic v ose x.
+Třída SortByXAsc slouží k porovnání souřadnic v ose x.\\
 \\
 
-\textbf{bool operator()(QPoint &p1, QPoint &p2)}\\
-Přetížený operátor () vrátí bod s větší souřadnicí x z dvojice bodů.
+\textbf{bool operator()(QPoint \&p1, QPoint \&p2)}
+Přetížený operátor () vrátí bod s větší souřadnicí x z dvojice bodů.\\
 \\
 
 \subsubsection{sortByYAsc}
 Třída SortByXAsc slouží k porovnání souřadnic v ose y.
 \\
 
-\textbf{bool operator()(QPoint &p1, QPoint &p2)}\\
+\textbf{bool operator()(QPoint \&p1, QPoint \&p2)}
 Přetížený operátor () vrátí bod s větší souřadnicí y z dvojice bodů.
 \\
 
 \subsubsection{Widget}
-\\
 
-\textbf{void on_pushButton_clicked()}\\
+
+\textbf{void on\_pushButton\_clicked()}
 Při stisknutí tlačítka Create CH se volají metody třídy Algorithms dle metody vybrané v comboboxu.
 \\
 
-\textbf{void on_generate_clicked()}\\
+\textbf{void on\_generate\_clicked()}
 Při stisknutí tlačítka Generate se volají metody třídy Draw dle metody vybrané v comboboxu.
 \\
 
-\void on_pushButton_2_clicked()}\\
+\textbf{void on\_pushButton\_2\_clicked()}
 Při stisknutí tlačítka Clear se zavolá metoda třídy Draw clearCanvas.
 \\
 
-\void on_minimumAreaEnclosingBox_clicked();}\\
+\textbf{void on\_minimumAreaEnclosingBox\_clicked()}
 Při stisknutí tlačítka MinEndBox se nad konvexní obálkou zavolá metoda třídy Algorithms minimumAreaEnclosingBox.
 \\
 
@@ -337,6 +480,9 @@ Dostupné z: https://www.geeksforgeeks.org/convex-hull-set-1-jarviss-algorithm-o
 
 \item  BAYER, Tomáš. Geometrické vyhledávání [online][cit. 5.11.2018]. \\
 Dostupné z: https://web.natur.cuni.cz/~bayertom/images/courses/Adk/adk4.pdf  \\
+
+\item GeeksforGeeks: Convex Hull - Set 2 (Graham Scan). [online][cit. 12.11.2018]\\
+Dostupné z: https://www.geeksforgeeks.org/convex-hull-set-2-graham-scan/
 
 
 
