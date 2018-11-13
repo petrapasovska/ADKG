@@ -3,11 +3,17 @@
 #include <QtGui>
 #include <math.h>
 using namespace std;
+
 typedef enum{
     LEFT = 0,
     RIGHT,
     ON
 } TPosition;
+
+struct vec_angle{
+    QPoint p;
+    double a;
+};
 
 class Algorithms
 {
@@ -18,6 +24,7 @@ private:
     static void polygonTransform(QPoint p, QPoint k, QPoint p1, QPoint k1, QLine &pol);
     static void rotateByAngle(QPolygon &points, double angle);
     static void rotateByAngle(QLine &points, double angle);
+
 public:
     Algorithms();
 
@@ -29,7 +36,10 @@ public:
     static QPolygon QHull (vector<QPoint> &points);
     static void qh (int s, int e, vector<QPoint> &p, QPolygon &h);
     static QPolygon GrahamScan (vector<QPoint> &points);
+    static QPolygon GrahamScanNew (vector<QPoint> &points);
     static QPolygon CHSweep (vector<QPoint> &points);
+    static QPolygon exatlyCH(QPolygon ch);
+    static QPolygon deleteDuplicityCH(QPolygon ch);
 };
 
 #endif // ALGORITHMS_H
