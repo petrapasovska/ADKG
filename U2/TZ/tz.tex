@@ -136,9 +136,14 @@ Abychom byli schopni algoritmus sestavit, je potřeba nalézt pivot, označme je
 \end{figure}
 
 \subsubsection{Problematické situace}
-K chybě v algoritmu může dojít v případě, že tři body budou kolineární. Tedy v případě, že se budou tři následující body nacházet na jedné přímce:  $ p_i, p_{i+1}, p_{i+2} \in \vec{x} $.
-\\
-napsat řešení 
+K chybě v algoritmu může dojít v případě, že v množině bodů bude existovat více bodů s minimální Y souřadnicí. V tom případě se jedná o kolineární body. Tento problém lze ošetřit výběřem pivota s minimální Y souřadnicí a maximální X souřadnicí.\\
+
+Ošetření problematické situace:
+\begin{enumerate}
+\item Nalezení pivota q:  $ q = min(y_i) $ 
+\item Při nalezení více bodů s minimální souřadnicí: $max X_{ \forall q \in P}$
+\end{enumerate}
+
 
 
 
@@ -178,7 +183,6 @@ Pro výpočet metodou Quick Hull je nejprve zapotřebí nalézt extrémní body,
 \item Opakování hledání nejvzdálenějšího bodu v dolní části.
 \end{enumerate}
 
-Tady nevím, jestli nerozepsat i implementaci lokální metody??? Možná by to pak bylo pochopitelnější
 
 
 \subsection{Sweep line}
@@ -213,7 +217,6 @@ $ while (p[p[i]]) \in \sigma_L (i, p[i])  $
 \subsubitem Změna indexů: $ n[p[p[i]]] = i; p[i] = p[p[i]]$
 \end{enumerate}
 
-ta implementace vypadá trošku chaoticky, když zbyde čas tak nějak upravíme :-)
 
 \subsection{Graham Scan}
 Algoritmus Graham Scan slouží k vytvoření konvexní obálky nad konečným množstvím bodů. Metoda je pojmenována po Ronaldu Grahamovi, který ji publikoval v roce 1972. Časová náročnost metody je O(n log(n)). Hlavní myšlenka algoritmu je taková, že každá uspořádaná trojice bodů musí splňovat kritérium levotočivosti (uvažujeme uspořádání hran v CCW orientaci - proti směru hodinových ručiček).\\
@@ -249,7 +252,7 @@ $ X = X_0 + r * cos(\phi)$ \\
 $ Y = Y_0 + r * sin(\phi) $
 
 \subsubsection{Ellipse}
-Elipsa byla generována obdobně jako kruh s tím rozdílem, že nebyl generován poloměr, ale hodnota hlavní poloosy (a) a vedlejší poloosy (b). 
+Elipsa byla generována obdobně jako kruh s tím rozdílem, že nebyl generován poloměr, ale hodnota hlavní poloosy (a) a vedlejší poloosy (b). \\
 $ X = X_0 + a * cos(\phi)$ \\
 $ Y = Y_0 + b * sin(\phi) $
 
@@ -276,26 +279,22 @@ Striktně konvexní obálky jsou takové, že po sobě následující 3 body nel
 \subsection{Konstrukce Minimum Area Enclosing Box}
 V rámci bonusových úloh bylo i sestrojení obdélníku s minimální plochou s využitím konvexní obálky. Tvorba takovýchto obdélníků se využívá v kartografii pro detekci tvaru a natočení budov. Případně by se mohla metoda používat v rámci generalizace, zde by však bylo zapotřebí ošetřit, aby výsledná data byla topologicky čistá. Při tvorbě minimálního obdélníku s využitím konvexní obálky se vychází z předpokladu, že nejméně jedna strana obdélníka je kolineární se stranou konvexní obálky. Složitost takovéto konstrukce má časovou náročnost O(n). 
 
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{mbr.jpg}
-	\caption{Princip tvorby Minimum Bounding Rectangle včetně znázornění úhlů a stran, které jsou tímto způsobem také popsány v následné implementaci metody. [zdroj: 5]}
-\end{figure}
+
 
 \subsubsection{Implementace metody}
 \begin{enumerate}
-\item Inicializuj: $ A_{min} = \infty; rot = 0; \Phi_{sum} = 0$
+\item Inicializuj: $ A_{min} = \infty$
+\item Inicializace místního souřadnicového systému a výpočet úhlu následujících bodů: $p=[0,0]; k=[0,\overrightarrow{PK}]$
+\item Pro všechny body převod do místního systému: $points_i = p; points_{i+1} = k$
 \item Nalezení Minimum Bounding Rectangle, který se dotýká konvexní obálky v extrémních bodech (min X, max X, min Y, max Y)
-\item Výpočet úhlů a plochy: $ \phi_j, \phi_k, A(R)$
-\item Vložení vypočtené plochy do minimální: $A_{min} = A$
-\item Opakuj dokud: $\Phi_{sum} \textless  {\pi/4}$
-\subitem Výpočet úhlů $\Phi_i, \Phi_j, \Phi_k, \Phi_l$ a stran $l_1, l_2$
-\subitem Nalezni nejmenší úhel: $\Phi = min(\Phi_i, \Phi_j, \Phi_k, \Phi_l)$
-\subitem Otočení obdélníku o úhel $\Phi$
-\subitem Výpočet plochy obdélníku a porovnání s dosavadní minimální plochou.
-\subitem Při nalezení menší plochy: $A_{min} = A; rot = rot + \Phi; L_1 = l_1; L_2 = l_2$
-\subitem $\Phi_{sum} = \Phi_{sum} + \Phi$
+\item Porovnání s minimální plochou. $A < A_{min}$
+\subitem Nahraď:$ A_{min}; Save (min X, max X, min Y, max Y); Save Angle $
+\item Vytvoř obdélník z (min X, max X, min Y, max Y).
+\item Nalezení největší osy obdélníku v místní soustavě.
+\item Transformace do globálního systému.
 \end{enumerate}
+
+
 
 \section{Vstupní data}
 Vstupními daty je množina bodů, která je vygenerovaná uživatelem. Uživatel může v tomto případě generovat body sám za pomoci kurzoru. Případně je v aplikaci implementována funkce pro automatické generování bodů. Uživatel má navíc možnost vlastní volby, jakým způsobem budou body generovány, zda budou body v kruhu, ve čtverci, elipse či v gridu. \\
@@ -387,6 +386,36 @@ Zároveň jsou výstupem data s porovnáním jednotlivých dob výpočtů na rů
 	\centering
 	\includegraphics[width=10cm]{close.jpg}
 	\caption{Vyskakovací okno při ukončování aplikace}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{jarvis_ch.jpg}
+	\caption{Tvorba konvexní obálky metodou Jarvis Scan}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{sweepline_ch.jpg}
+	\caption{Tvorba konvexní obálky metodou Sweep Line}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{qhull_ch.jpg}
+	\caption{Tvorba konvexní obálky metodou Quick Hull}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{grahamscan_ch.jpg}
+	\caption{Tvorba konvexní obálky metodou Graham Scan}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{minBound.jpg}
+	\caption{Tvorba minimálního ohraničujícího obdélníku}
 \end{figure}
 
 \clearpage
@@ -532,7 +561,9 @@ V algoritmu Graham Scan pro výpočet konvexní obálky je po zamyšlení zřejm
 Při tvorbě generování gridu napadla autory myšlenka, že by se body generovaly v některém ze známých kartografických zobrazení. Z bakalářského studia znají velké množství zobrazovacích rovnic, pomocí nichž by se body zobrazovaly. Zajímavé rozmístění by měla zejména kuželová zobrazení. Při zobrazení bodů v rámci některého kartografického zobrazení by výsledná konvexní obálka představovala celý svět, případně polokouli, záleželo by na typu zvoleného zobrazení.
 
 \subsection{Testování algoritmů}
-V rámci této úlohy bylo provedeno několik testování nad odlišným množstvím bodů a na jejich odlišném zobrazení. Časově bylo testování poměrně náročné, za úvahu jistě stojí popřemýšlení, zda by nebylo výhodnější vytvořit takovou funkci, která by pro předem definované tvary a množství bodů sama provedla testování. Zároveň obsahuje platforma Qt i knihovnu grafů, časová úspora by tedy byla velmi výrazná.
+V rámci této úlohy bylo provedeno několik testování nad odlišným množstvím bodů a na jejich odlišném zobrazení. Časově bylo testování poměrně náročné, za úvahu jistě stojí popřemýšlení, zda by nebylo výhodnější vytvořit takovou funkci, která by pro předem definované tvary a množství bodů sama provedla testování. Zároveň obsahuje platforma Qt i knihovnu grafů, časová úspora by tedy byla velmi výrazná.\\
+\\
+
 
 
 
