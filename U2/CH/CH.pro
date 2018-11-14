@@ -30,14 +30,16 @@ SOURCES += \
     draw.cpp \
     algorithms.cpp \
     sortbyxasc.cpp \
-    sortbyyasc.cpp
+    sortbyyasc.cpp \
+    sortbyangle.cpp
 
 HEADERS += \
         widget.h \
     draw.h \
     algorithms.h \
     sortbyxasc.h \
-    sortbyyasc.h
+    sortbyyasc.h \
+    sortbyangle.h
 
 FORMS += \
         widget.ui

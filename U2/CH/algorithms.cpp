@@ -1,6 +1,7 @@
 #include "algorithms.h"
 #include "sortbyxasc.h"
 #include "sortbyyasc.h"
+#include "sortbyangle.h"
 
 Algorithms::Algorithms()
 {
@@ -239,7 +240,6 @@ void Algorithms::minimumAreaEnclosingBox (QPolygon &ch, QPolygon &rectangle, QLi
 {
        QPolygon ch_used;              // main direction of building
        QPolygon ch_sort;     // save points for transformation
-       QPoint  p_global_rectangle, k_global_rectangle, p_rectangle, k_rectangle;
        QPoint p1(0,0);                  // center of local system
        QPoint k1;
        double min_angle;
@@ -247,15 +247,6 @@ void Algorithms::minimumAreaEnclosingBox (QPolygon &ch, QPolygon &rectangle, QLi
        k1.setY(0);
        int n = ch.size();
 
-       /* // compute min_area for loop
-       std::sort(ch_sort.begin(),ch_sort.end(), SortByXAsc());
-       double x_min = ch_sort[0].x();
-       double x_max = ch_sort[n-1].x();
-       std::sort(ch_sort.begin(),ch_sort.end(), sortByYAsc());
-       double y_min = ch_sort[0].y();
-       double y_max = ch_sort[n-1].y();
-       double min_area = (x_max-x_min)*(y_max-y_min);
-       */
        double min_area = std::numeric_limits<double>::max();
 
        //compute coordinates od rectangle
@@ -293,12 +284,6 @@ void Algorithms::minimumAreaEnclosingBox (QPolygon &ch, QPolygon &rectangle, QLi
                 y_max_rectangle = y_max;
                 min_area = area;
                 min_angle = angle;
-
-                //save transform key
-                p_global_rectangle = ch[i];
-                k_global_rectangle = ch[i+1];
-                p_rectangle = p1;
-                k_rectangle = k1;
             }
        }
 
@@ -320,55 +305,8 @@ void Algorithms::minimumAreaEnclosingBox (QPolygon &ch, QPolygon &rectangle, QLi
        // transform  direction and rectangle back to global system
        rotateByAngle(rectangle,-min_angle*(M_PI/180));
        rotateByAngle(direction,-min_angle*(M_PI/180));
-       //polygonTransform(p_rectangle, k_rectangle, p_global_rectangle, k_global_rectangle, rectangle);
-       //polygonTransform(p_rectangle, k_rectangle, p_global_rectangle, k_global_rectangle, direction);
-
-
 }
 
-void Algorithms::polygonTransform(QPoint p, QPoint k, QPoint p1, QPoint k1, QPolygon &pol)
-{
-    // Xa = Xp + b*delxpa - a*delypa
-    // Ya = Yp + a*delxpa + b*delypa
-    // a =(delxpk*delYpk - delypk*delXpk)/(delxpk*delxpk +delypk*delypk)
-    // b =(delxpk*delXpk - delypk*delYpk)/(delxpk*delxpk +delypk*delypk)
-
-    double angle = get2LinesAngle(p, k, p1, k1)*(M_PI/180);
-
-    //double a = ((p.x()-k.x())*(p1.y()-k1.y()) - (p.y()-k.y())*(p1.x()-k1.x())) / ((p.x()-k.x())*(p.x()-k.x()) - (p.y()-k.y())*(p.y()-k.y()));
-    //double b = ((p.x()-k.x())*(p1.y()-k1.y()) - (p.y()-k.y())*(p1.x()-k1.x())) / ((p.x()-k.x())*(p.x()-k.x()) - (p.y()-k.y())*(p.y()-k.y()));
-
-    for(int i = 0; i<pol.size();i++)
-    {
-        QPoint point = pol[i];
-        pol[i].setX(cos(angle)*(point.x()) + sin(angle)*(point.y()));
-        pol[i].setY(-sin(angle)*(point.x()) + cos(angle)*(point.y()));
-        //pol[i].setX(p1.x() + b*(point.x()-p.x()) - a*(point.y()-p.y()));
-        //pol[i].setY(p1.y() + a*(point.x()-p.x()) + b*(point.y()-p.y()));
-    }
-}
-
-
-void Algorithms::polygonTransform(QPoint p, QPoint k, QPoint p1, QPoint k1, QLine &pol)
-{
-    // Xa = Xp + b*delxpa - a*delypa
-    // Ya = Yp + a*delxpa + b*delypa
-    // a =(delxpk*delYpk - delypk*delXpk)/(delxpk*delxpk +delypk*delypk)
-    // b =(delxpk*delXpk - delypk*delZpk)/(delxpk*delxpk +delypk*delypk)
-
-    double angle = get2LinesAngle(p, k, p1, k1)*(M_PI/180);
-
-    //double a = ((p.x()-k.x())*(p1.y()-k1.y()) - (p.y()-k.y())*(p1.x()-k1.x())) / ((p.x()-k.x())*(p.x()-k.x()) - (p.y()-k.y())*(p.y()-k.y()));
-    //double b = ((p.x()-k.x())*(p1.y()-k1.y()) - (p.y()-k.y())*(p1.x()-k1.x())) / ((p.x()-k.x())*(p.x()-k.x()) - (p.y()-k.y())*(p.y()-k.y()));
-
-    QPoint first = pol.p1();
-    QPoint second = pol.p2();
-
-    pol.setP1(QPoint(cos(angle)*(first.x()) + sin(angle)*(first.y()), -sin(angle)*(first.x()) + cos(angle)*(first.y())));
-    pol.setP2(QPoint(cos(angle)*(second.x()) + sin(angle)*(second.y()), -sin(angle)*(second.x()) + cos(angle)*(second.y())));
-    //pol.setP1(QPoint(p1.x() + b*(first.x()-p.x()) - a*(first.y()-p.y()),p1.y() + a*(first.x()-p.x()) + b*(first.y()-p.y())));
-    //pol.setP1(QPoint(p1.x() + b*(second.x()-p.x()) - a*(second.y()-p.y()),p1.y() + a*(second.x()-p.x()) + b*(second.y()-p.y())));
-}
 
 // Borrow from kalator, my transform function not work
 void Algorithms::rotateByAngle(QPolygon &points, double angle)
@@ -546,6 +484,14 @@ QPolygon Algorithms::CHSweep (vector<QPoint> &points)
     //sort by x coord asc
     std::sort(points.begin(), points.end(), SortByXAsc());
 
+    //delete duplicit points on sorted data
+    for(int i =0; i<points.size(); i++){
+        if((points[i].x()==points[i+1].x()) && (points[i].y()==points[i+1].y())  ){
+            points.erase(points.begin()+i);
+            i--;
+        }
+    }
+
     //create list of predecessors (p) and successors (n)
     std::vector<int> p(points.size()), n(points.size());
 
@@ -622,12 +568,16 @@ QPolygon Algorithms::CHSweep (vector<QPoint> &points)
         poly_ch.push_back(points[index]);
         index = n[index];
     }
+
+    exatlyCH(poly_ch);
+
     return poly_ch;
 }
 
 QPolygon Algorithms::GrahamScanNew (vector<QPoint> &points)
 {
     QPolygon ch;
+    QPolygon pointsByAngle;
     std::vector<vec_angle> angles;
     double eps = 0.001;
     int index = 0;
@@ -660,13 +610,43 @@ QPolygon Algorithms::GrahamScanNew (vector<QPoint> &points)
         point.p.setX(points[i].x());
         point.p.setY(points[i].y());
         point.a = get2LinesAngle(q,s,q, points[i]);
+        point.d = length2Points(q,points[i]);
         angles.push_back(point);
     }
 
+    // sort by angle and distance
+    std::sort(angles.begin(), angles.end(), sortbyangle());
+
+    //select point of star shape from sorted points
+    for(int i = 0; i<angles.size(); i++)
+    {
+        double ang = angles[i].a;
+    }
 
 
+    ch.push_back(pointsByAngle[0]);
+/*
+    // find out the position of point to line
+    for(int i = 1; i < pointsByAngle.size(); i++)
+       {
+           bool doEvaluation  = true;
 
+           while(doEvaluation )
+           {
+               if(getPointLinePosition(ch[ch.size()-1], ch[ch.size()-2], pointsByAngle[i]) == RIGHT)
+                   ch.pop_back();
 
+               else if(getPointLinePosition(ch[ch.size()-1], ch[ch.size()-2], pointsByAngle[i]) == ON)
+                   ch.pop_back();
 
+               else
+                   doEvaluation  = false;
+           }
+           ch.push_back(pointsByAngle[i]);
+       }
+
+    exatlyCH(ch);
+*/
+    return ch;
 }
 

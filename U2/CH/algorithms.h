@@ -13,6 +13,7 @@ typedef enum{
 struct vec_angle{
     QPoint p;
     double a;
+    double d;
 };
 
 class Algorithms
