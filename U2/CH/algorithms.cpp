@@ -546,6 +546,14 @@ QPolygon Algorithms::CHSweep (vector<QPoint> &points)
     //sort by x coord asc
     std::sort(points.begin(), points.end(), SortByXAsc());
 
+    //delete duplicit points on sorted data
+    for(int i =0; i<points.size(); i++){
+        if((points[i].x()==points[i+1].x()) && (points[i].y()==points[i+1].y())  ){
+            points.erase(points.begin()+i);
+            i--;
+        }
+    }
+
     //create list of predecessors (p) and successors (n)
     std::vector<int> p(points.size()), n(points.size());
 
@@ -622,6 +630,9 @@ QPolygon Algorithms::CHSweep (vector<QPoint> &points)
         poly_ch.push_back(points[index]);
         index = n[index];
     }
+
+    exatlyCH(poly_ch);
+
     return poly_ch;
 }
 
