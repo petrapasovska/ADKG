@@ -54,25 +54,24 @@ double Algorithms::get2LinesAngle(QPoint &p1,QPoint &p2,QPoint &p3, QPoint &p4)
 QPolygon Algorithms::CHJarvis (vector<QPoint> &points)
 {
     QPolygon ch;
-    std::vector<QPoint> q_points;
-    std::vector<QPoint> s_points;
     int index = 0;
-    qDebug()<<"points is"<<points;
 
     //Find pivot q
     std::sort(points.begin(), points.end(), sortByYAsc());
 
-    QPoint q = points[index];
-
     //Reduce singulary case  by kolinear points
+
     for(int i = 1;i<points.size();i++)
     {
-        if(q.y()== points[i].y())
+        if(points[0].y()== points[i].y())
         {
             index++;
         }
     }
 
+
+    // pivot with min y and max x
+    QPoint q = points[index];
 
     //Find s
     std::sort(points.begin(), points.end(), SortByXAsc());
@@ -116,6 +115,9 @@ QPolygon Algorithms::CHJarvis (vector<QPoint> &points)
         pj = points[i_max];
 
     } while (!(pj == q));
+
+    exatlyCH(ch);
+    deleteDuplicityCH(ch);
 
     return ch;
 }
@@ -189,13 +191,8 @@ QPolygon Algorithms::QHull (vector<QPoint> &points)
         }
     }
 
-    //Delete points on the same line
-    for(int i=0; i<(ch.size()-2); i++){
-        if(getPointLinePosition(ch[i+2],ch[i],ch[i+1])==ON){
-            ch.remove(i+1);
-            i--;
-        }
-    }
+    exatlyCH(ch);
+    deleteDuplicityCH(ch);
 
     qDebug() << ch;
 
@@ -396,10 +393,12 @@ void Algorithms::rotateByAngle(QLine &points, double angle)
 
 QPolygon Algorithms::GrahamScan (vector<QPoint> &points){
 
-    // sort by Y and add point with smallest Y to the convex hull
-    //
+    double eps = 0.001;
 
+    // sort by Y and add point with smallest Y to the convex hull
     std::sort(points.begin(), points.end(), sortByYAsc());
+
+    // pivot with min y and max x
     QPoint q = points[0];
 
     QPolygon poly;
@@ -416,12 +415,15 @@ QPolygon Algorithms::GrahamScan (vector<QPoint> &points){
 
         int ind_max = -1;
         double fi_max = 0;
-        double fi = 0;
+        double fi;
 
         for (int i =0; i<poly.size(); i++){
 
             // count the angel with axis X according to quadrant
+            //fi = (atan2(fabs((q.x()-poly[i].x())),fabs(q.y()-poly[i].y())))*180/M_PI;
+
             double alfa = (atan(fabs((q.x()-poly[i].x()))/fabs(q.y()-poly[i].y())))*180/M_PI;
+
 
             // Check the quadrant and fix the angel according to the axis X
             if((poly[i].x()-q.x())<0 && (poly[i].y()-q.y())>0){
@@ -444,7 +446,7 @@ QPolygon Algorithms::GrahamScan (vector<QPoint> &points){
             // check points with the same angel and remove point which is closer
 
 
-            if(fabs((fi-fi_max))<0.001){
+            if(fabs((fi-fi_max))<eps){
                 double distNew = sqrt((q.x()-poly[i].x())*(q.x()-poly[i].x()) + (q.y()-poly[i].y())*(q.y()-poly[i].y()));
                 double distOld = sqrt((q.x()-poly[ind_max].x())*(q.x()-poly[ind_max].x()) + (q.y()-poly[ind_max].y())*(q.y()-poly[ind_max].y()));
 
@@ -499,6 +501,16 @@ QPolygon Algorithms::GrahamScan (vector<QPoint> &points){
            ch.push_back(pointsByAngle[i]);
        }
 
+    exatlyCH(ch);
+
+    return ch;
+
+}
+
+QPolygon Algorithms::exatlyCH(QPolygon ch)
+{
+    QPoint first = ch[0];
+    QPoint second = ch[1];
 
     //Delete points on the same line
     for(int i=0; i<(ch.size()-2); i++){
@@ -509,104 +521,10 @@ QPolygon Algorithms::GrahamScan (vector<QPoint> &points){
     }
 
     return ch;
-
 }
 
-
-
-QPolygon Algorithms::CHSweep (vector<QPoint> &points)
+QPolygon Algorithms::deleteDuplicityCH(QPolygon ch)
 {
-    //Create convex hull using the sweepline procedure
-    QPolygon ch;
-
-    //sort by X
-    std::sort(points.begin(), points.end(), SortByXAsc());
-
-    //Create list of predecessors
-    std::vector<int> p(points.size());
-
-    //Create list of successors
-    std::vector<int> n(points.size());
-
-    /*
-    //Create triangle (0, 1, 2) from the first 3 points
-    //Change i to 3 in the next for loop
-    if(getPointLinePosition(points[2], points[0], points[1])==LEFT)
-    {
-        n[0] = 1;
-        n[1] = 2;
-        n[2] = 0;
-        p[0] = 2;
-        p[1] = 0;
-        p[2] = 1;
-    }
-    //Create triangle (0, 2, 1) from the first 3 points
-    else
-    {
-        n[0] = 2;
-        n[2] = 1;
-        n[1] = 0;
-        p[0] = 1;
-        p[2] = 0;
-        p[1] = 2;
-    }
-    */
-
-    //Create an initial biangle (0, 1)
-    //Change i to 2 in the next for loop
-    n[0]=1;
-    n[1]=0;
-
-    p[0]=1;
-    p[1]=0;
-
-    for (int i = 2; i < points.size(); i++)
-    {
-        //Point in the upper halfplane
-        //Link i with predecessor/successor
-        if(points[i].y() > points[i-1].y())
-        {
-            p[i]=i-1;
-            n[i]=n[i-1];
-        }
-
-        //Point in the lower halfplane
-        else
-        {
-            n[i]=i-1;
-            p[i]=p[i-1];
-
-        }
-
-        //Link predecessor/successor with i-th point
-        n[p[i]] = i;
-        p[n[i]] = i;
-
-        //Fix the upper tangent
-        while(getPointLinePosition(points[n[n[i]]], points[i], points[n[i]])==RIGHT)
-        {
-            p[n[n[i]]] = i;
-            n[i] = n[n[i]];
-        }
-
-        //Fix the lower tangent
-        while(getPointLinePosition(points[p[p[i]]], points[i], points[p[i]])==LEFT)
-        {
-            n[p[p[i]]] = i;
-            p[i] = p[p[i]];
-        }
-    }
-
-    // Convert to the polygon
-    ch.push_back(points[0]);
-    int i = n[0];
-
-    while (i != 0)
-    {
-       ch.push_back(points[i]);
-       i = n[i];
-    }
-
     //Delete duplicit points
     for(int i = 0; i<(ch.size()-1); i++){
         for(int j = i+1; j<(ch.size()); j++){
@@ -616,15 +534,139 @@ QPolygon Algorithms::CHSweep (vector<QPoint> &points)
             }
         }
     }
+    return ch;
+}
 
-    //Delete points on the same line
-    for(int i=0; i<(ch.size()-2); i++){
-        if(getPointLinePosition(ch[i+2],ch[i],ch[i+1])==ON){
-            ch.remove(i+1);
-            i--;
+QPolygon Algorithms::CHSweep (vector<QPoint> &points)
+{
+
+    //create convex hull using the Sweep line procedure
+    QPolygon poly_ch;
+
+    //sort by x coord asc
+    std::sort(points.begin(), points.end(), SortByXAsc());
+
+    //create list of predecessors (p) and successors (n)
+    std::vector<int> p(points.size()), n(points.size());
+
+    //create triangle from first 3 points
+/*    if(getPointLinePosition(points[2], points[0], points[1]) == LEFT)
+    {
+        n[0] = 1;
+        n[1] = 2;
+        n[2] = 0;
+        p[0] = 2;
+        p[1] = 0;
+        p[2] = 1;
+    }
+    else
+    {
+        n[0] = 2;
+        n[2] = 1;
+        n[1] = 0;
+        p[0] = 1;
+        p[2] = 0;
+        p[1] = 2;
+    }
+*/    //create initial bi-angle from first 2 points
+    n[0] = 1;
+    n[1] = 0;
+
+    p[0] = 1;
+    p[1] = 0;
+
+    for(unsigned int i = 2; i < points.size(); i++)
+    {
+        //does new point lie on upper/lower halfplane?
+        //link i with predecessor/succesor
+
+        if(getPointLinePosition(points[i], points[p[i-1]], points[i-1]) == LEFT)
+        //if(points[i].y() >= points[i-1].y())
+        {
+            p[i] = i-1;
+            n[i] = n[i-1];
+        }
+        else
+        {
+            p[i] = p[i-1];
+            n[i] = i-1;
+        }
+
+        //link predecessor/successor with i
+        n[p[i]] = i;
+        p[n[i]] = i;
+
+        //fix upper tangent
+        while(getPointLinePosition(points[n[n[i]]], points[i], points[n[i]]) == RIGHT)
+        {
+            p[n[n[i]]] = i;
+            n[i] = n[n[i]];
+
+        }
+
+        //fix lower tangent
+        while(getPointLinePosition(points[p[p[i]]], points[i], points[p[i]]) == LEFT)
+        {
+            n[p[p[i]]] = i;
+            p[i] = p[p[i]];
         }
     }
 
-    qDebug() << ch;
-    return ch;
+    //add points to poly_ch
+    poly_ch.push_back(points[0]);
+
+    int index = n[0];
+
+    while(index != 0)
+    {
+        poly_ch.push_back(points[index]);
+        index = n[index];
+    }
+    return poly_ch;
 }
+
+QPolygon Algorithms::GrahamScanNew (vector<QPoint> &points)
+{
+    QPolygon ch;
+    std::vector<vec_angle> angles;
+    double eps = 0.001;
+    int index = 0;
+
+    // sort by Y and add point with smallest Y to the convex hull
+    std::sort(points.begin(), points.end(), sortByYAsc());
+
+    //Reduce singulary case  by kolinear points
+    for(int i = 1;i<points.size();i++)
+    {
+        if(points[0].y()== points[i].y())
+        {
+            index++;
+        }
+    }
+
+    // pivot with min y and max x
+    QPoint q = points[index];
+    ch.push_back(q);
+    //points.erase(index);
+
+    //Find s
+    std::sort(points.begin(), points.end(), SortByXAsc());
+    QPoint s(points[0].x(),q.y());
+
+    //calculate angles beetwen pivot-axes X and pivot-some points
+    vec_angle point;
+    for(int i = 0; i<points.size();i++)
+    {
+        point.p.setX(points[i].x());
+        point.p.setY(points[i].y());
+        point.a = get2LinesAngle(q,s,q, points[i]);
+        angles.push_back(point);
+    }
+
+
+
+
+
+
+}
+
