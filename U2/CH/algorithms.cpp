@@ -579,7 +579,6 @@ QPolygon Algorithms::GrahamScanNew (vector<QPoint> &points)
     QPolygon ch;
     QPolygon pointsByAngle;
     std::vector<vec_angle> angles;
-    double eps = 0.001;
     int index = 0;
 
     // sort by Y and add point with smallest Y to the convex hull
@@ -597,56 +596,86 @@ QPolygon Algorithms::GrahamScanNew (vector<QPoint> &points)
     // pivot with min y and max x
     QPoint q = points[index];
     ch.push_back(q);
-    //points.erase(index);
 
     //Find s
     std::sort(points.begin(), points.end(), SortByXAsc());
     QPoint s(points[0].x(),q.y());
 
-    //calculate angles beetwen pivot-axes X and pivot-some points
+    //calculate angles and distance beetwen pivot-axes X and pivot-some points
     vec_angle point;
+
     for(int i = 0; i<points.size();i++)
     {
         point.p.setX(points[i].x());
         point.p.setY(points[i].y());
-        point.a = get2LinesAngle(q,s,q, points[i]);
+
+        if(q == points[i])
+        {
+            point.a = 0;
+        }
+        else
+        {
+            point.a = get2LinesAngle(q,s,q, points[i]);
+        }
+
         point.d = length2Points(q,points[i]);
         angles.push_back(point);
+        qDebug() << point.p << point.a << point.d;
     }
 
     // sort by angle and distance
     std::sort(angles.begin(), angles.end(), sortbyangle());
 
-    //select point of star shape from sorted points
+    qDebug() << "sort bod uhel delka ";
     for(int i = 0; i<angles.size(); i++)
     {
-        double ang = angles[i].a;
+        qDebug() << angles[i].p << angles[i].a << angles[i].d;
     }
 
+    //select point of star shape from sorted points
+    double angle_before = 0;
+    double distance_before = 0;
 
-    ch.push_back(pointsByAngle[0]);
-/*
-    // find out the position of point to line
-    for(int i = 1; i < pointsByAngle.size(); i++)
-       {
-           bool doEvaluation  = true;
+    qDebug() << "delete same angle ";
+    // fix the cyklus for
+    angles.push_back(angles[angles.size()]);
+    pointsByAngle.push_back(angles[0].p);
+    for(int i = 0; i<angles.size(); i++)
+    {
+        if(fabs(angles[i].a-angle_before)<10e-6)
+        {
+            if(angles[i].d>distance_before)
+            {
+                distance_before = angles[i].d;
+            }
+        }
+        else
+        {
+            angle_before = angles[i].a;
+            distance_before = angles[i].d;
+            pointsByAngle.push_back(angles[i-1].p);
+            qDebug() << angles[i-1].p;
+        }
+    }
 
-           while(doEvaluation )
-           {
-               if(getPointLinePosition(ch[ch.size()-1], ch[ch.size()-2], pointsByAngle[i]) == RIGHT)
-                   ch.pop_back();
+    //add point with min angle
+    ch.push_back(pointsByAngle[1]);
 
-               else if(getPointLinePosition(ch[ch.size()-1], ch[ch.size()-2], pointsByAngle[i]) == ON)
-                   ch.pop_back();
-
-               else
-                   doEvaluation  = false;
-           }
-           ch.push_back(pointsByAngle[i]);
-       }
+    for(unsigned int i = 2; i < pointsByAngle.size(); i++)
+        {
+            bool notConvex = true;
+            while(notConvex)
+            {
+                if(getPointLinePosition(ch[ch.size()-1], ch[ch.size()-2], pointsByAngle[i]) == RIGHT)
+                        ch.pop_back();
+                else
+                    notConvex = false;
+            }
+            ch.push_back(pointsByAngle[i]);
+        }
 
     exatlyCH(ch);
-*/
+
     return ch;
 }
 

@@ -10,7 +10,7 @@ public:
 
     bool operator()(vec_angle &t, vec_angle &t1)
     {
-        if(fabs(t.a-t1.a) < 10e6)
+        if(fabs(t.a-t1.a) < 10e-6)
         {
             if(t.d < t1.d)
             {
@@ -21,10 +21,12 @@ public:
                 return 0;
             }
         }
+
         else if(t.a < t1.a)
         {
             return 1;
         }
+
         else
         {
             return 0;

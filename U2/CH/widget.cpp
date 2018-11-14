@@ -32,7 +32,7 @@ void Widget::on_pushButton_clicked()
     else if (ui->comboBox->currentIndex()==2)
         ch = Algorithms::CHSweep(points);
     else if (ui->comboBox->currentIndex()==3)
-        ch = Algorithms::GrahamScan(points);
+        ch = Algorithms::GrahamScanNew(points);
 
     //End time
     clock_t e = std::clock();
