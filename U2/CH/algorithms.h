@@ -35,7 +35,7 @@ public:
     static void minimumAreaEnclosingBox (QPolygon &ch, QPolygon &rectangle, QLine &direction);
     static double getPointLineDistance(QPoint &q, QPoint &a, QPoint &b);
     static QPolygon QHull (vector<QPoint> &points);
-    static void qh (int s, int e, vector<QPoint> &p, QPolygon &h);
+    static void qh (unsigned int s, unsigned int e, vector<QPoint> &p, QPolygon &h);
     static QPolygon GrahamScan (vector<QPoint> &points);
     static QPolygon GrahamScanNew (vector<QPoint> &points);
     static QPolygon CHSweep (vector<QPoint> &points);

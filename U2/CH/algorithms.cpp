@@ -55,14 +55,14 @@ double Algorithms::get2LinesAngle(QPoint &p1,QPoint &p2,QPoint &p3, QPoint &p4)
 QPolygon Algorithms::CHJarvis (vector<QPoint> &points)
 {
     QPolygon ch;
-    int index = 0;
+    unsigned int index = 0;
 
     //Find pivot q
     std::sort(points.begin(), points.end(), sortByYAsc());
 
     //Reduce singulary case  by kolinear points
 
-    for(int i = 1;i<points.size();i++)
+    for(unsigned int i = 1;i<points.size();i++)
     {
         if(points[0].y()== points[i].y())
         {
@@ -78,9 +78,6 @@ QPolygon Algorithms::CHJarvis (vector<QPoint> &points)
     std::sort(points.begin(), points.end(), SortByXAsc());
     QPoint s = points[0];
 
-    qDebug()<< "q is"<<q;
-    qDebug()<<"s is"<<s;
-
     //Create Pjj
     QPoint pjj (s.x(),q.y());
     QPoint pj = q;
@@ -91,11 +88,11 @@ QPolygon Algorithms::CHJarvis (vector<QPoint> &points)
     //Add all points to CH
     do
     {
-        int i_max = -1;
+        unsigned int i_max = 0;
         double fi_max = 0;
 
         //Find pi = arg max angle(pi, pj, pjj)
-        for(int i = 0; i<points.size();i++)
+        for(unsigned int i = 0; i<points.size();i++)
         {
             //Get angle betwwen 2 segments
             double fi = get2LinesAngle(pj, pjj, pj, points[i]);
@@ -157,7 +154,7 @@ QPolygon Algorithms::QHull (vector<QPoint> &points)
     sl.push_back(q3);
 
     //Splite to SU or SL
-    for(int i =0;i<points.size();i++)
+    for(unsigned int i =0;i<points.size();i++)
     {
         // Add to SU
         if(getPointLinePosition(points[i],q1,q3)==LEFT)
@@ -195,19 +192,18 @@ QPolygon Algorithms::QHull (vector<QPoint> &points)
     exatlyCH(ch);
     deleteDuplicityCH(ch);
 
-    qDebug() << ch;
 
     return ch;
 }
 
-void Algorithms::qh(int s, int e, vector<QPoint> &p, QPolygon &h)
+void Algorithms::qh(unsigned int s, unsigned int e, vector<QPoint> &p, QPolygon &h)
 {
     //Recursive procedure of qhull
-    int i_max = -1;
+    unsigned int i_max = 0;
     double d_max = 0;
 
     //Browse all points
-    for(int i = 2; i<p.size(); i++)
+    for(unsigned int i = 2; i<p.size(); i++)
     {
         //Is the point in the right half-plane?
         if(getPointLinePosition(p[i], p[s], p[e])==RIGHT)
@@ -242,8 +238,14 @@ void Algorithms::minimumAreaEnclosingBox (QPolygon &ch, QPolygon &rectangle, QLi
        QPolygon ch_sort;     // save points for transformation
        QPoint p1(0,0);                  // center of local system
        QPoint k1;
-       double min_angle;
-       double x_min,y_min,x_max,y_max,x_min_rectangle,y_min_rectangle,x_max_rectangle,y_max_rectangle;
+       double min_angle =0;
+       double x_min,y_min,x_max,y_max;
+
+       double x_min_rectangle =0;
+       double y_min_rectangle =0;
+       double x_max_rectangle =0;
+       double y_max_rectangle =0;
+
        k1.setY(0);
        int n = ch.size();
 
@@ -262,7 +264,6 @@ void Algorithms::minimumAreaEnclosingBox (QPolygon &ch, QPolygon &rectangle, QLi
             ch_used = ch;
             rotateByAngle(ch_used,angle*(M_PI/180));
             //polygonTransform(ch[i], ch[i+1], p1, k1, ch_used);
-            qDebug()<<ch_used;
 
             // find min max coordinates
             ch_sort = ch_used;
@@ -287,19 +288,20 @@ void Algorithms::minimumAreaEnclosingBox (QPolygon &ch, QPolygon &rectangle, QLi
             }
        }
 
+
        // Add points to rectangle
-       rectangle << QPoint(x_min_rectangle, y_min_rectangle) << QPoint(x_max_rectangle, y_min_rectangle) << QPoint(x_max_rectangle, y_max_rectangle) << QPoint(x_min_rectangle, y_max_rectangle);
+       rectangle << QPoint(static_cast<int>(x_min_rectangle), static_cast<int>(y_min_rectangle)) << QPoint(static_cast<int>(x_max_rectangle), static_cast<int>(y_min_rectangle)) << QPoint(static_cast<int>(x_max_rectangle), static_cast<int>(y_max_rectangle)) << QPoint(static_cast<int>(x_min_rectangle), static_cast<int>(y_max_rectangle));
 
        //Decide Main Line of Rectangle
        if(rectangle[2].x()-rectangle[0].x()>rectangle[2].y()-rectangle[0].y())
        {
-           direction.setP1(QPoint(rectangle[0].x(), 0.5*(rectangle[2].y()+rectangle[0].y()))); //QPoint(x_min, 0.5*(y_max+y_min))
-           direction.setP2(QPoint(rectangle[2].x(), 0.5*(rectangle[2].y()+rectangle[0].y())));//QPoint(x_max, 0.5*(y_max+y_min))
+           direction.setP1(QPoint(rectangle[0].x(), (rectangle[2].y()+rectangle[0].y())/2)); //QPoint(x_min, 0.5*(y_max+y_min))
+           direction.setP2(QPoint(rectangle[2].x(), (rectangle[2].y()+rectangle[0].y())/2));//QPoint(x_max, 0.5*(y_max+y_min))
        }
        else
        {
-           direction.setP1(QPoint(0.5*(rectangle[2].x()+rectangle[0].x()), rectangle[0].y())); //QPoint(0.5*(x_max+x_min), y_min)
-           direction.setP2(QPoint(0.5*(rectangle[2].x()+rectangle[0].x()), rectangle[2].y()));//QPoint(0.5*(x_max+x_min), y_max)
+           direction.setP1(QPoint((rectangle[2].x()+rectangle[0].x())/2, rectangle[0].y())); //QPoint(0.5*(x_max+x_min), y_min)
+           direction.setP2(QPoint((rectangle[2].x()+rectangle[0].x())/2, rectangle[2].y()));//QPoint(0.5*(x_max+x_min), y_max)
        }
 
        // transform  direction and rectangle back to global system
@@ -353,7 +355,7 @@ QPolygon Algorithms::GrahamScan (vector<QPoint> &points){
 
         int ind_max = -1;
         double fi_max = 0;
-        double fi;
+        double fi = 0;
 
         for (int i =0; i<poly.size(); i++){
 
@@ -447,8 +449,6 @@ QPolygon Algorithms::GrahamScan (vector<QPoint> &points){
 
 QPolygon Algorithms::exatlyCH(QPolygon ch)
 {
-    QPoint first = ch[0];
-    QPoint second = ch[1];
 
     //Delete points on the same line
     for(int i=0; i<(ch.size()-2); i++){
@@ -485,7 +485,7 @@ QPolygon Algorithms::CHSweep (vector<QPoint> &points)
     std::sort(points.begin(), points.end(), SortByXAsc());
 
     //delete duplicit points on sorted data
-    for(int i =0; i<points.size(); i++){
+    for(unsigned int i =0; i<points.size(); i++){
         if((points[i].x()==points[i+1].x()) && (points[i].y()==points[i+1].y())  ){
             points.erase(points.begin()+i);
             i--;
@@ -493,7 +493,7 @@ QPolygon Algorithms::CHSweep (vector<QPoint> &points)
     }
 
     //create list of predecessors (p) and successors (n)
-    std::vector<int> p(points.size()), n(points.size());
+    std::vector< unsigned int> p(points.size()), n(points.size());
 
     //create triangle from first 3 points
 /*    if(getPointLinePosition(points[2], points[0], points[1]) == LEFT)
@@ -561,7 +561,7 @@ QPolygon Algorithms::CHSweep (vector<QPoint> &points)
     //add points to poly_ch
     poly_ch.push_back(points[0]);
 
-    int index = n[0];
+    unsigned int index = n[0];
 
     while(index != 0)
     {
@@ -579,13 +579,13 @@ QPolygon Algorithms::GrahamScanNew (vector<QPoint> &points)
     QPolygon ch;
     QPolygon pointsByAngle;
     std::vector<vec_angle> angles;
-    int index = 0;
+    unsigned int index = 0;
 
     // sort by Y and add point with smallest Y to the convex hull
     std::sort(points.begin(), points.end(), sortByYAsc());
 
     //Reduce singulary case  by kolinear points
-    for(int i = 1;i<points.size();i++)
+    for(unsigned int i = 1;i<points.size();i++)
     {
         if(points[0].y()== points[i].y())
         {
@@ -604,7 +604,7 @@ QPolygon Algorithms::GrahamScanNew (vector<QPoint> &points)
     //calculate angles and distance beetwen pivot-axes X and pivot-some points
     vec_angle point;
 
-    for(int i = 0; i<points.size();i++)
+    for(unsigned int i = 0; i<points.size();i++)
     {
         point.p.setX(points[i].x());
         point.p.setY(points[i].y());
@@ -620,27 +620,20 @@ QPolygon Algorithms::GrahamScanNew (vector<QPoint> &points)
 
         point.d = length2Points(q,points[i]);
         angles.push_back(point);
-        qDebug() << point.p << point.a << point.d;
     }
 
     // sort by angle and distance
     std::sort(angles.begin(), angles.end(), sortbyangle());
 
-    qDebug() << "sort bod uhel delka ";
-    for(int i = 0; i<angles.size(); i++)
-    {
-        qDebug() << angles[i].p << angles[i].a << angles[i].d;
-    }
-
     //select point of star shape from sorted points
     double angle_before = 0;
     double distance_before = 0;
 
-    qDebug() << "delete same angle ";
+
     // fix the cyklus for
     angles.push_back(angles[angles.size()]);
     pointsByAngle.push_back(angles[0].p);
-    for(int i = 0; i<angles.size(); i++)
+    for(unsigned int i = 0; i<angles.size(); i++)
     {
         if(fabs(angles[i].a-angle_before)<10e-6)
         {
@@ -654,14 +647,14 @@ QPolygon Algorithms::GrahamScanNew (vector<QPoint> &points)
             angle_before = angles[i].a;
             distance_before = angles[i].d;
             pointsByAngle.push_back(angles[i-1].p);
-            qDebug() << angles[i-1].p;
+
         }
     }
 
     //add point with min angle
     ch.push_back(pointsByAngle[1]);
 
-    for(unsigned int i = 2; i < pointsByAngle.size(); i++)
+    for(int i = 2; i < pointsByAngle.size(); i++)
         {
             bool notConvex = true;
             while(notConvex)

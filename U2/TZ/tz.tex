@@ -786,14 +786,14 @@ Součástí úlohy bylo i testování doby výpočtu jednotlivých konvexních o
 
 \section{Náměty na vylepšení}
 \subsection{Graham Scan}
-Pro algoritmus Graham Scan byl nejprve napsán kod, který byl velmi náročný a aplikace nebyla funkční na větším množství dat. Z toho důvodu byla napsána nová metoda, která je již funkční a při testování dosahovala nejlepších možných výsledků.
+Pro algoritmus Graham Scan byl nejprve napsán kod, který byl velmi náročný a aplikace nebyla funkční na větším množství dat. Z toho důvodu byla napsána nová metoda, která je již funkční a při testování dosahovala nejlepších možných výsledků. Z toho důvodu je v kódu pojmenována jako GrahamScanNew. Původní funkce byla v kódu ponechána pro případnou doeditaci a její zprovoznění.
 
 \subsection{Generování množin bodů}
 Při tvorbě generování gridu napadla autory myšlenka, že by se body generovaly v některém ze známých kartografických zobrazení. Z bakalářského studia znají velké množství zobrazovacích rovnic, pomocí nichž by se body zobrazovaly. Zajímavé rozmístění by měla zejména kuželová zobrazení. Při zobrazení bodů v rámci některého kartografického zobrazení by výsledná konvexní obálka představovala celý svět, případně polokouli, záleželo by na typu zvoleného zobrazení.
 
 \subsection{Testování algoritmů}
-V rámci této úlohy bylo provedeno několik testování nad odlišným množstvím bodů a na jejich odlišném zobrazení. Časově bylo testování poměrně náročné, za úvahu jistě stojí popřemýšlení, zda by nebylo výhodnější vytvořit takovou funkci, která by pro předem definované tvary a množství bodů sama provedla testování. Zároveň obsahuje platforma Qt i knihovnu grafů, časová úspora by tedy byla velmi výrazná.\\
-\\
+V rámci této úlohy bylo provedeno několik testování nad odlišným množstvím bodů a na jejich odlišném zobrazení. Časově bylo testování poměrně náročné, za úvahu jistě stojí popřemýšlení, zda by nebylo výhodnější vytvořit takovou funkci, která by pro předem definované tvary a množství bodů sama provedla testování. Zároveň obsahuje platforma Qt i knihovnu grafů, časová úspora by tedy byla velmi výrazná.
+
 
 \subsection{Tvorba tabulek v LaTeXu}
 V rámci dokumentace bylo i prezentování výsledných měření prostřednictvým tabulek. V původních tabulkách byl ještě sloupec, který označoval typy množin (kruh, grid, random). Bohužel s tímto sloupcem byla tabulka oříznutá a přes veškerou snahu se autorům nepodařilo nalézt řešení, jakým způsobem tabulku posunout vlevo. Z toho důvodu byl tento sloupec odstraněn a tabulky byly popsány v záhlaví podkapitoly. S tímto řešením nejsou autoři zcela spokojeni, tabulky nejsou dostatečně přehledné. 
