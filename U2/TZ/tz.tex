@@ -487,6 +487,18 @@ Metoda pro výpočet konvexní obálky nad vektorem bodů metodou Sweep Line. Me
 Metoda pro výpočet hlavních směrů budovy. Na vstupu je konvexní obálka ch a prázdné proměnné rectangle a direction. Do rectangle se uloží minimální ohraničující obdélník a do direction hlavní směr budovy.
 \\
 
+\textbf{QPolygon GrahamScanNew (vector\textless QPoint \textgreater \&points)}\\
+Opravený algoritmus Graham Scan, který funguje i na větší množství bodů.
+\\
+
+\textbf{QPolygon deleteDuplicityCH (QPolygon ch)}\\
+Metoda pro odstranění duplicitních bodů.
+\\
+
+\textbf{QPolygon exactlyCH (QPolygon ch)}\\
+Metoda pro výpočet striktně konvexní obálky.
+\\
+
 \subsubsection{Draw}
 Třída Draw obsahuje několik metod. Metody jsou určeny pro generování a vykreslování proměných.
 \\
@@ -587,19 +599,194 @@ Při stisknutí tlačítka Hint je uživateli zobrazena nápověda, jakým způs
 Po vytvoření funkční aplikace byly jednotlivé algoritmy otestovány na různém množství dat a na různých typech množin. Testování bylo prováděno nad výpočtem striktně konvexních obálek, které jsou výstupem aplikace. Samotné testování bylo prováděno v režimu Release. Testované typy množin byly voleny kruh, grid a náhodné rozmístění. Jednotlivé doby byly uloženy do tabulek a následně zobrazeny v grafu. 
 
 \subsection{Jarvis Scan}
-\subsection{Quick Hull}
+Tato metoda dosahovala nejhorších výsledků. Pro milion bodů byla doba výpočtu kolem 5 minut. Přestože by tato metoda měla pro body na kružnici dosahovat nejhorších výsledků, překvapivě je doba pro kružnici nejlepší. Nejhorší doby dosahuje pro náhodné rozmístění bodů.
+
+
+
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{jarvis_kruh.jpg}
+\end{figure}
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{jarvis_grid.jpg}
+\end{figure}
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{jarvis_random.jpg}
+\end{figure}
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{jarvis_vse.jpg}
+\end{figure}
+
+\clearpage
+
+
 \subsection{Sweep Line}
+Z dosavadních znalostí by tato metoda měla dosahovat velmi dobrých výsledků. Přesto v naší aplikaci dochází k chybě, při testování množiny bodů o 725.000 bodech začne aplikace pro náhodné rozmístění a kruh padat a je nefunkční. Na chybu se bohužel nepodařilo přijít.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{sweep_kruh.jpg}
+\end{figure}
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{sweep_grid.jpg}
+\end{figure}
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{sweep_random.jpg}
+\end{figure}
+\clearpage
+
+\subsection{Quick Hull}
+Metoda Quick Hull dosahovala poměrně přiznivých výsledků. Velmi zajímavý byl graf porovnání výpočtu pro testované množiny, kde lze vidět, že funkce mají zhruba stejný průběh. Opět vychází nejlepší časy pro kruh a nejhorší pro náhodné rozmístění bodů.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{quickhull_kruh.jpg}
+\end{figure}
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{quickhull_grid.jpg}
+\end{figure}
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{quickhull_random.jpg}
+\end{figure}
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{quickhull_vse.jpg}
+\end{figure}
+
+
+\subsection{Graham Scan}
+Tento algoritmus dosahuje nejlepších výsledků. Metoda je rychlá a funkční. Pro kruh opět dosahuje nejlepších výsledků a nejhorších výsledků pro náhodné rozmístění bodů.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{grahamscan_kruh.jpg}
+\end{figure}
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{grahamscan_grid.jpg}
+\end{figure}
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{grahamscan_random.jpg}
+\end{figure}
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=10cm]{graham_vse.jpg}
+\end{figure}
+
+
+
+\clearpage
+\subsection{Tabulky výsledných průměrných dob pro jednotlivé algoritmy}
+
+Níže lze vidět tabulky s průměrnýmu naměřenými dobami jednotlivých algoritmů. Čas je uváděn v msec. První řádek vždy označuje počet bodů, druhý řádek množinu generovnou v kruhu, třetí řádek množinu v gridu a poslední řádek náhodné rozmístění bodů.
+
+
+\begin{table}[h]
+	\begin{tabular}{|r|r|r|r|r|r|r|r|r|r|}
+	\hline
+	  \textbf{1000} 	& \textbf{10000} & \textbf{100000} & \textbf{225000} & \textbf{350000} & \textbf{475000} & \textbf{600000}  & \textbf{725000}
+ & \textbf{850000}  & \textbf{1000000}\\ \hline
+			 76.2	& 603 	& 3323 & 7460 & 10409 & 11155 & 13280 &	14127 & 20775 & 26073 \\ \hline
+	 32	& 893  	& 14664	& 27210 & 60533 & 91470 & 128758 & 170449 & 216169 & 276887 \\ \hline
+	 11	& 191  	& 3562 & 29533 & 39542 & 51781 & 83605 & 112170 & 130838 & 153814	 \\ \hline
+
+	
+	\end{tabular}
+		\caption{Jarvis Scan}
+		
+\end{table}
+
+
+\begin{table}[h]
+	\begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|}
+	\hline
+	 \textbf{1000} 	& \textbf{10000} & \textbf{100000} & \textbf{225000} & \textbf{350000} & \textbf{475000} & \textbf{600000}  & \textbf{725000}
+ & \textbf{850000}  & \textbf{1000000}\\ \hline
+	 1.8 & 15 & 151 &  273 & 430 & 520 & 487 & 774 & 657 & 898\\ \hline
+	 1 & 3 & 23 & 43 & 65 & 68 & 86 & 96 & 112 & 231 \\ \hline
+	 1 & 7 & 58 & 126 & 164 & 180 & 242 & 280 & 314 & 355	 \\ \hline
+
+	
+	\end{tabular}
+		\caption{Quick Hull}
+\end{table}
+
+
+
+
+
+
+\begin{table}[h]
+	\begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|}
+	\hline
+	 \textbf{1000} 	& \textbf{10000} & \textbf{100000} & \textbf{225000} & \textbf{350000} & \textbf{475000} & \textbf{600000}  & \textbf{725000}
+ & \textbf{850000}  & \textbf{1000000}\\ \hline
+	 1 & 115 & 7581 &  22199 & 65410 & 91985 & 222160 & - & - & -\\ \hline
+	 1 & 4 & 23 & 52 & 67 & 83 & 87 & 110 & 108 & 230  \\ \hline
+	2 & 35 & 1475 & 9938 & 24547 & 52011 & 101730 & - & -& -	 \\ \hline
+
+	
+	\end{tabular}
+		\caption{Sweep Line}
+\end{table}
+
+
+\begin{table}[h]
+	\begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|}
+	\hline
+	 \textbf{1000} 	& \textbf{10000} & \textbf{100000} & \textbf{225000} & \textbf{350000} & \textbf{475000} & \textbf{600000}  & \textbf{725000}
+ & \textbf{850000}  & \textbf{1000000}\\ \hline
+	 1.6  & 11 & 91 & 169 & 339 & 457 & 458 & 662 & 805 & 938   \\ \hline
+	 1 & 16 & 256 & 406 & 611 & 763 & 1052 & 1081 & 1289 & 1926 \\ \hline
+	 1 & 17 & 174 & 364 & 562 & 782 & 984 & 993 & 1117 & 1048 \\ \hline
+
+	
+	\end{tabular}
+		\caption{Graham Scan}
+\end{table}
 
 
 \clearpage
 \section{Závěr}
 V rámci úlohy byla vytvořena aplikace, která je schopna na vygenerovaných bodech zkonstruovat konvexní obálku. Zároveň je v rámci aplikace možné náhodně vygenerovat téměř libovolné množství bodů do určitého tvaru. Na výběr je poměrně široké spektrum běžných tvarů, což jistě uživatel ocení.\\
 \\
-Součástí úlohy bylo i testování doby výpočtu jednotlivých konvexních obálek. Testování bylo prováděno nad striktně konvexními obálkami, samotný výpočet je tedy zatížen ještě o vyhodnocení, zda následující tři body neleží na stejné přímce. Výsledné doby dopadly dle očekávání. Algoritmus Jarvis Scan měl znatelně nejhorší čas. Naopak metoda Sweep Line se jeví jako nejlepší řešení.
+Součástí úlohy bylo i testování doby výpočtu jednotlivých konvexních obálek. Testování bylo prováděno nad striktně konvexními obálkami, samotný výpočet je tedy zatížen ještě o vyhodnocení, zda následující tři body neleží na stejné přímce. Výsledné doby dopadly dle očekávání. Algoritmus Jarvis Scan měl znatelně nejhorší čas. Naopak metoda Graham Scan se jeví jako nejlepší řešení.
 
 \section{Náměty na vylepšení}
 \subsection{Graham Scan}
-V algoritmu Graham Scan pro výpočet konvexní obálky je po zamyšlení zřejmě použit příliš složitý postup výpočtu úhlu s osou x. Zároveň víme, že velikosti směrnic budou vždy dosahovat hodnot od 0 do 180, neboť se jedná o úhel mezi pivotem a osou X. Tudíž některé řádky týkající se určení kvadrantů jsou zbytečné.
+Pro algoritmus Graham Scan byl nejprve napsán kod, který byl velmi náročný a aplikace nebyla funkční na větším množství dat. Z toho důvodu byla napsána nová metoda, která je již funkční a při testování dosahovala nejlepších možných výsledků.
 
 \subsection{Generování množin bodů}
 Při tvorbě generování gridu napadla autory myšlenka, že by se body generovaly v některém ze známých kartografických zobrazení. Z bakalářského studia znají velké množství zobrazovacích rovnic, pomocí nichž by se body zobrazovaly. Zajímavé rozmístění by měla zejména kuželová zobrazení. Při zobrazení bodů v rámci některého kartografického zobrazení by výsledná konvexní obálka představovala celý svět, případně polokouli, záleželo by na typu zvoleného zobrazení.
@@ -607,6 +794,13 @@ Při tvorbě generování gridu napadla autory myšlenka, že by se body generov
 \subsection{Testování algoritmů}
 V rámci této úlohy bylo provedeno několik testování nad odlišným množstvím bodů a na jejich odlišném zobrazení. Časově bylo testování poměrně náročné, za úvahu jistě stojí popřemýšlení, zda by nebylo výhodnější vytvořit takovou funkci, která by pro předem definované tvary a množství bodů sama provedla testování. Zároveň obsahuje platforma Qt i knihovnu grafů, časová úspora by tedy byla velmi výrazná.\\
 \\
+
+\subsection{Tvorba tabulek v LaTeXu}
+V rámci dokumentace bylo i prezentování výsledných měření prostřednictvým tabulek. V původních tabulkách byl ještě sloupec, který označoval typy množin (kruh, grid, random). Bohužel s tímto sloupcem byla tabulka oříznutá a přes veškerou snahu se autorům nepodařilo nalézt řešení, jakým způsobem tabulku posunout vlevo. Z toho důvodu byl tento sloupec odstraněn a tabulky byly popsány v záhlaví podkapitoly. S tímto řešením nejsou autoři zcela spokojeni, tabulky nejsou dostatečně přehledné. 
+
+\subsection{Minimum Area Enclosing Box}
+Při výpočtu minimálního ohraničujícího obdélníku autorům z neznámé příčiny nefungovala transformace, ač se to snažili vyřešit. Po konzultaci byla část pro transformaci vypůjčena od kolegy, kterému fungovala bez problémů. Vypůjčená část je v kódu vyznačena. 
+
 
 
 
