@@ -10,8 +10,11 @@
     <height>677</height>
    </rect>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::CustomContextMenu</enum>
+  </property>
   <property name="windowTitle">
-   <string>Widget</string>
+   <string notr="true">Convex Hull</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>

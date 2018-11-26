@@ -48,6 +48,8 @@ void Widget::on_generate_clicked()
 {
     bool b = 0;
 
+    ui->Canvas->clearCanvas();
+
     std::vector<QPoint> points;
     //Generate
     if (ui->comboBox_2->currentIndex()==0)
