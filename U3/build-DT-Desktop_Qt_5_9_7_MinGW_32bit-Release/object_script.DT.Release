@@ -1,0 +1,12 @@
+INPUT(
+./release\main.o
+./release\widget.o
+./release\draw.o
+./release\algorithms.o
+./release\edge.o
+./release\sortbyxasc.o
+./release\qpoint3d.o
+./release\triangle.o
+./release\moc_widget.o
+./release\moc_draw.o
+);

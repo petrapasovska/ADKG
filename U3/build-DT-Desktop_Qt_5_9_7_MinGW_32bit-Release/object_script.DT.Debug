@@ -1,0 +1,12 @@
+INPUT(
+./debug\main.o
+./debug\widget.o
+./debug\draw.o
+./debug\algorithms.o
+./debug\edge.o
+./debug\sortbyxasc.o
+./debug\qpoint3d.o
+./debug\triangle.o
+./debug\moc_widget.o
+./debug\moc_draw.o
+);
