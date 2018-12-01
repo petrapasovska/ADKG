@@ -62,3 +62,24 @@ void Widget::on_pushButton_4_clicked()
     ui->Canvas->setDTM(dtm);
     repaint();
 }
+
+void Widget::on_pushButton_5_clicked()
+{
+       ui->Canvas->clearDT();
+
+       std::vector<QPoint3D> points;
+       //Generate
+       if (ui->comboBox->currentIndex()==0)
+           points = Algorithms::generateHill();
+       else if (ui->comboBox->currentIndex()==1)
+          points = Algorithms::generateValley();
+       else if (ui->comboBox->currentIndex()==2)
+          points = Algorithms::generateMountains();
+       else  (ui->comboBox->currentIndex()==3)
+          points = Algorithms::generateRest();
+
+       ui->Canvas->setPoints(points);
+
+       ui->Canvas->repaint();
+}
+

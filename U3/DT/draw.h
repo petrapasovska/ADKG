@@ -23,6 +23,7 @@ class Draw : public QWidget
         void mousePressEvent(QMouseEvent *e);
         void clearPoints() {points.clear();}
         void clearDT();
+        void setPoints(std::vector<QPoint3D> points_){points = points_;}
         std::vector<QPoint3D> & getPoints(){return points;}
         std::vector<Edge> & getDT(){return dt;}
         void setDT(std::vector<Edge> &dt_){dt = dt_;}

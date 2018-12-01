@@ -27,6 +27,37 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
+      <widget class="QComboBox" name="comboBox">
+       <item>
+        <property name="text">
+         <string>Kupa</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Udoli</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Spocinek</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Hrbet</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_5">
+       <property name="text">
+        <string>Generate</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="pushButton">
        <property name="text">
         <string>Delaunay</string>

@@ -417,3 +417,107 @@ std::vector<Triangle> Algorithms::analyzeDTM(std::vector<Edge> &dt)
 
     return dtm;
 }
+
+std::vector<QPoint3D> Algorithms::generateHill()
+{
+    std::vector<QPoint3D> random_points;
+    int n = rand()%30;
+    QPoint3D p;
+    QPoint3D center;
+    double a = rand()%200;
+    double b = rand()%200;
+    double fi = (2*M_PI)/(n);
+
+    center.setX(rand()%300+200);
+    center.setY(rand()%300+200);
+    center.setZ(rand()%500 + 300);
+    for(int j = 0;j<4;j++)
+    {
+        for(int i = 0;i<n;i++)
+        {
+            p.setX(center.x() + a*cos(i*fi));
+            p.setY(center.y() + b*sin(i*fi));
+            p.setZ(center.getZ()-j*20);
+            random_points.push_back(p);
+        }
+        a+=j*50;
+        b+=j*50;
+    }
+    return random_points;
+}
+
+std::vector<QPoint3D> Algorithms::generateValley()
+{
+    std::vector<QPoint3D> random_points;
+    int n = rand()%30;
+
+    QPoint3D p;
+    QPoint3D p1;
+    QPoint3D center;
+    double a = rand()%40;
+
+    center.setX(rand()%300+200);
+    center.setY(rand()%300+200);
+    center.setZ(rand()%50);
+
+    for(int j = 0;j<4;j++)
+    {
+        for(int i = 0;i<n;i++)
+        {
+            p.setX(center.x()+a);
+            p.setY(center.y()+i*10);
+            p.setZ(center.getZ()+a);
+
+            random_points.push_back(p);
+
+            p1.setX(center.x()-a);
+            p1.setY(center.y()+i*10);
+            p1.setZ(center.getZ()+a);
+
+            random_points.push_back(p1);
+        }
+        a+=j*50;
+    }
+    return random_points;
+}
+
+std::vector<QPoint3D> Algorithms::generateMountains()
+{
+    std::vector<QPoint3D> random_points;
+     int n = rand()%30;
+
+     QPoint3D p;
+     QPoint3D p1;
+     QPoint3D center;
+     double a = rand()%40;
+
+     center.setX(rand()%300+200);
+     center.setY(rand()%300+200);
+     center.setZ(rand()%50 + 700);
+
+     for(int j = 0;j<4;j++)
+     {
+         for(int i = 0;i<n;i++)
+         {
+             p.setX(center.x()+a);
+             p.setY(center.y()+i*10);
+             p.setZ(center.getZ()-a);
+
+             random_points.push_back(p);
+
+             p1.setX(center.x()-a);
+             p1.setY(center.y()+i*10);
+             p1.setZ(center.getZ()-a);
+
+             random_points.push_back(p1);
+         }
+         a+=j*50;
+     }
+     return random_points;
+}
+
+std::vector<QPoint3D> Algorithms::generateRest()
+{
+    std::vector<QPoint3D> random_points;
+
+}
