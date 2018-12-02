@@ -114,11 +114,11 @@ Delaunay triangulace je nejčastěji používanou trianglucí při tvorbě digit
 \subsubsection{Vlastnosti}
 Uvnitř opsané kružnice libovolného trojúhelníku triangulace neleží žádný jiný bod.
 \\
-Maximalizuje minimální úhlel, avšak neminimalizuje maximální úhle v trojúhelníku.
+Maximalizuje minimální úhel, avšak neminimalizuje maximální úhle v trojúhelníku.
 \\
 Vůči kritériu minimálního úhlu je lokálně i globálně optimální.
 \\
-Triangulace je jednoznáčná pokud čtyři body neleží na kružnici.
+Triangulace je jednoznačná pokud čtyři body neleží na kružnici.
 \\
 
 Triangulace byla realizována pomocí metody inkrementální konstrukce. Tento algoritmus je založen na postupném hledání bodu, který k bodům hrany tvoří minimální opsanou kružnici. Každá hrana je orientovaná a bod se hledá pouze v její levé polorovině.\\
@@ -296,60 +296,50 @@ Expozice terénu je definována jako azimut k průmětu normálového vektoru ro
 Třída Algorithms obsahuje několik metod. Metody jsou určeny pro výpočty použitých algoritmů.
 \\
 
-\textbf{double length2Points(QPoint q, QPoint p)}\\
+\textbf{double distance(QPoint3D p1, QPoint3D p2)}\\
 Metoda, jejíž návratová hodnota je typu double, vrací velikost spojnice mezi dvěma body.
-\\
-
-\textbf{void polygonTransform(QPoint p, QPoint k, QPoint p1, QPoint k1, QPolygon \&pol)}\\
-Metoda je přetížená pro  podobnostní transformaci QPolygon a QLine. Transformační klíč je dán dvěma body se souřadnicemi v obou souřadných soustavách. Body p a k jsou v souřadné soustavě, ze které pochází pol. Body p1 a k1 jsou v souřadné soustavě, do které chceme transformovat. Výsledek transformace se přeuloží do proměnné pol.
-\\
-
-\textbf{rotateByAngle(QPolygon \&points, double angle)}\\
-Metoda je přetížená pro rotaci QPolygon a QLine. Prvky proměnné pol se pouze pootočí podle úhlu angle. Proměnná úhel je v radiánech. 
 \\
 
 \textbf{TPosition getPointLinePosition(QPoint \&q, QPoint \&a, QPoint \&b)}\\
 Tato metoda slouží k určení pozice bodu q vůči linii tvořené body a, b. Výstupem metody je LEFT, RIGHT nebo ON.\\
 
+\textbf{double getCircleRadius(QPoint3D &p1, QPoint3D &p2, QPoint3D &p3, QPoint3D &c)}\\
+Metoda jejíž návratová hodnota je typu double, vrací velikost poloměru kružnice tvořené třemi vstupními body.\\
 
-\textbf{double get2LinesAngle(QPoint \&p1,QPoint \&p2,QPoint \&p3, QPoint \&p4)}\\
-Pomocí této funkce je vypočítán úhel mezi dvěma přímkami, kde první přímka je tvořena body $ p_1 $ a $p_2$, druhá přímka je tvořena body $ p_3 $ a $p_4$.\\
+\textbf{int getNearestPoint(QPoint3D &p, std::vector<QPoint3D> &points)}\\
+Tato metoda slouží k nalezení indexu nejbližšího bodu k bodu p.\\
 
+\textbf{int getDelaunayPoint(QPoint3D &s, QPoint3D &e, std::vector<QPoint3D> &points)}\\
+Tato metoda slouží k nalezení indexu bodu, který splňuje Delaunay vlastnosti.\\
 
-\textbf{QPolygon CHJarvis (vector\textless QPoint \textgreater \&points)}\\
-Metoda pro výpočet konvexní obálky nad vektorem bodů metodou Jarvis Scan. Metoda vrácí konvexní obálku s typem QPolygon.
+\textbf{std::vector<Edge> DT(std::vector<QPoint3D> &points)}\\
+Metoda vytváří nad vektorem bodů Delaunay triangulaci, které se reprezentuje jako vektor hran.\\
+
+\textbf{QPoint3D getContourPoint(QPoint3D &p1, QPoint3D &p2, double z)}\\
+Metoda vypočte průsečík hrany, tvořenou 3D body p1 a p2, a rovinou definovanou z souřadnicí.\\
+
+\textbf{std::vector<Edge> createContours(std::vector<Edge> &dt, double z_min, double z_max, double dz)}\\
+Metoda z triangulace dt v zadaném intervalu v ose Z <z_min ; z_max> s intervalem vrstevnic dz vrátí vektor hran definující vrstevnice.\\
+
+\textbf{double getSlope(QPoint3D &p1, QPoint3D &p2, QPoint3D &p3)}\\
+Tato metoda slouží k vypočetní hodnoty sklonu trojúhelníku definovanému 3D body p1, p2 a p3.\\
+
+\textbf{double getAspect(QPoint3D &p1, QPoint3D &p2, QPoint3D &p3)}\\
+Tato metoda slouží k vypočetní hodnoty expozice trojúhelníku definovanému 3D body p1, p2 a p3.\\
+
+\textbf{std::vector<Triangle> analyzeDTM(std::vector<Edge> &dt)}\\
 \\
 
-\textbf{QPolygon QHull (vector\textless QPoint \textgreater \&points)}\\
-Metoda pro výpočet konvexní obálky nad vektorem bodů metodou Quick Hull. Metoda vrácí konvexní obálku s typem QPolygon.
+\textbf{std::vector<QPoint3D> generateHill()}\\
 \\
 
-\textbf{void qh (int s, int e, vector\textless QPoint \textgreater \&p, QPolygon \&h)}\\
-Pomocná metoda pro rekurzi v metodě Qhull. Na vstupu jsou indexy bodů s a e, které určují přímku, podle níž se určí, zda bod p patří do konvexní obálky H. Metoda nic nevrací, pouze ukládá body, které patří do konvexní obálky.
+\textbf{std::vector<QPoint3D> generateValley())}\\
 \\
 
-\textbf{QPolygon GrahamScan (vector\textless QPoint \textgreater \&points)}\\
-Metoda pro výpočet konvexní obálky nad vektorem bodů metodou Graham Scan. Metoda vrácí konvexní obálku s typem QPolygon.
+\textbf{std::vector<QPoint3D> generateMountains()}\\
 \\
 
-\textbf{QPolygon CHSweep (vector\textless QPoint \textgreater \&points)}\\
-Metoda pro výpočet konvexní obálky nad vektorem bodů metodou Sweep Line. Metoda vrácí konvexní obálku s typem QPolygon.
-\\
-
-\textbf{void minimumAreaEnclosingBox (QPolygon \&ch, QPolygon \&rectangle, QLine \&direction)}\\
-Metoda pro výpočet hlavních směrů budovy. Na vstupu je konvexní obálka ch a prázdné proměnné rectangle a direction. Do rectangle se uloží minimální ohraničující obdélník a do direction hlavní směr budovy.
-\\
-
-\textbf{QPolygon GrahamScanNew (vector\textless QPoint \textgreater \&points)}\\
-Opravený algoritmus Graham Scan, který funguje i na větší množství bodů.
-\\
-
-\textbf{QPolygon deleteDuplicityCH (QPolygon ch)}\\
-Metoda pro odstranění duplicitních bodů.
-\\
-
-\textbf{QPolygon exactlyCH (QPolygon ch)}\\
-Metoda pro výpočet striktně konvexní obálky.
+\textbf{std::vector<QPoint3D> generateRest())}\\
 \\
 
 \subsubsection{Draw}
@@ -364,45 +354,31 @@ Metoda slouží k vykreslení vytvořených, generovaných bodů a zobrazení v�
 Metoda uloží bod se souřadnicemi místa kliknutí v zobrazovacím okně.
 \\
 
-\textbf{void clearCanvas()}\\
+\textbf{void clearDT()}\\
 Metoda slouží k vymazání proměnných a k překreslení
 \\
 
-\textbf{std::vector\textless QPoint \textgreater generateGrid(int n)}\\
-Metoda generuje pravidelnou mřížku. Na vstupu je počet generovaných bodů. Návratová hodnota je vektor bodů.\\
+\textbf{void clearPoints()}\\
+Metoda slouží k vymazání bodů.
+\\
 
-\textbf{std::vector\textless QPoint \textgreater generateRandomPoints(int n)}\\
-Metoda generuje náhodné body. Na vstupu je počet generovaných bodů. Návratová hodnota je vektor bodů.\\
+\textbf{void setPoints(std::vector<QPoint3D> points_)}\\
+Metoda slouží pro převod bodů do vykreslovacího okna.\\
 
-\textbf{std::vector\textless QPoint \textgreater generateStarShape(int n)}\\
-Metoda generuje body do tvaru hvězdy. Na vstupu je počet generovaných bodů. Návratová hodnota je vektor bodů.\\
+\textbf{std::vector<QPoint3D> & getPoints()}\\
+Metoda slouží pro převod bodů z vykreslovacího okna.\\
 
-\textbf{std::vector\textless QPoint \textgreater generateSquare(int n)}\\
-Metoda generuje body do tvaru čtverce. Na vstupu je počet generovaných bodů, změna v počtu bodů se projení s násobkem čtyř. Návratová hodnota je vektor bodů.\\
+\textbf{std::vector<Edge> & getDT()}\\
+Metoda slouží pro převod Delaunay triangulace z vykreslovacího okna.\\
 
-\textbf{std::vector\textless QPoint \textgreater generateEclipse(int n)}\\
-Metoda generuje body do tvaru elipsy. Na vstupu je počet generovaných bodů. Návratová hodnota je vektor bodů.\\
+\textbf{void setDT(std::vector<Edge> &dt_)}\\
+Metoda slouží pro převod Delaunay triangulace do vykreslovacího okna.\\
 
-\textbf{std::vector\textless QPoint \textgreater generateCircle(int n)}\\
-Metoda generuje body do tvaru kruhu. Na vstupu je počet generovaných bodů. Návratová hodnota je vektor bodů.\\
+\textbf{void setContours(std::vector<Edge> &contours_)}\\
+Metoda slouží pro převod vrtevnic do vykreslovacího okna.\\
 
-\textbf{void setCH(QPolygon ch\_)}\\
-Metoda slouží pro převod konvexní obálky do vykreslovacího okna.\\
-
-\textbf{setRectangle(QPolygon rectangle\_)}\\
-Metoda slouží pro převod minimální ohraničujícího obdélníku do vykreslovacího okna.\\
-
-\textbf{setDirection(QLine direction\_)}\\
-Metoda slouží pro převod hlavního směru budovy do vykreslovacího okna.\\
-
-\textbf{setPoints(std::vector\textless QPoint \textgreater points\_)}\\
-Metoda slouží pro převod vektoru bodů do vykreslovacího okna.\\
-
-\textbf{std::vector\textless QPoint \textgreater getPoints()}\\
-Metoda slouží pro převod vektoru bodů z vykreslovacího okna.\\
-
-\textbf{QPolygon getConvexHull()}\\
-Metoda slouží pro převod konvexní obálky z vykreslovacího okna.
+\textbf{void setDTM(std::vector<Triangle> &dtm_)}\\
+\\
 
 \subsubsection{SortByXAsc}
 Třída SortByXAsc slouží k porovnání souřadnic v ose x.\\
@@ -411,224 +387,71 @@ Třída SortByXAsc slouží k porovnání souřadnic v ose x.\\
 \textbf{bool operator()(QPoint \&p1, QPoint \&p2)}\\
 Přetížený operátor () vrátí bod s větší souřadnicí x z dvojice bodů.\\
 
+\subsubsection{Edge}
+\textbf{Edge(QPoint3D &start, QPoint3D &end)}\\
+Třída Edge je konstruována ze dvou 3D bodů, počátek a konec hrany. Třída slouží k uložení hrany triangulace a nebo vrstevnic.\\
+    
+\textbf{QPoint3D & getS()}\\
+Metoda vrátí počáteční bod hrany.\\
 
-\subsubsection{sortByYAsc}
-Třída sortByYAsc slouží k porovnání souřadnic v ose y.
-\\
+\textbf{QPoint3D & getE()}\\
+Metoda vrátí koncový bod hrany.\\
 
-\textbf{bool operator()(QPoint \&p1, QPoint \&p2)}\\
-Přetížený operátor () vrátí bod s větší souřadnicí y z dvojice bodů.
-\\
+\textbf{void switchOr()}\\
+Metoda prohodí orientaci hrany.\\
+
+\subsubsection{QPoint3D}
+\textbf{QPoint3D(double x, double y, double z_)}\\
+Třída QPoint3D je odvozena z třídy QPointF a složí k uložení bodu s informací o výšce.\\
+
+\textbf{double getZ()}\\
+Metoda vrátí výšce bodu.\\
+
+\textbf{void setZ(double z_)}\\
+Metoda nastaví výšku bodu.\\
+
+\subsubsection{Triangle}
+\textbf{Triangle(QPoint3D &p1_, QPoint3D &p2_, QPoint3D &p3_, double slope_, double aspect_))}\\
+Třída QPoint3D složí k uložení trojúhelníku definovaného boy p1, p2, p3 a jeho informaci o sklonu a expozici.\\
+
+\textbf{ QPoint3D getP1()}\\
+Metoda vrátí první bod trojúhelníku.\\
+
+\textbf{ QPoint3D getP2()}\\
+Metoda vrátí druhý bod trojúhelníku.\\
+
+\textbf{ QPoint3D getP3()}\\
+Metoda vrátí třetí bod trojúhelníku.\\
+
+\textbf{double getSlope()}\\
+Metoda vrátí sklon trojúhelníku.\\
+
+\textbf{double getAspect()}\\
+Metoda vrátí expozici trojúhelníku.\\
 
 \subsubsection{Widget}
 
-
 \textbf{void on\_pushButton\_clicked()}\\
-Při stisknutí tlačítka Create CH se volají metody třídy Algorithms dle metody vybrané v comboboxu.
-\\
-
-\textbf{void on\_generate\_clicked()}\\
-Při stisknutí tlačítka Generate se volají metody třídy Draw dle metody vybrané v comboboxu.
-\\
-
-\textbf{void on\_pushButton\_2\_clicked()}\\
-Při stisknutí tlačítka Clear se zavolá metoda třídy Draw clearCanvas.
-\\
-
-\textbf{void on\_minimumAreaEnclosingBox\_clicked()}\\
-Při stisknutí tlačítka MinEndBox se nad konvexní obálkou zavolá metoda třídy Algorithms minimumAreaEnclosingBox.
+Při stisknutí tlačítka Denaulay se zavolá metoda třídy Algorithms DT a výsledek se zobrazí v okně.
 \\
 
 \textbf{void on\_pushButton\_3\_clicked()}\\
-Při stisknutí tlačítka Close je uživatel vyzván, zda chce skutečně aplikaci ukončit.
+Při stisknutí tlačítka Clear se zavolá metoda třídy Draw clearDT.
+\\
+
+\textbf{void on\_pushButton\_2\_clicked()}\\
+Při stisknutí tlačítka Create Contours se zavolá metoda třídy Algorithms createContours a výsledek se zobrazí v okně.
 \\
 
 \textbf{void on\_pushButton\_4\_clicked()}\\
-Při stisknutí tlačítka Hint je uživateli zobrazena nápověda, jakým způsobem postupovat, neboť při stisknutí tlačítka pro tvorbu konvexní obálky nad prázdnou množinou je aplikace ukončena.
+Při stisknutí tlačítka AnalyzeDTM se zavolá metoda třídy Algorithms analyzeDTM a výsledek se zobrazí v okně.
 \\
 
+\textbf{void on\_pushButton\_5\_clicked()}\\
+Při stisknutí tlačítka Generate a výběru z comboboxu se vygenerují body terénu.
+\\
 
 \section{Testování}
-Po vytvoření funkční aplikace byly jednotlivé algoritmy otestovány na různém množství dat a na různých typech množin. Testování bylo prováděno nad výpočtem striktně konvexních obálek, které jsou výstupem aplikace. Samotné testování bylo prováděno v režimu Release. Testované typy množin byly voleny kruh, grid a náhodné rozmístění. Jednotlivé doby byly uloženy do tabulek a následně zobrazeny v grafu. 
-
-\subsection{Jarvis Scan}
-Tato metoda dosahovala nejhorších výsledků. Pro milion bodů byla doba výpočtu kolem 5 minut. Přestože by tato metoda měla pro body na kružnici dosahovat nejhorších výsledků, překvapivě je doba pro kružnici nejlepší. Nejhorší doby dosahuje pro náhodné rozmístění bodů.
-
-
-
-
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{jarvis_kruh.jpg}
-\end{figure}
-
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{jarvis_grid.jpg}
-\end{figure}
-
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{jarvis_random.jpg}
-\end{figure}
-
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{jarvis_vse.jpg}
-\end{figure}
-
-\clearpage
-
-
-\subsection{Sweep Line}
-Z dosavadních znalostí by tato metoda měla dosahovat velmi dobrých výsledků. Přesto v naší aplikaci dochází k chybě, při testování množiny bodů o 725.000 bodech začne aplikace pro náhodné rozmístění a kruh padat a je nefunkční. Na chybu se bohužel nepodařilo přijít.
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{sweep_kruh.jpg}
-\end{figure}
-
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{sweep_grid.jpg}
-\end{figure}
-
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{sweep_random.jpg}
-\end{figure}
-\clearpage
-
-\subsection{Quick Hull}
-Metoda Quick Hull dosahovala poměrně přiznivých výsledků. Velmi zajímavý byl graf porovnání výpočtu pro testované množiny, kde lze vidět, že funkce mají zhruba stejný průběh. Opět vychází nejlepší časy pro kruh a nejhorší pro náhodné rozmístění bodů.
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{quickhull_kruh.jpg}
-\end{figure}
-
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{quickhull_grid.jpg}
-\end{figure}
-
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{quickhull_random.jpg}
-\end{figure}
-
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{quickhull_vse.jpg}
-\end{figure}
-
-
-\subsection{Graham Scan}
-Tento algoritmus dosahuje nejlepších výsledků. Metoda je rychlá a funkční. Pro kruh opět dosahuje nejlepších výsledků a nejhorších výsledků pro náhodné rozmístění bodů.
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{grahamscan_kruh.jpg}
-\end{figure}
-
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{grahamscan_grid.jpg}
-\end{figure}
-
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{grahamscan_random.jpg}
-\end{figure}
-
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{graham_vse.jpg}
-\end{figure}
-
-
-
-\clearpage
-\subsection{Tabulky výsledných průměrných dob pro jednotlivé algoritmy}
-
-Níže lze vidět tabulky s průměrnýmu naměřenými dobami jednotlivých algoritmů. Čas je uváděn v msec. První řádek vždy označuje počet bodů, druhý řádek množinu generovnou v kruhu, třetí řádek množinu v gridu a poslední řádek náhodné rozmístění bodů.
-
-
-\begin{table}[h]
-	\begin{tabular}{|r|r|r|r|r|r|r|r|r|r|}
-	\hline
-	  \textbf{1000} 	& \textbf{10000} & \textbf{100000} & \textbf{225000} & \textbf{350000} & \textbf{475000} & \textbf{600000}  & \textbf{725000}
- & \textbf{850000}  & \textbf{1000000}\\ \hline
-			 76.2	& 603 	& 3323 & 7460 & 10409 & 11155 & 13280 &	14127 & 20775 & 26073 \\ \hline
-	 32	& 893  	& 14664	& 27210 & 60533 & 91470 & 128758 & 170449 & 216169 & 276887 \\ \hline
-	 11	& 191  	& 3562 & 29533 & 39542 & 51781 & 83605 & 112170 & 130838 & 153814	 \\ \hline
-
-	
-	\end{tabular}
-		\caption{Jarvis Scan}
-		
-\end{table}
-
-
-\begin{table}[h]
-	\begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|}
-	\hline
-	 \textbf{1000} 	& \textbf{10000} & \textbf{100000} & \textbf{225000} & \textbf{350000} & \textbf{475000} & \textbf{600000}  & \textbf{725000}
- & \textbf{850000}  & \textbf{1000000}\\ \hline
-	 1.8 & 15 & 151 &  273 & 430 & 520 & 487 & 774 & 657 & 898\\ \hline
-	 1 & 3 & 23 & 43 & 65 & 68 & 86 & 96 & 112 & 231 \\ \hline
-	 1 & 7 & 58 & 126 & 164 & 180 & 242 & 280 & 314 & 355	 \\ \hline
-
-	
-	\end{tabular}
-		\caption{Quick Hull}
-\end{table}
-
-
-
-
-
-
-\begin{table}[h]
-	\begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|}
-	\hline
-	 \textbf{1000} 	& \textbf{10000} & \textbf{100000} & \textbf{225000} & \textbf{350000} & \textbf{475000} & \textbf{600000}  & \textbf{725000}
- & \textbf{850000}  & \textbf{1000000}\\ \hline
-	 1 & 115 & 7581 &  22199 & 65410 & 91985 & 222160 & - & - & -\\ \hline
-	 1 & 4 & 23 & 52 & 67 & 83 & 87 & 110 & 108 & 230  \\ \hline
-	2 & 35 & 1475 & 9938 & 24547 & 52011 & 101730 & - & -& -	 \\ \hline
-
-	
-	\end{tabular}
-		\caption{Sweep Line}
-\end{table}
-
-
-\begin{table}[h]
-	\begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|}
-	\hline
-	 \textbf{1000} 	& \textbf{10000} & \textbf{100000} & \textbf{225000} & \textbf{350000} & \textbf{475000} & \textbf{600000}  & \textbf{725000}
- & \textbf{850000}  & \textbf{1000000}\\ \hline
-	 1.6  & 11 & 91 & 169 & 339 & 457 & 458 & 662 & 805 & 938   \\ \hline
-	 1 & 16 & 256 & 406 & 611 & 763 & 1052 & 1081 & 1289 & 1926 \\ \hline
-	 1 & 17 & 174 & 364 & 562 & 782 & 984 & 993 & 1117 & 1048 \\ \hline
-
-	
-	\end{tabular}
-		\caption{Graham Scan}
-\end{table}
 
 
 \clearpage

@@ -75,9 +75,10 @@ void Widget::on_pushButton_5_clicked()
           points = Algorithms::generateValley();
        else if (ui->comboBox->currentIndex()==2)
           points = Algorithms::generateMountains();
+       /*
        else  (ui->comboBox->currentIndex()==3)
           points = Algorithms::generateRest();
-
+*/
        ui->Canvas->setPoints(points);
 
        ui->Canvas->repaint();
