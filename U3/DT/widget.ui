@@ -40,12 +40,12 @@
        </item>
        <item>
         <property name="text">
-         <string>Spocinek</string>
+         <string>Hrbet</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Hrbet</string>
+         <string>Grid</string>
         </property>
        </item>
       </widget>
@@ -54,6 +54,13 @@
       <widget class="QPushButton" name="pushButton_5">
        <property name="text">
         <string>Generate</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_6">
+       <property name="text">
+        <string>Import</string>
        </property>
       </widget>
      </item>
@@ -76,6 +83,16 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Interval vrstevnic</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="dz"/>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_2">

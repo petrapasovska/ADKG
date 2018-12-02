@@ -516,8 +516,24 @@ std::vector<QPoint3D> Algorithms::generateMountains()
      return random_points;
 }
 
-std::vector<QPoint3D> Algorithms::generateRest()
+std::vector<QPoint3D> Algorithms::generateGrid(int grid)
 {
     std::vector<QPoint3D> random_points;
+    QPoint3D p;
+
+
+     for(int j = 0;j<800;j += grid)
+     {
+         for(int i = 0;i<800;i += grid)
+         {
+             p.setX(j);
+             p.setY(i);
+             p.setZ(i*j/10000);
+
+             random_points.push_back(p);
+         }
+
+     }
+     return random_points;
 
 }

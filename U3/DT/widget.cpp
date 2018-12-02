@@ -25,14 +25,7 @@ Widget::~Widget()
 void Widget::on_pushButton_clicked()
 {
     std::vector<QPoint3D> points = ui->Canvas->getPoints();
-    /*
-    std::ofstream f ("test.fxt");
-    for(QPoint3D p: points)
-    {
-        f << p.x() << "  " << p.y() <<'\n';
-    }
-    f.close();
-    */
+
     std::vector<Edge> dt = Algorithms::DT(points);
     ui->Canvas->setDT(dt);
     repaint();
@@ -49,9 +42,10 @@ void Widget::on_pushButton_2_clicked()
 {
     //Create contour lines
     std::vector<Edge> dt = ui->Canvas->getDT();
-    std::vector<Edge> contours = Algorithms::createContours(dt, 0, 100, 5);
+    std::vector<Edge> contours = Algorithms::createContours(dt, z_min, z_max, ui->dz->text().toInt());
     ui->Canvas->setContours(contours);
     repaint();
+
 }
 
 void Widget::on_pushButton_4_clicked()
@@ -75,12 +69,35 @@ void Widget::on_pushButton_5_clicked()
           points = Algorithms::generateValley();
        else if (ui->comboBox->currentIndex()==2)
           points = Algorithms::generateMountains();
-       /*
-       else  (ui->comboBox->currentIndex()==3)
-          points = Algorithms::generateRest();
-*/
+       else if (ui->comboBox->currentIndex()==3)
+          points = Algorithms::generateGrid(100);
+
        ui->Canvas->setPoints(points);
 
        ui->Canvas->repaint();
 }
 
+
+void Widget::on_pushButton_6_clicked()
+{
+    std::vector<QPoint3D> points;
+
+    QSizeF canvas_size = ui->Canvas->size();
+
+    QString path = QFileDialog::getOpenFileName(
+                this,
+                tr("Select file"),
+                "/",
+                "Text file (*.txt);;All files (*.*)");
+
+    std::string path_utf8 = path.toUtf8().constData();
+
+    QString msg;
+
+
+   Draw::importPolygons(path_utf8, points,canvas_size, z_min, z_max);
+
+   ui->Canvas->setPoints(points);
+
+   ui->Canvas->repaint();
+}

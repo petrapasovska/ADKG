@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <vector>
+#include <fstream>
+#include <QMessageBox>
 
 #include "edge.h"
 #include "qpoint3d.h"
@@ -29,6 +31,7 @@ class Draw : public QWidget
         void setDT(std::vector<Edge> &dt_){dt = dt_;}
         void setContours(std::vector<Edge> &contours_){contours = contours_;}
         void setDTM(std::vector<Triangle> &dtm_){dtm = dtm_;}
+        static void importPolygons(std::string &path, std::vector<QPoint3D> &points,  QSizeF &canvas_size, double &min_z, double &max_z);
 
     signals:
 
