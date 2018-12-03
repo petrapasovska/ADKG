@@ -60,16 +60,6 @@ QPolygon Algorithms::CHJarvis (vector<QPoint> &points)
     //Find pivot q
     std::sort(points.begin(), points.end(), sortByYAsc());
 
-    //Reduce singulary case  by kolinear points
-
-    for(unsigned int i = 1;i<points.size();i++)
-    {
-        if(points[0].y()== points[i].y())
-        {
-            index++;
-        }
-    }
-
 
     // pivot with min y and max x
     QPoint q = points[index];
@@ -90,6 +80,7 @@ QPolygon Algorithms::CHJarvis (vector<QPoint> &points)
     {
         unsigned int i_max = 0;
         double fi_max = 0;
+        double dist_min = 1e10;
 
         //Find pi = arg max angle(pi, pj, pjj)
         for(unsigned int i = 0; i<points.size();i++)
@@ -102,6 +93,17 @@ QPolygon Algorithms::CHJarvis (vector<QPoint> &points)
             {
                 i_max=i;
                 fi_max=fi;
+            }
+
+            // Reduce singalarity by colinear points
+            else if ((fi-fi_max)<0.0001){
+                double dist = length2Points(pj, points[i]);
+
+                if(dist_min<dist){
+                    dist_min = dist;
+                    i_max = i;
+                    fi_max = fi;
+                }
             }
         }
 
@@ -119,6 +121,7 @@ QPolygon Algorithms::CHJarvis (vector<QPoint> &points)
 
     return ch;
 }
+
 
 double Algorithms::getPointLineDistance(QPoint &q, QPoint &a, QPoint &b)
 {
@@ -485,12 +488,17 @@ QPolygon Algorithms::CHSweep (vector<QPoint> &points)
     std::sort(points.begin(), points.end(), SortByXAsc());
 
     //delete duplicit points on sorted data
-    for(unsigned int i =0; i<points.size(); i++){
-        if((points[i].x()==points[i+1].x()) && (points[i].y()==points[i+1].y())  ){
-            points.erase(points.begin()+i);
-            i--;
+    vector<QPoint> pointsWithRemovedDuplicit;
+    for(unsigned int i =0; i<points.size() - 1; i++){
+        if((points[i].x()!=points[i+1].x()) || (points[i].y()!=points[i+1].y())  ){
+            pointsWithRemovedDuplicit.push_back(points[i]);
         }
     }
+    pointsWithRemovedDuplicit.push_back(points[points.size() - 1]);
+
+    points = pointsWithRemovedDuplicit;
+
+
 
     //create list of predecessors (p) and successors (n)
     std::vector< unsigned int> p(points.size()), n(points.size());
