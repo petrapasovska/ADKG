@@ -53,7 +53,7 @@
 %vložení loga cvut
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=7cm]{logo.png}
+	\includegraphics[width=7cm]{pictures/logo.png}
 \end{figure}
 
 \vspace{0.5cm}
@@ -89,7 +89,7 @@ Níže uvedené zadání je kopie ze stránek předmětu.
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[clip, trim=0cm 10cm 0cm 3cm, width=1.2\textwidth]{zadani.pdf}
+	\includegraphics[clip, trim=0cm 5cm 0cm 0cm, width=1.2\textwidth]{zadani.pdf}
 \end{figure}
 
 \subsection{Údaje o bonusových úlohách}
@@ -172,121 +172,11 @@ Expozice terénu je definována jako azimut k průmětu normálového vektoru ro
 
 
 \section{Vstupní data}
-\\
+
 
 \section{Výstupní data}
-\\
 
 
-\clearpage
-\section{Aplikace}
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{vstup.jpg}
-	\caption{Zobrazené okno po spuštění aplikace}
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{circle.jpg}
-	\caption{Vygenerované body v kruhu}
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{square.jpg}
-	\caption{Vygenerované body ve čtverci}
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{ellipse.jpg}
-	\caption{Vygenerované body v elipse}
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{grid.jpg}
-	\caption{Vygenerované body v pravidelné mřížce}
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{random.jpg}
-	\caption{Náhodně vygenerované body}
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{star_shaped.jpg}
-	\caption{Vygenerované body ve tvaru Star Shaped}
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{warning_grid.jpg}
-	\caption{Varování na redukci vloženého počtu bodů při tvorbě gridu }
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{warning_square.jpg}
-	\caption{Varování při neplatném vstupu při tvorbě čtverce}
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{warning_square2.jpg}
-	\caption{Varování na redukci vloženého počtu bodů při tvorbě čtverce}
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{hint.jpg}
-	\caption{Nápověda, pokud si uživatel nebude jistý, jak v aplikaci postupovat}
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{tooltip.jpg}
-	\caption{Po přiložení kurzoru se zobrazí informace o objektu}
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{close.jpg}
-	\caption{Vyskakovací okno při ukončování aplikace}
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{jarvis_ch.jpg}
-	\caption{Tvorba konvexní obálky metodou Jarvis Scan}
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{sweepline_ch.jpg}
-	\caption{Tvorba konvexní obálky metodou Sweep Line}
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{qhull_ch.jpg}
-	\caption{Tvorba konvexní obálky metodou Quick Hull}
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{grahamscan_ch.jpg}
-	\caption{Tvorba konvexní obálky metodou Graham Scan}
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=10cm]{minBound.jpg}
-	\caption{Tvorba minimálního ohraničujícího obdélníku}
-\end{figure}
 
 \clearpage
 
@@ -303,31 +193,31 @@ Metoda, jejíž návratová hodnota je typu double, vrací velikost spojnice mez
 \textbf{TPosition getPointLinePosition(QPoint \&q, QPoint \&a, QPoint \&b)}\\
 Tato metoda slouží k určení pozice bodu q vůči linii tvořené body a, b. Výstupem metody je LEFT, RIGHT nebo ON.\\
 
-\textbf{double getCircleRadius(QPoint3D &p1, QPoint3D &p2, QPoint3D &p3, QPoint3D &c)}\\
+\textbf{double getCircleRadius(QPoint3D \&p1, QPoint3D \&p2, QPoint3D \&p3, QPoint3D \&c)}\\
 Metoda jejíž návratová hodnota je typu double, vrací velikost poloměru kružnice tvořené třemi vstupními body.\\
 
-\textbf{int getNearestPoint(QPoint3D &p, std::vector<QPoint3D> &points)}\\
+\textbf{int getNearestPoint(QPoint3D \&p, std::vector<QPoint3D> \&points)}\\
 Tato metoda slouží k nalezení indexu nejbližšího bodu k bodu p.\\
 
-\textbf{int getDelaunayPoint(QPoint3D &s, QPoint3D &e, std::vector<QPoint3D> &points)}\\
+\textbf{int getDelaunayPoint(QPoint3D \&s, QPoint3D \&e, std::vector<QPoint3D> \&points)}\\
 Tato metoda slouží k nalezení indexu bodu, který splňuje Delaunay vlastnosti.\\
 
-\textbf{std::vector<Edge> DT(std::vector<QPoint3D> &points)}\\
+\textbf{std::vector<Edge> DT(std::vector<QPoint3D> \&points)}\\
 Metoda vytváří nad vektorem bodů Delaunay triangulaci, které se reprezentuje jako vektor hran.\\
 
-\textbf{QPoint3D getContourPoint(QPoint3D &p1, QPoint3D &p2, double z)}\\
+\textbf{QPoint3D getContourPoint(QPoint3D \&p1, QPoint3D \&p2, double z)}\\
 Metoda vypočte průsečík hrany, tvořenou 3D body p1 a p2, a rovinou definovanou z souřadnicí.\\
 
-\textbf{std::vector<Edge> createContours(std::vector<Edge> &dt, double z_min, double z_max, double dz)}\\
-Metoda z triangulace dt v zadaném intervalu v ose Z <z_min ; z_max> s intervalem vrstevnic dz vrátí vektor hran definující vrstevnice.\\
+\textbf{std::vector<Edge> createContours(std::vector<Edge> \&dt, $double z_min, double z_max, double dz$)}\\
+Metoda z triangulace dt v zadaném intervalu v ose Z $<z_min ; z_max>$ s intervalem vrstevnic dz vrátí vektor hran definující vrstevnice.\\
 
-\textbf{double getSlope(QPoint3D &p1, QPoint3D &p2, QPoint3D &p3)}\\
+\textbf{double getSlope(QPoint3D \&p1, QPoint3D \&p2, QPoint3D \&p3)}\\
 Tato metoda slouží k vypočetní hodnoty sklonu trojúhelníku definovanému 3D body p1, p2 a p3.\\
 
-\textbf{double getAspect(QPoint3D &p1, QPoint3D &p2, QPoint3D &p3)}\\
+\textbf{double getAspect(QPoint3D \&p1, QPoint3D \&p2, QPoint3D \&p3)}\\
 Tato metoda slouží k vypočetní hodnoty expozice trojúhelníku definovanému 3D body p1, p2 a p3.\\
 
-\textbf{std::vector<Triangle> analyzeDTM(std::vector<Edge> &dt)}\\
+\textbf{std::vector<Triangle> analyzeDTM(std::vector<Edge> \&dt)}\\
 \\
 
 \textbf{std::vector<QPoint3D> generateHill()}\\
@@ -362,22 +252,22 @@ Metoda slouží k vymazání proměnných a k překreslení
 Metoda slouží k vymazání bodů.
 \\
 
-\textbf{void setPoints(std::vector<QPoint3D> points_)}\\
+\textbf{void setPoints(std::vector<QPoint3D> points\_)}\\
 Metoda slouží pro převod bodů do vykreslovacího okna.\\
 
-\textbf{std::vector<QPoint3D> & getPoints()}\\
+\textbf{std::vector<QPoint3D> \& getPoints()}\\
 Metoda slouží pro převod bodů z vykreslovacího okna.\\
 
-\textbf{std::vector<Edge> & getDT()}\\
+\textbf{std::vector<Edge> \& getDT()}\\
 Metoda slouží pro převod Delaunay triangulace z vykreslovacího okna.\\
 
-\textbf{void setDT(std::vector<Edge> &dt_)}\\
+\textbf{void setDT(std::vector<Edge>\&dt\_)}\\
 Metoda slouží pro převod Delaunay triangulace do vykreslovacího okna.\\
 
-\textbf{void setContours(std::vector<Edge> &contours_)}\\
+\textbf{void setContours(std::vector<Edge>\&contours\_)}\\
 Metoda slouží pro převod vrtevnic do vykreslovacího okna.\\
 
-\textbf{void setDTM(std::vector<Triangle> &dtm_)}\\
+\textbf{void setDTM(std::vector<Triangle> \&dtm\_)}\\
 \\
 
 \subsubsection{SortByXAsc}
@@ -388,30 +278,30 @@ Třída SortByXAsc slouží k porovnání souřadnic v ose x.\\
 Přetížený operátor () vrátí bod s větší souřadnicí x z dvojice bodů.\\
 
 \subsubsection{Edge}
-\textbf{Edge(QPoint3D &start, QPoint3D &end)}\\
+\textbf{Edge(QPoint3D \&start, QPoint3D \&end)}\\
 Třída Edge je konstruována ze dvou 3D bodů, počátek a konec hrany. Třída slouží k uložení hrany triangulace a nebo vrstevnic.\\
     
-\textbf{QPoint3D & getS()}\\
+\textbf{QPoint3D \&getS()}\\
 Metoda vrátí počáteční bod hrany.\\
 
-\textbf{QPoint3D & getE()}\\
+\textbf{QPoint3D \& getE()}\\
 Metoda vrátí koncový bod hrany.\\
 
 \textbf{void switchOr()}\\
 Metoda prohodí orientaci hrany.\\
 
 \subsubsection{QPoint3D}
-\textbf{QPoint3D(double x, double y, double z_)}\\
+\textbf{QPoint3D(double x, double y, double z\_)}\\
 Třída QPoint3D je odvozena z třídy QPointF a složí k uložení bodu s informací o výšce.\\
 
 \textbf{double getZ()}\\
 Metoda vrátí výšce bodu.\\
 
-\textbf{void setZ(double z_)}\\
+\textbf{void setZ(double z\_)}\\
 Metoda nastaví výšku bodu.\\
 
 \subsubsection{Triangle}
-\textbf{Triangle(QPoint3D &p1_, QPoint3D &p2_, QPoint3D &p3_, double slope_, double aspect_))}\\
+\textbf{Triangle(QPoint3D \&p1\_, QPoint3D \&p2\_, QPoint3D \&p3\_, double slope\_, double aspect\_))}\\
 Třída QPoint3D složí k uložení trojúhelníku definovaného boy p1, p2, p3 a jeho informaci o sklonu a expozici.\\
 
 \textbf{ QPoint3D getP1()}\\
@@ -451,31 +341,12 @@ Při stisknutí tlačítka AnalyzeDTM se zavolá metoda třídy Algorithms analy
 Při stisknutí tlačítka Generate a výběru z comboboxu se vygenerují body terénu.
 \\
 
-\section{Testování}
 
 
 \clearpage
 \section{Závěr}
-V rámci úlohy byla vytvořena aplikace, která je schopna na vygenerovaných bodech zkonstruovat konvexní obálku. Zároveň je v rámci aplikace možné náhodně vygenerovat téměř libovolné množství bodů do určitého tvaru. Na výběr je poměrně široké spektrum běžných tvarů, což jistě uživatel ocení.\\
-\\
-Součástí úlohy bylo i testování doby výpočtu jednotlivých konvexních obálek. Testování bylo prováděno nad striktně konvexními obálkami, samotný výpočet je tedy zatížen ještě o vyhodnocení, zda následující tři body neleží na stejné přímce. Výsledné doby dopadly dle očekávání. Algoritmus Jarvis Scan měl znatelně nejhorší čas. Naopak metoda Graham Scan se jeví jako nejlepší řešení.
-
-\section{Náměty na vylepšení}
-\subsection{Graham Scan}
-Pro algoritmus Graham Scan byl nejprve napsán kod, který byl velmi náročný a aplikace nebyla funkční na větším množství dat. Z toho důvodu byla napsána nová metoda, která je již funkční a při testování dosahovala nejlepších možných výsledků. Z toho důvodu je v kódu pojmenována jako GrahamScanNew. Původní funkce byla v kódu ponechána pro případnou doeditaci a její zprovoznění.
-
-\subsection{Generování množin bodů}
-Při tvorbě generování gridu napadla autory myšlenka, že by se body generovaly v některém ze známých kartografických zobrazení. Z bakalářského studia znají velké množství zobrazovacích rovnic, pomocí nichž by se body zobrazovaly. Zajímavé rozmístění by měla zejména kuželová zobrazení. Při zobrazení bodů v rámci některého kartografického zobrazení by výsledná konvexní obálka představovala celý svět, případně polokouli, záleželo by na typu zvoleného zobrazení.
-
-\subsection{Testování algoritmů}
-V rámci této úlohy bylo provedeno několik testování nad odlišným množstvím bodů a na jejich odlišném zobrazení. Časově bylo testování poměrně náročné, za úvahu jistě stojí popřemýšlení, zda by nebylo výhodnější vytvořit takovou funkci, která by pro předem definované tvary a množství bodů sama provedla testování. Zároveň obsahuje platforma Qt i knihovnu grafů, časová úspora by tedy byla velmi výrazná.
 
 
-\subsection{Tvorba tabulek v LaTeXu}
-V rámci dokumentace bylo i prezentování výsledných měření prostřednictvým tabulek. V původních tabulkách byl ještě sloupec, který označoval typy množin (kruh, grid, random). Bohužel s tímto sloupcem byla tabulka oříznutá a přes veškerou snahu se autorům nepodařilo nalézt řešení, jakým způsobem tabulku posunout vlevo. Z toho důvodu byl tento sloupec odstraněn a tabulky byly popsány v záhlaví podkapitoly. S tímto řešením nejsou autoři zcela spokojeni, tabulky nejsou dostatečně přehledné. 
-
-\subsection{Minimum Area Enclosing Box}
-Při výpočtu minimálního ohraničujícího obdélníku autorům z neznámé příčiny nefungovala transformace, ač se to snažili vyřešit. Po konzultaci byla část pro transformaci vypůjčena od kolegy, kterému fungovala bez problémů. Vypůjčená část je v kódu vyznačena. 
 
 
 
@@ -485,23 +356,9 @@ Při výpočtu minimálního ohraničujícího obdélníku autorům z neznámé 
 \section{Reference}
 
 \begin{enumerate}
-\item  MARTÍNEK, Petr. Konvexní obálka rozsáhlé množiny bodů v E\^d [online][cit. 31.10.2018]. \\
-Dostupné z: http://graphics.zcu.cz/files/86\_BP\_2010\_Martinek\_Petr.pdf  \\
+\item  BAYER, Tomáš. Geometrické vyhledávání [online][cit. 1. 12.2018]. \\
+Dostupné z: https://web.natur.cuni.cz/~bayertom/images/courses/Adk/adk5.pdf  \\
 
-\item Convex Hulls: Explained. [online][cit. 31.10.2018]\\
-Dostupné z: https://medium.com/@harshitsikchi/convex-hulls-explained-baab662c4e94\\
-
-\item Convex-hull mass estimates of the dodo (Raphus cucullatus). [online][cit. 31.10.2018]\\
-Dostupné z: https://www.semanticscholar.org/paper/Convex-hull-mass-estimates-of-the-dodo-(Raphus-of-a-Brassey-O\'Mahoney/12e07d3b712561cad16501ac8096120e14901eb8
-
-\item GeeksforGeeks: Convex Hull - Set 1 (Jarvis's Algorithm or Wrapping. [online][cit. 5.11.2018]\\
-Dostupné z: https://www.geeksforgeeks.org/convex-hull-set-1-jarviss-algorithm-or-wrapping/
-
-\item  BAYER, Tomáš. Geometrické vyhledávání [online][cit. 5.11.2018]. \\
-Dostupné z: https://web.natur.cuni.cz/~bayertom/images/courses/Adk/adk4.pdf  \\
-
-\item GeeksforGeeks: Convex Hull - Set 2 (Graham Scan). [online][cit. 12.11.2018]\\
-Dostupné z: https://www.geeksforgeeks.org/convex-hull-set-2-graham-scan/
 
 
 
