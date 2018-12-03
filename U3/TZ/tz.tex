@@ -345,10 +345,28 @@ Při stisknutí tlačítka Generate a výběru z comboboxu se vygenerují body t
 
 \clearpage
 \section{Závěr}
+Byla vytvořena aplikace, které nad importovanými body vytvoří Delaunay triangulaci, vykreslí vrstevnice, sklon a expozici terénu. Aplikace má nějaké nedostatky, které autoři nestihli opravit.\\
 
+\subsection{Delaunay triangulce}
+Vzhledem implementace triangulace, výběr trojúhelníku z vyhledávání nejmenší opsané kružnice, algoritmus selhává, když body jsou v mřížce. Triangulace je pro tyto body nejednoznačná a další výpočty selhávají.\\
 
+V aplikaci nezle nadefinovat povinné hrany, které jsou důležité pro terénní tvary, jako terénní hrana a propast. Proto algoritmus není použitelný pro data s těmito typy terénní tvarů. Důvod je zřejmý z implementace triangulace.\\
 
+V aplikaci též nelze nastavit zájmovou oblast, proto je nutné před výpočtem algoritmu odstranit body, nad kterými nechceme provádět triangulaci.\\
 
+Aplikace je užitečná pro výškopisná data v terénu bez povinných hran a kde data nepotřebují být upravována, viz předchozí odstavec. \\
+
+\subsection{Vrstevnice}
+Pro vykreslení vrstevnic byla použitá lineární interpolace, která má svoje úskalí. Jelikož pro výpočet vrstevnic není řešené vyhlazení vrstevnic, výsledek není vhodný ke chlubení.\\
+
+Autoři neřešili vykreslení hlavní vrstevnice zesílenou čárou ani popis vrstevnic. \\
+
+\subsection{Sklon a expozice terénu}
+Při výpočtu sklonu a expozice terénu vzniká problém v rovinatém území. Při výpočtu vznikají zaokrouhlovací chyby, které se promítnou do sklonu a expozice. Proto se terén jeví uživateli nerovinný.\\
+
+Do aplikace by se hodila legenda expozice terénu.\\
+
+\section{Náměty na vylepšení}
 
 
 
