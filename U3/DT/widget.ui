@@ -27,6 +27,44 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
+      <widget class="QComboBox" name="comboBox">
+       <item>
+        <property name="text">
+         <string>Kupa</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Udoli</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Hrbet</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Grid</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_5">
+       <property name="text">
+        <string>Generate</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_6">
+       <property name="text">
+        <string>Import</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="pushButton">
        <property name="text">
         <string>Delaunay</string>
@@ -45,6 +83,16 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Interval vrstevnic</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="dz"/>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_2">

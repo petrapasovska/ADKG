@@ -7,38 +7,6 @@
 Draw::Draw(QWidget *parent) : QWidget(parent)
 {
     srand((unsigned)time(0));
-
-    /*
-    QPoint p1(462,  157);
-    QPoint p2(289,  294);
-    QPoint p3(496,  361);
-    QPoint p4(714,  200);
-    */
-    /*
- QPoint p1(467,  163);
- QPoint p2(340,  273);
- QPoint p3(361,  425);
- QPoint p4(744,  271);
- QPoint p5(544,  330);
- QPoint p6(68,  636);
- QPoint p7(70,  660);
- QPoint p8(881,  513);
- QPoint p9(937,  39);
- QPoint p10(926,  330);
-
-
-    points.push_back(p1);
-    points.push_back(p2);
-    points.push_back(p3);
-    points.push_back(p4);
-    points.push_back(p5);
-    points.push_back(p6);
-    points.push_back(p7);
-    points.push_back(p8);
-    points.push_back(p9);
-    points.push_back(p10);
-    */
-
 }
 
 void Draw::paintEvent(QPaintEvent *e)
@@ -51,7 +19,7 @@ void Draw::paintEvent(QPaintEvent *e)
    for(int i = 0; i < points.size(); i++)
    {
        painter.drawEllipse(points[i].x() - 5, points[i].y() - 5, 10, 10);
-       painter.drawText(points[i].x() + 10, points[i].y() + 10, QString::number(points[i].getZ()));
+       //painter.drawText(points[i].x() + 10, points[i].y() + 10, QString::number(points[i].getZ()));
    }
 
    //Draw Delaunay edges
@@ -61,7 +29,7 @@ void Draw::paintEvent(QPaintEvent *e)
    }
 
    //Draw contour lines
-   painter.setPen(Qt::green);
+   painter.setPen(Qt::black);
 
    for(int i = 0; i < contours.size(); i++)
    {
@@ -165,3 +133,54 @@ void Draw::clearDT()
     contours.clear();
 }
 
+void Draw::importPolygons(std::string &path, std::vector<QPoint3D> &points,  QSizeF &canvas_size, double &min_z, double &max_z)
+{
+    double x, y, z;
+    QPoint3D p;
+
+
+    //go through file and load points into poly_pol (storing all polygons)
+    double min_x = std::numeric_limits<double>::max();
+    double min_y = std::numeric_limits<double>::max();
+    double max_x = std::numeric_limits<double>::min();
+    double max_y = std::numeric_limits<double>::min();
+    min_z = std::numeric_limits<double>::max();
+    max_z = std::numeric_limits<double>::min();
+
+
+    std::ifstream myfile(path);
+    if(myfile.is_open())
+    {
+        qDebug() << "File is open";
+        while(myfile >> x >> y >> z)        //read file line by line
+        {
+            p.setX(x);
+            p.setY(y);
+            p.setZ(z);
+
+            points.push_back(p);
+
+            if(x < min_x) min_x = x;
+            if(x > max_x) max_x = x;
+            if(y < min_y) min_y = y;
+            if(y > max_y) max_y = y;
+            if(z < min_z) min_z = z;
+            if(z > max_z) max_z = z;
+        }
+
+        myfile.close();
+    }
+
+    //scale points to canvas size
+        double h = canvas_size.height() - 40;
+        double w = canvas_size.width() - 40;
+
+        double x_coef = w/(max_x-min_x);
+        double y_coef = h/(max_y-min_y);
+
+        for(unsigned int i = 0; i < points.size(); i++)
+        {
+            points[i].setX((points[i].x()-min_x)*x_coef);
+            points[i].setY((points[i].y()-min_y)*y_coef);
+        }
+}
