@@ -50,11 +50,29 @@ void Widget::on_pushButton_2_clicked()
 
 void Widget::on_pushButton_4_clicked()
 {
+    bool slope = FALSE;
+    bool aspect = FALSE;
     //Analyze slope and aspect
     std::vector<Edge> dt = ui->Canvas->getDT();
     std::vector<Triangle> dtm = Algorithms::analyzeDTM(dt);
     ui->Canvas->setDTM(dtm);
+
+    if (ui->comboBox_2->currentIndex()==0)
+    {
+        slope = TRUE;
+        aspect = FALSE;
+    }
+    else if (ui->comboBox_2->currentIndex()==1)
+    {
+        slope = FALSE;
+        aspect = TRUE;
+    }
+
+    ui->Canvas->setAspect(aspect);
+    ui->Canvas->setSlope(slope);
+
     repaint();
+
 }
 
 void Widget::on_pushButton_5_clicked()

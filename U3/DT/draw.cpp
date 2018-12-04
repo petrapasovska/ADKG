@@ -36,79 +36,86 @@ void Draw::paintEvent(QPaintEvent *e)
        painter.drawLine(contours[i].getS(), contours[i].getE());
    }
 
-   //Draw slope
-   double c = 255.0/180;
-   for(int i = 0; i < dtm.size(); i++)
+   if(slope == TRUE)
    {
-       //Get triangle and its vertices
-       Triangle t = dtm[i];
-       QPoint3D p1 = t.getP1();
-       QPoint3D p2 = t.getP2();
-       QPoint3D p3 = t.getP3();
+       //Draw slope
+       double c = 255.0/180;
+       for(int i = 0; i < dtm.size(); i++)
+       {
+           //Get triangle and its vertices
+           Triangle t = dtm[i];
+           QPoint3D p1 = t.getP1();
+           QPoint3D p2 = t.getP2();
+           QPoint3D p3 = t.getP3();
 
-       //Get slope and setthe brush
-       int c_slope = c * t.getSlope();
-       painter.setBrush(QColor(c_slope,c_slope,c_slope));
+           //Get slope and setthe brush
+           int c_slope = c * t.getSlope();
+           painter.setBrush(QColor(c_slope,c_slope,c_slope));
 
-       //Create and draw the  polygon
-       QPolygon triangle;
-       triangle.append(QPoint(p1.x(), p1.y()));
-       triangle.append(QPoint(p2.x(), p2.y()));
-       triangle.append(QPoint(p3.x(), p3.y()));
+           //Create and draw the  polygon
+           QPolygon triangle;
+           triangle.append(QPoint(p1.x(), p1.y()));
+           triangle.append(QPoint(p2.x(), p2.y()));
+           triangle.append(QPoint(p3.x(), p3.y()));
 
-       painter.drawPolygon(triangle);
+           painter.drawPolygon(triangle);
+       }
    }
 
-   //Draw aspect
-   for(int i =0; i<dtm.size(); i++)
+   if(aspect == TRUE)
    {
-       //Get triangle and its vertices
-       Triangle t = dtm[i];
-       QPoint3D p1 = t.getP1();
-       QPoint3D p2 = t.getP2();
-       QPoint3D p3 = t.getP3();
+       //Draw aspect
+       for(int i =0; i<dtm.size(); i++)
+       {
+           //Get triangle and its vertices
+           Triangle t = dtm[i];
+           QPoint3D p1 = t.getP1();
+           QPoint3D p2 = t.getP2();
+           QPoint3D p3 = t.getP3();
 
-       int count_aspect = t.getAspect();
+           int count_aspect = t.getAspect();
 
-       if((count_aspect>=0) && (count_aspect<22.5)){
-           painter.setBrush(QColor(0, 206, 209));
-       }
-       else if((count_aspect>=22.5) && (count_aspect<67.5)){
-           painter.setBrush(QColor(124, 252, 0));
-       }
-       else if((count_aspect>=67.5) && (count_aspect<112.5)){
-           painter.setBrush(QColor(255, 255, 0));
-       }
-       else if((count_aspect>=112.5) && (count_aspect<157.5)){
-           painter.setBrush(QColor(255, 165, 0));
-       }
-       else if((count_aspect>=157.5) && (count_aspect<180)){
-           painter.setBrush(QColor(220, 20, 60));
-       }
-       else if((count_aspect>=-180) && (count_aspect<-157.5)){
-           painter.setBrush(QColor(220, 20, 60));
-       }
-       else if((count_aspect>=-157.5) && (count_aspect<-112.5)){
-           painter.setBrush(QColor(255, 20, 147));
-       }
-       else if((count_aspect>=-112.5) && (count_aspect<-67.5)){
-           painter.setBrush(QColor(186, 85, 211));
-       }
-       else if((count_aspect>=-67.5) && (count_aspect<-22.5)){
-           painter.setBrush(QColor(65, 105, 225));
-       }
-       else if((count_aspect>=-22.5) && (count_aspect<0)){
-           painter.setBrush(QColor(0, 206, 209));
-       }
+           if((count_aspect>=0) && (count_aspect<22.5)){
+               painter.setBrush(QColor(0, 206, 209));
+           }
+           else if((count_aspect>=22.5) && (count_aspect<67.5)){
+               painter.setBrush(QColor(124, 252, 0));
+           }
+           else if((count_aspect>=67.5) && (count_aspect<112.5)){
+               painter.setBrush(QColor(255, 255, 0));
+           }
+           else if((count_aspect>=112.5) && (count_aspect<157.5)){
+               painter.setBrush(QColor(255, 165, 0));
+           }
+           else if((count_aspect>=157.5) && (count_aspect<180)){
+               painter.setBrush(QColor(220, 20, 60));
+           }
+           else if((count_aspect>=-180) && (count_aspect<-157.5)){
+               painter.setBrush(QColor(220, 20, 60));
+           }
+           else if((count_aspect>=-157.5) && (count_aspect<-112.5)){
+               painter.setBrush(QColor(255, 20, 147));
+           }
+           else if((count_aspect>=-112.5) && (count_aspect<-67.5)){
+               painter.setBrush(QColor(186, 85, 211));
+           }
+           else if((count_aspect>=-67.5) && (count_aspect<-22.5)){
+               painter.setBrush(QColor(65, 105, 225));
+           }
+           else if((count_aspect>=-22.5) && (count_aspect<0)){
+               painter.setBrush(QColor(0, 206, 209));
+           }
 
 
-       //Create and draw the polygon
-       QPolygon triangle;
-       triangle.append(QPoint(p1.x(), p1.y()));
-       triangle.append(QPoint(p2.x(), p2.y()));
-       triangle.append(QPoint(p3.x(), p3.y()));
+           //Create and draw the polygon
+           QPolygon triangle;
+           triangle.append(QPoint(p1.x(), p1.y()));
+           triangle.append(QPoint(p2.x(), p2.y()));
+           triangle.append(QPoint(p3.x(), p3.y()));
 
-       painter.drawPolygon(triangle);
+           painter.drawPolygon(triangle);
+
+       }
 
    }
 

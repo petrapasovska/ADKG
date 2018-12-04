@@ -18,6 +18,7 @@ class Draw : public QWidget
         std::vector<Edge> dt;             //List of Delaunay edges
         std::vector<Edge> contours;       //List of contours
         std::vector<Triangle> dtm;
+        bool slope, aspect;
 
     public:
         explicit Draw(QWidget *parent = nullptr);
@@ -32,6 +33,9 @@ class Draw : public QWidget
         void setContours(std::vector<Edge> &contours_){contours = contours_;}
         void setDTM(std::vector<Triangle> &dtm_){dtm = dtm_;}
         static void importPolygons(std::string &path, std::vector<QPoint3D> &points,  QSizeF &canvas_size, double &min_z, double &max_z);
+        void setSlope(bool slope_){slope = slope_;}
+        void setAspect(bool aspect_){aspect = aspect_;}
+
 
     signals:
 
