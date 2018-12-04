@@ -460,6 +460,8 @@ std::vector<QPoint3D> Algorithms::generateValley()
     center.setY(rand()%300+200);
     center.setZ(rand()%50);
 
+    qDebug() << center;
+
     for(int j = 0;j<4;j++)
     {
         for(int i = 0;i<n;i++)
@@ -478,6 +480,8 @@ std::vector<QPoint3D> Algorithms::generateValley()
         }
         a+=j*50;
     }
+
+
     return random_points;
 }
 

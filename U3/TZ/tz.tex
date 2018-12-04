@@ -93,7 +93,7 @@ Níže uvedené zadání je kopie ze stránek předmětu.
 \end{figure}
 
 \subsection{Údaje o bonusových úlohách}
-Nebyly vytvořeny žádné bonusové úlohy.
+V rámci bonusových úloh byl vytvořen výběr barevných stupnic pro vizualizaci sklonu a expozice. Dále jsou v rámci aplikace generované některé terénní tvary.
 
 
 
@@ -224,10 +224,17 @@ $$  v_x = \Delta x_2, x_3; u_y = \Delta y_2, y_3; u_z = \Delta z_2, z_3;$$
 Pro výpočet expozice byla použita funkce atan2, která automaticky určí i daný kvadrant, a tím je vypočtený úhel korektní směrnicí.
 
 \section{Informace o bonusových úlohách}
+\subsection{Výběr barevných stupnic při vizualizaci sklonu a expozice}
+V rámci této bonusové úlohy byly definovány barevné stupnice pro zobrazení sklonu a expozice. Pro sklon byly zvoleny odstíny šedi. Pro zobrazení šedé barvy v režimu RGB je typické to, že všechny tři složky mají stejné číslo. Bylo tedy snadné rozdělit interval 256 (jedná se o osmi bitovou hloubku) dle intervalu, ve kterém vychází sklon terénu.\\
+\\
+Pro vyznačení expozice byly voleny syté barvy. Inspirací byla barevná škála v programu ArcGIS, přesto byly barvy zvoleny tak, aby byly asociativní se směrem, který reprezentují.
+
+\subsection{Algoritmus pro automatické generování terénních tvarů}
+V aplikaci je možnost automatického generování terénních tvarů. Na výběr je kupa, údolí, hřbet a grid. Přesto, že grid neoznačuje žádný terénní tvar, byl mezi možnosti přidán z toho důvodu, abychom demonstrovali špatnou implementaci takovéhoto rozmístění bodů. 
 
 
 \section{Vstupní data}
-V aplikaci lze bud generovat jednoduchá data, nebo je lze importovat ve formátu .txt\\
+V aplikaci lze buď tvořit body pomocí kurzoru, kde však je výška generována náhodně, nebo lze generovat jednotlivé útvary terénu a nebo lze importovat data ve formátu .txt\\
 
 Vzor vstupních dat ve formátu .txt\\
  748720.120    1048636.300     306.100\\
@@ -236,8 +243,10 @@ Vzor vstupních dat ve formátu .txt\\
  748721.610    1048628.180     305.570\\
 
 \section{Výstupní data}
+Výstupem je grafická aplikace, která na vstupních datech vytvoří Delaunayho triangulaci, se zvoleným krokem vykreslí vrstevnice a následně je možné zobrazit sklon či expozici terénu. 
 
 \section{Aplikace}
+
 
 
 \section{Dokumentace}
@@ -420,7 +429,7 @@ Při stisknutí tlačítka Import, se otevře okno pro výběr importovaných da
 
 \clearpage
 \section{Závěr}
-Byla vytvořena aplikace, která nad importovanými body vytvoří Delaunayho triangulaci, vykreslí vrstevnice, sklon a expozici terénu. Aplikace má nějaké nedostatky, které autoři nestihli opravit.\\
+Byla vytvořena aplikace, která nad importovanými body vytvoří Delaunayho triangulaci, vykreslí vrstevnice, sklon a expozici terénu. Aplikace má nějaké nedostatky, které autoři nestihli opravit. \\
 
 \subsection{Delaunayho triangulace}
 Vzhledem k implementaci triangulace pro výběr trojúhelníku s vyhledáním nejmenší opsané kružnice, algoritmus selhává pro body na mřížce. Triangulace je pro tyto body nejednoznačná a další výpočty selhávají. Obecně se ví, že Delaunyho triangulace nemá pro body na mřížce jednoznačné řešení. Tento problém by se mohl vyřešit vložením povinných hran.\\
@@ -438,14 +447,24 @@ Autoři neřešili vykreslení hlavní vrstevnice zesílenou čárou ani popis v
 
 \subsection{Sklon a expozice terénu}
 Při výpočtu sklonu a expozice terénu vzniká problém v rovinatém území. Při výpočtu vznikají zaokrouhlovací chyby, které se promítnou do sklonu a expozice. Proto se terén jeví uživateli nerovinný.\\
+\\
+Při vykreslení sklonu terénu byly pro ilustraci zvoleny odstíny šedi. Sklon nabývá hodnot od 0 do 180 $^\circ$. Vykreslení expozice bylo rozděleno do osmi směrů - S, SV, V, JV, J, JZ, Z, SZ. Barvy znázorňující jednolivé směry byly voleny asociativně s určitou symbolikou. Pro sever byla zvolena chladná modrá, pro jih naopak teplá červená barva. Pro východ byla zvolena žlutá barva reprezentující slunce a pro západ byla fialová, aby byla pokryta celá škála barev. Pro směry tvořené kombinací jiných směrů byla vybrána taková barva, pro kterou lze vidět určité přecházení obou barev. Pro kvalitnější znázornění expozice a jednotlivých přechodů by jistě bylo vhodnější použít více intervalů, neboť v prostředí Qt Creatoru můžeme vytvořit obrovské množství různých odstínů. Přesto by byl výsledek poté nepřehledný a uživatel by se v tom nemusel zcela orientovat. \\
 
 Do aplikace by se hodila legenda expozice terénu.\\
 
+\subsection{Výstupy aplikace}
+Uživatel má v aplikaci možnost uložit si vytvořený model naimportovaných souřadnic, Delaunayho triangulací, vrstevnic, sklonu či expozice. 
+
+
+
 \section{Náměty na vylepšení}
 V aplikaci by se dalo vylepšit zobrazení vrstevnic, mohla by být zvýrazněná zesílená vrstevnice a zobrazen popis vrstevnic. 
-V aplikaci by mohla být možnost exportu jak triangulace tak vrstevnic. 
+Při exportu výstupu by bylo vhodné vyřešit volbu místa, kam se obrázek ukládá.
 V aplikaci mi mohlo být řešeno odstranění naimportovaných bodů, nad kterými uživatel nechce počítat triangulaci. 
 V aplikaci by mohla být volba pro uživatele nastavení výpočet vrstevnic v určitém rozsahu nadmořské výšky.\\
+
+\subsection{Sklon terénu}
+Sklon terénu, jak je prostřednictvím aplikace vykreslován, vyvolává jen vizuální efekt. Uživatel si udělá přibližnou představu o terénu, ale tím to končí. Určitě by bylo vhodné sklonitost rozdělit do intervalů. V případě, že by aplikace měla praktické využití, by jí následně mohli využívat například stavaři, kteří při výkopu musí zkontrolovat sklon vzhledem k druhu horniny a přípustnému sklonu svahu.
 
 
 \clearpage

@@ -48,11 +48,11 @@ void Draw::paintEvent(QPaintEvent *e)
            QPoint3D p2 = t.getP2();
            QPoint3D p3 = t.getP3();
 
-           //Get slope and setthe brush
+           //Get slope and set the brush
            int c_slope = c * t.getSlope();
            painter.setBrush(QColor(c_slope,c_slope,c_slope));
 
-           //Create and draw the  polygon
+           //Create and draw the polygon
            QPolygon triangle;
            triangle.append(QPoint(p1.x(), p1.y()));
            triangle.append(QPoint(p2.x(), p2.y()));
@@ -79,13 +79,13 @@ void Draw::paintEvent(QPaintEvent *e)
                painter.setBrush(QColor(0, 206, 209));
            }
            else if((count_aspect>=22.5) && (count_aspect<67.5)){
-               painter.setBrush(QColor(124, 252, 0));
+               painter.setBrush(QColor(65, 105, 225));
            }
            else if((count_aspect>=67.5) && (count_aspect<112.5)){
-               painter.setBrush(QColor(255, 255, 0));
+               painter.setBrush(QColor(186, 85, 211));
            }
            else if((count_aspect>=112.5) && (count_aspect<157.5)){
-               painter.setBrush(QColor(255, 165, 0));
+              painter.setBrush(QColor(255, 20, 147));
            }
            else if((count_aspect>=157.5) && (count_aspect<180)){
                painter.setBrush(QColor(220, 20, 60));
@@ -94,13 +94,13 @@ void Draw::paintEvent(QPaintEvent *e)
                painter.setBrush(QColor(220, 20, 60));
            }
            else if((count_aspect>=-157.5) && (count_aspect<-112.5)){
-               painter.setBrush(QColor(255, 20, 147));
+                painter.setBrush(QColor(255, 165, 0));
            }
            else if((count_aspect>=-112.5) && (count_aspect<-67.5)){
-               painter.setBrush(QColor(186, 85, 211));
+               painter.setBrush(QColor(255, 255, 0));
            }
            else if((count_aspect>=-67.5) && (count_aspect<-22.5)){
-               painter.setBrush(QColor(65, 105, 225));
+               painter.setBrush(QColor(124, 252, 0));
            }
            else if((count_aspect>=-22.5) && (count_aspect<0)){
                painter.setBrush(QColor(0, 206, 209));
@@ -124,11 +124,13 @@ void Draw::paintEvent(QPaintEvent *e)
 
 void Draw::mousePressEvent(QMouseEvent *e)
 {
+    /*
     //Add new point
     int z = (rand()%101);
     QPoint3D p(e->x(), e->y(), z);
     points.push_back(p);
     repaint();
+    */
 }
 
 void Draw::clearDT()

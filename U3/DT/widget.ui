@@ -30,17 +30,17 @@
       <widget class="QComboBox" name="comboBox">
        <item>
         <property name="text">
-         <string>Kupa</string>
+         <string>Hill</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Udoli</string>
+         <string>Valley</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Hrbet</string>
+         <string>Ridge</string>
         </property>
        </item>
        <item>
@@ -100,7 +100,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Interval vrstevnic</string>
+        <string>Interval of contours</string>
        </property>
       </widget>
      </item>
@@ -162,13 +162,6 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_3">
-       <property name="text">
-        <string>Clear</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <spacer name="verticalSpacer_3">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -180,6 +173,20 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="Save">
+       <property name="text">
+        <string>Save</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="text">
+        <string>Clear</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

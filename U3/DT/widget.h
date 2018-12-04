@@ -32,6 +32,8 @@ private slots:
 
     void on_pushButton_6_clicked();
 
+    void on_Save_clicked();
+
 private:
     Ui::Widget *ui;
 };

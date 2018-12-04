@@ -119,3 +119,10 @@ void Widget::on_pushButton_6_clicked()
 
    ui->Canvas->repaint();
 }
+
+
+
+void Widget::on_Save_clicked()
+{
+    ui->Canvas->grab().save("image.png");
+}
