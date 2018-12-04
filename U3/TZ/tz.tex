@@ -89,7 +89,7 @@ Níže uvedené zadání je kopie ze stránek předmětu.
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[clip, trim=0cm 5cm 0cm 0cm, width=1.2\textwidth]{zadani.pdf}
+	\includegraphics[width=17cm]{zadani.pdf}
 \end{figure}
 
 \subsection{Údaje o bonusových úlohách}
@@ -123,18 +123,26 @@ V dnešní době se kromě analýzy prostorových dat využívá Delaunyho trian
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=5cm]{pictures/liska.jpg}
-\includegraphics[width=5cm]{pictures/jan_van_eyck.png}
+\includegraphics[width=7cm]{pictures/liska.jpg}
+\includegraphics[width=7cm]{pictures/jan_van_eyck.png}
 \caption{Použití Delaunyho triangulace v grafice - na vytvořeném novém obrázku lišky a na přepracování obrazu od Jana van Eycka}
 \end{figure}
 
 \section{Popis použitých algoritmů}
-Existuje několik způsobů jak vytvořit triangulaci s různými kritérii. V této úloze jsme se zabývali Delaunayho triangulací pomocí metody inkrementální konstrukce.
+Existuje několik způsobů jak vytvořit triangulaci s různými kritérii. Obecně lze metody triangulace rozdělit na dvě skupiny. Jednou je skupina triangulací dle geometrické konstrukce. Mezi tyto triangulace se řadí Greedy triangulace, Delaunayho triangulace, Minimum Weight triangulace, Constrained triangulace (triangulace s povinnými hranami) a datově závislé triangulace. Případně lze triangulace rozdělit dle použitých kritérií, tedy na lokálně optimální triangulace, globálně optimální triangulace a multikriteriálně optimalizované triangulace. \\
+\\
+V této úloze jsme se zabývali Delaunayho triangulací pomocí metody inkrementální konstrukce. Další metody přímé konstrukce Delaunayho triangulace jsou např. metoda lokálního prohazování, inkrementálního vkládání, Divide and Conquer (rozděl a panuj) či Sweep Line (zametací přímka). Pro nepřímou konstrukci se využívají Voronoiho diagramy, v praxi však tento způsob není používaný. 
 
 \subsection{Delaunayho triangulace}
-Delaunayho triangulace je nejčastěji používanou triangulací při tvorbě digitálního modelu terénu. Delaunayho triagulaci lze provádět v rovině i v prostoru.
+Delaunayho triangulace je nejčastěji používanou triangulací při tvorbě digitálního modelu terénu. Delaunayho triagulaci lze provádět v rovině i v prostoru.\\
 \\
-\subsubsection{Vlastnosti}
+Triangulace byla realizována pomocí metody inkrementální konstrukce. Tento algoritmus je založen na postupném hledání bodu, který k bodům hrany tvoří minimální opsanou kružnici. Každá hrana je orientovaná a bod se hledá pouze v její levé polorovině.\\
+\\
+Je-li nalezen bod s výše uvedeným kritériem, vytvoří se dvě nové hrany, které jsou přidány do triangulace. Nenalezne-li se daný bod, prohodí se orientace hrany a hledání pokračuje.\\
+\\
+Hrany, které nebyly zlegalizovány (nebyl k nim ještě nalezen třetí bod), jsou ukládány do struktury Active Edge List (AEL). Pokud k dané hraně byl nalezen třetí bod, hrana se ze struktury odstraní. Než je hrana vložena do struktury, kontroluje se, zda hrana už ve struktuře není s opačnou orientací. Pokud je, hrana se nevloží. Algoritmus probíhá do té doby, dokud není struktura AEL prázdná.
+
+\subsubsection{Vlastnosti Delaunayho triangulace}
 
 \begin{enumerate}
 \item Uvnitř opsané kružnice libovolného trojúhelníku triangulace neleží žádný jiný bod.
@@ -143,55 +151,77 @@ Delaunayho triangulace je nejčastěji používanou triangulací při tvorbě di
 \item Triangulace je jednoznačná, pokud čtyři body neleží na kružnici.
 \end{enumerate}
 
-
-Triangulace byla realizována pomocí metody inkrementální konstrukce. Tento algoritmus je založen na postupném hledání bodu, který k bodům hrany tvoří minimální opsanou kružnici. Každá hrana je orientovaná a bod se hledá pouze v její levé polorovině.\\
-\\
-Je-li nalezen bod s výše uvedeným kritériem, vytvoří se dvě nové hrany, které jsou přidány do triangulace. Nenalezne-li se daný bod, prohodí se orientace hrany a hledání pokračuje.\\
-\\
-Hrany, které nebyly zlegalizovány (nebyl k nim ještě nalezen třetí bod), jsou ukládány do struktury Active Edge List (AEL). Pokud k dané hraně byl nalezen třetí bod, hrana se ze struktury odstraní. Než je hrana vložena do struktury, kontroluje se, zda hrana už ve struktuře není s opačnou orientací. Pokud je, hrana se nevloží. Algoritmus probíhá do té doby, dokud není struktura AEL prázdná.
-
 \subsubsection{Implementace metody}
 \begin{enumerate}
-\item Nalezení pivota q a k němu nejbližší bod:  $ q = min(y_i) $ 
-\item Hledání prvního Delaunayho bodu.
-\item Vytvoření prvního Delaunay trojúhelníku.
-\item Hrany trojúhelníka se uloží do triangulace a do AEL.
-\item Dokud není AEL prázdný proveď.
-\subitem Hledej Delaunay bod k hraně z AEL.
-\subitem Pokud Delaunay bod existuje.
-\subsubitem Přidej nové hrany do DT.
-\subsubitem Pokud nová hrana není v AEL přidej.
+\item Nalezení pivota q s minimální souřadnicí X:  $ q = min(x_i) $ 
+\item Hledání nejbližšího bodu bodu: $ ||p_1 - q||_2 = min  $
+\item Vytvoření první hrany: $ e = (q, p_1) $ 
+\item Hledání Delaunayho bodu: $ \underline{p} = argmin_{\forall p_i \in \sigma_L (e)} r'(k_i); k_i = (a, b, p_i); e = (a, b)$ 
+\subitem Při nenalezení Delaunayho bodu změna orientace: $ \nexists \underline{p} : e \leftarrow (p_1, q);$ go to 4. 
+\item Vytvoření zbývajících hran trojúhelníka: $ e_2 = (p_1,  \underline{p}); e_3 = ( \underline{p} , q) $
+\item Přidání hran trojúhelníka do DT:  $ DT \leftarrow e; DT \leftarrow e_2; DT \leftarrow e_3  $  
+\item Přidání hran trojúhelníka do AEL:  $ AEL \leftarrow e; AEL \leftarrow e_2; AEL \leftarrow e_3  $  
+\item Dokud není AEL prázdný proveď:
+\subitem Hledání Delaunayho bodu k hraně z AEL (viz 4).
+\subitem Pokud Delaunayho bod existuje. $ if \exists  \underline{p}$
+\subsubitem Vytvoření zbývajících hran trojúhelníku:   $ e_2 = (p_1,  \underline{p}); e_3 = ( \underline{p} , q) $
+\subsubitem Pokud nová hrana není v AEL, přidej.
 \end{enumerate}
 
 \subsection{Vrstevnice}
-V úloze byly vrstevnice konstruovány lineární interpolací. U lineární interpolace je rozestup vrstevnice mezi dvěma body konstantní, tedy i spád. Při konstrukci vrstevnic hledáme průsečnici vodorovné roviny o výšce Z a rovinu trojúhelníka triangulace.\\
+Vrstevnice jsou půdorysným obrazem průsečných čar vodorovných rovin s terénem, přičemž jejich nadmořská výška je bezezbytku dělitelná zvoleným základem. Existují 4 druhy vrstevnic - základní, zvýrazněné, doplňkové a pomocné. Základní vrstevnice jsou vyobrazené tenkou křivkou a jejich rozestup je roven intervalu vrstevnic. Zvýrazněné vrstevnice jsou značeny tučně a obvykle jsou voleny jako pětinásobek základního intervalu. Doplňkové vrstevnice mají většinou poloviční či čtvrtinový interval a znázorňují se čárkovaně nejčastěji v místech  plochého terénu. Pomocné vrstevnice slouží jen pro orientaci v místech, kde může docházet k podstatným změnám terénu (sesuvná území, lomy). \\
+\\
+Při popisu vrstevnic existuje několik kartografických zásad. Pozice textu by měla symbolizovat terén, tedy hlava popisu směrem do kopce a pata do klesání. Dále by měl být popis zobrazen stejným způsobem jako popisovaná vrstevnice (barva, tučně apod). Z důvodu čitelnosti je nutné vrstevnici v místě popisu přerušit. Je vhodné, aby byl popis rovnoměrně rozmístěn po mapovém poli. \\
+\\
+Existují dva základní způsoby konstrukce vrstevnic. U lineární interpolace je rozestup vrstevnic mezi dvěma body konstantní, tedy i spád. Při konstrukci vrstevnic hledáme průsečnici vodorovné roviny o výšce Z a rovinu trojúhelníka triangulace. V úloze byly vrstevnice konstruovány lineární interpolací.\\
 
 \subsubsection{Implementace metody}
 \begin{enumerate}
-\item Pro všechny hrany triangulace:
-\subitem Otestuj zda hrana protíná vodorovnou rovinu o výšce Z:
-\subitem Pokud protíná spočti polohové souřadnice.
+\item Pro všechny hrany trojúhelníku t: $ \forall e_i \in t: $
+\item Hrana náleží rovině vrstevnice z: $ (z - z_i) \cdot (z - z_{i+1}) = 0 \rightarrow e_i \in \rho $
+\item Hrana nenáleží rovině vrstevnice z: $ (z - z_i) \cdot (z - z_{i+1}) < 0 \rightarrow e_i \not \in \rho $
+\item Hrana je průnikem roviny vrstevnice z: $ (z - z_i) \cdot (z - z_{i+1}) < 0 \rightarrow e_i \cap \rho $
+\subitem Výpočet polohových souřadnic: 
+$$  x = \frac{(x_2 - x_1)}{(z_2 - z_1)} (z - z_1) + x_1 $$ 
+$$  y = \frac{(y_2 - y_1)}{(z_2 - z_1)} (z - z_1) + y_1 $$ 
 \subitem Vytvoř hranu tvořící vrstevnici.
 
 \end{enumerate}
 
 \subsection{Sklon terénu}
-Skon terénu je definován jako úhel mezi normálovým vektorem (0,0,1) a normálovým vektorem roviny trojúhelníku.
+Skon terénu je definován jako úhel mezi normálovým vektorem (0,0,1) a normálovým vektorem roviny trojúhelníku. Pro výpočet je dostačující vypočítat směrové vektory v trojúhelníku. Do výpočtu vstupuje normálový vektor (0, 0, 1), jehož norma je rovna jedné a který v čitateli argumentu funkce arcus cosinus ponechá pouze Z část normálového vektoru.
+
 
 \subsubsection{Implementace metody}
 \begin{enumerate}
-\item Pro všechny trojúhelníky triangulace:
-\subitem Vypočti sklon:
+\item Pro všechny trojúhelníky triangulace: $ \forall t_i \in DT: $
+\subitem Výpočet normálového vektoru roviny trojúhelníku: \\
+ $$ n_t = (u_y \cdot v_z - u_z \cdot v_y)^2 - (u_x \cdot v_z - u_z \cdot v_x)^2  + (u_x \cdot v_y - u_y \cdot v_x)^2 $$
+\subitem Kde:
+$$  u_x = \Delta x_2, x_1; u_y = \Delta y_2, y_1; u_z = \Delta z_2, z_1;$$
+$$  v_x = \Delta x_2, x_3; u_y = \Delta y_2, y_3; u_z = \Delta z_2, z_3;$$
+\item Výpočet sklonu: $ \varphi = arccos \frac{n_z}{|n_t|} $
+
 \end{enumerate}
 
 \subsection{Expozice terénu}
-Expozice terénu je definována jako azimut k průmětu normálového vektoru roviny trojúhelníku do roviny x,y.
+Expozice terénu je definována jako azimut k průmětu normálového vektoru roviny trojúhelníku do roviny x, y. Expozice má významný vliv na energetické poměry, neboť znázorňuje jednotlivé dopady slunečního záření, s čímž souvisí i výpar vody v oblasti. 
 
 \subsubsection{Implementace metody}
 \begin{enumerate}
-\item Pro všechny trojúhelníky triangulace:
-\subitem Vypočti expozici:
+\item Pro všechny trojúhelníky triangulace: $ \forall t_i \in DT: $
+\subitem Výpočet x a y části normálového vektoru: \\
+$$ n_x = (u_y \cdot v_z - u_z \cdot v_y) $$
+$$ n_y = -(u_x \cdot v_z - u_z \cdot v_x) $$
+\subitem Kde:
+$$  u_x = \Delta x_2, x_1; u_y = \Delta y_2, y_1; u_z = \Delta z_2, z_1;$$
+$$  v_x = \Delta x_2, x_3; u_y = \Delta y_2, y_3; u_z = \Delta z_2, z_3;$$
+\item Výpočet expozice: $ A =atan2( \frac{n_x}{n_y}) $
 \end{enumerate}
+
+\
+
+Pro výpočet expozice byla použita funkce atan2, která automaticky určí i daný kvadrant, a tím je vypočtený úhel korektní směrnicí.
 
 \section{Informace o bonusových úlohách}
 
