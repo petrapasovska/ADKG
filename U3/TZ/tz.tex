@@ -172,7 +172,13 @@ Expozice terénu je definována jako azimut k průmětu normálového vektoru ro
 
 
 \section{Vstupní data}
+V aplikaci lze bud generovat jednoduchá data, nebo je lze importovat ve formátu .txt\\
 
+Vzor vstupních dat ve formátu .txt\\
+ 748720.120    1048636.300     306.100\\
+ 748720.750    1048636.130     305.940\\
+ 748721.600    1048635.700     306.080\\
+ 748721.610    1048628.180     305.570\\
 
 \section{Výstupní data}
 
@@ -268,6 +274,17 @@ Metoda slouží pro převod Delaunay triangulace do vykreslovacího okna.\\
 Metoda slouží pro převod vrtevnic do vykreslovacího okna.\\
 
 \textbf{void setDTM(std::vector<Triangle> \&dtm\_)}\\
+Metoda slouží pro převod trojúhelníku triangulace a jeho informací o sklonu a expozici terénu\\
+
+\textbf{void importPolygons(std::string &path, std::vector<QPoint3D> &points,  QSizeF &canvas_size, double &min_z, double &max_z)}\\
+Metoda slouží pro import vrstevnic, z cesty patch naplní vektor points body a uloží hodnotu s minimální a maximální souřadnicí. Proměnná canvas_size slouží k vykreslení v rozsahu importovaných dat.\\
+
+\textbf{void setSlope(bool slope_)}\\
+Metoda slouží jako podmínka TRUE/FALSE pro vykreslení sklonu terénu.\\
+
+\textbf{void setAspect(bool aspect_)}\\
+Metoda slouží jako podmínka TRUE/FALSE pro vykreslení expozice terénu.\\
+
 \\
 
 \subsubsection{SortByXAsc}
@@ -339,6 +356,10 @@ Při stisknutí tlačítka AnalyzeDTM se zavolá metoda třídy Algorithms analy
 
 \textbf{void on\_pushButton\_5\_clicked()}\\
 Při stisknutí tlačítka Generate a výběru z comboboxu se vygenerují body terénu.
+\\
+
+\textbf{void on\_pushButton\_6\_clicked()}\\
+Při stisknutí tlačítka Import, se otevře okno pro výběr importovaných dat.
 \\
 
 
