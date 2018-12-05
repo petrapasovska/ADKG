@@ -17,7 +17,8 @@ class Widget : public QWidget
 public:
     explicit Widget(QWidget *parent = nullptr);
 
-    double z_min, z_max;
+    double z_min = 0;
+    double z_max = 1000;
 
     ~Widget();
 
