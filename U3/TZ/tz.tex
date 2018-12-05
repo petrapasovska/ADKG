@@ -98,9 +98,9 @@ V rámci bonusových úloh byl vytvořen výběr barevných stupnic pro vizualiz
 
 
 \section{Popis a rozbor problému}
-Hlavním cílem této úlohy je tvorba aplikace, která nad výškopisnými body vytvoří Delaunay triangulaci, vrstevnice a vypočte sklon a expozici k světovým stranám.\\
+Hlavním cílem této úlohy je tvorba aplikace, která nad výškopisnými body vytvoří Delaunayho triangulaci, vrstevnice a vypočte sklon a expozici k světovým stranám.\\
 \\
-Obecně triangulační algoritmy jsou nejvíce zkoumané algoritmy digitální kartografie v dnešní době. Slouží k různým účelům např. tvorba digitálního modelu terénu, plánování pohybu robotů, detekce otisků prstů.  [Zdroj: 1]
+Obecně triangulační algoritmy jsou nejvíce zkoumané algoritmy digitální kartografie v dnešní době. Slouží k různým účelům např. tvorba digitálního modelu terénu, plánování pohybu robotů, detekce otisků prstů.  [Zdroj: 1]\\
 \\
 Při triangulaci je kladen důraz na to, aby vytvořené trojúhelníky byly pokud možno rovnostranné. V případě, že takovéto trojúhelníky sestavíme, každý z vytvořených trojúhelníků musí co nejlépe reprezentovat hodnotu povrchu. Zároveň je nutné, aby byla produkována jednoznačná triangulace nezávisle na počátečním bodě či na orientaci množiny bodů. Delaunayho triangulace tyto podmínky obecně splňuje, přesto existují výjimky, kdy nemá Delaunayho triangulace jednoznačné řešení. Tento stav může nastat pro určité množiny dat, např. pravoúhlý grid. [Zdroj: 2]\\
 \\
@@ -429,14 +429,14 @@ Při stisknutí tlačítka Import, se otevře okno pro výběr importovaných da
 
 \clearpage
 \section{Závěr}
-Byla vytvořena aplikace, která nad importovanými body vytvoří Delaunayho triangulaci, vykreslí vrstevnice, sklon a expozici terénu. Aplikace má nějaké nedostatky, které autoři nestihli opravit. \\
+Byla vytvořena aplikace, která nad importovanými body vytvoří Delaunayho triangulaci, vykreslí vrstevnice, sklon a expozici terénu. Součástí závěru je slovní zhodnocení činnosti algoritmu. Grafické ukázky aplikace jsou v kapitole 7 - Aplikace. \\
 
 \subsection{Delaunayho triangulace}
-Vzhledem k implementaci triangulace pro výběr trojúhelníku s vyhledáním nejmenší opsané kružnice, algoritmus selhává pro body na mřížce. Triangulace je pro tyto body nejednoznačná a další výpočty selhávají. Obecně se ví, že Delaunyho triangulace nemá pro body na mřížce jednoznačné řešení. Tento problém by se mohl vyřešit vložením povinných hran.\\
+Vzhledem k implementaci triangulace pro výběr trojúhelníku s vyhledáním nejmenší opsané kružnice, algoritmus selhává pro body na mřížce. Triangulace je pro tyto body nejednoznačná a další výpočty nefungují. Obecně se ví, že Delaunyho triangulace nemá pro body na mřížce jednoznačné řešení. Tento problém by se mohl vyřešit vložením povinných hran.\\
 
-V aplikaci bohužel nelze nadefinovat povinné hrany, které jsou důležité pro terénní tvary, například pro terénní hranu či propast. Proto algoritmus není použitelný pro data s těmito typy terénních tvarů. Důvod je zřejmý z implementace triangulace.\\
+V aplikaci bohužel nelze nadefinovat povinné hrany, které jsou důležité pro terénní tvary, například pro terénní hranu či propast. Proto algoritmus není použitelný pro data s těmito typy terénních tvarů. Tvorba povinných hran by přitom výrazně zkvalitnila aplikaci, neboť by uživatel získával věrohodnější výstupy. Zároveň v rámci aplikace není možné vymazávat neexistující hrany při vytvořeném nekonvexním polygonu oblasti. Díky tomu je triangulace tvořena i na místech, kde nebyly podrobné body a chybně jsou v těchto místech vytvářeny vrstevnice, sklon a expozice. \\
 
-V aplikaci též nelze nastavit zájmovou oblast, proto je nutné před výpočtem algoritmu odstranit body, nad kterými nechceme provádět triangulaci.\\
+V aplikaci též nelze nastavit zájmovou oblast, proto je nutné před výpočtem algoritmu odstranit body, nad kterými nechceme provádět triangulaci. \\
 
 Aplikace je užitečná pro výškopisná data v terénu bez povinných hran a kde data nepotřebují být upravována, viz předchozí odstavec. \\
 
@@ -459,12 +459,14 @@ Uživatel má v aplikaci možnost uložit si vytvořený model naimportovaných 
 
 \section{Náměty na vylepšení}
 V aplikaci by se dalo vylepšit zobrazení vrstevnic, mohla by být zvýrazněná zesílená vrstevnice a zobrazen popis vrstevnic. 
-Při exportu výstupu by bylo vhodné vyřešit volbu místa, kam se obrázek ukládá.
 V aplikaci mi mohlo být řešeno odstranění naimportovaných bodů, nad kterými uživatel nechce počítat triangulaci. 
 V aplikaci by mohla být volba pro uživatele nastavení výpočet vrstevnic v určitém rozsahu nadmořské výšky.\\
 
 \subsection{Sklon terénu}
 Sklon terénu, jak je prostřednictvím aplikace vykreslován, vyvolává jen vizuální efekt. Uživatel si udělá přibližnou představu o terénu, ale tím to končí. Určitě by bylo vhodné sklonitost rozdělit do intervalů. V případě, že by aplikace měla praktické využití, by jí následně mohli využívat například stavaři, kteří při výkopu musí zkontrolovat sklon vzhledem k druhu horniny a přípustnému sklonu svahu.
+
+\subsection{Export výsledku}
+Při exportu vzniklého rastru je v aplikaci možnost výsledek uložit. Není však ošetřena cesta místa uložení. V současné verzi je obrázek ukládán v rámci složky "Release" či "Debug", v závislosti na tom, v jakém režimu uživatel aplikaci spustil.
 
 
 \clearpage

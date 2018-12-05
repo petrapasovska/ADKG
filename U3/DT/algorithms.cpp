@@ -254,6 +254,8 @@ std::vector<Edge> Algorithms::DT (std::vector<QPoint3D> &points)
         }
     }
 
+
+
     return DT;
 }
 
@@ -271,7 +273,6 @@ std::vector<Edge> Algorithms::createContours(std::vector<Edge> &dt, double z_min
 {
     //Create contour lines
     std::vector<Edge> contours;
-
 
     //Process all triangles
     for(int i = 0; i < dt.size(); i += 3)
@@ -460,7 +461,6 @@ std::vector<QPoint3D> Algorithms::generateValley()
     center.setY(rand()%300+200);
     center.setZ(rand()%50);
 
-    qDebug() << center;
 
     for(int j = 0;j<4;j++)
     {
@@ -480,7 +480,6 @@ std::vector<QPoint3D> Algorithms::generateValley()
         }
         a+=j*50;
     }
-
 
     return random_points;
 }

@@ -19,7 +19,7 @@ void Draw::paintEvent(QPaintEvent *e)
    for(int i = 0; i < points.size(); i++)
    {
        painter.drawEllipse(points[i].x() - 5, points[i].y() - 5, 10, 10);
-       //painter.drawText(points[i].x() + 10, points[i].y() + 10, QString::number(points[i].getZ()));
+       painter.drawText(points[i].x() + 10, points[i].y() + 10, QString::number(points[i].getZ()));
    }
 
    //Draw Delaunay edges
@@ -27,6 +27,7 @@ void Draw::paintEvent(QPaintEvent *e)
    {
        painter.drawLine(dt[i].getS(), dt[i].getE());
    }
+
 
    //Draw contour lines
    painter.setPen(Qt::black);
@@ -124,13 +125,13 @@ void Draw::paintEvent(QPaintEvent *e)
 
 void Draw::mousePressEvent(QMouseEvent *e)
 {
-    /*
+
     //Add new point
     int z = (rand()%101);
     QPoint3D p(e->x(), e->y(), z);
     points.push_back(p);
     repaint();
-    */
+
 }
 
 void Draw::clearDT()
