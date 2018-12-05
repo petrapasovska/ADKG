@@ -48,6 +48,16 @@
          <string>Grid</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>Saddle</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Col topographic</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item>
@@ -105,7 +115,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="dz"/>
+      <widget class="QLineEdit" name="dz">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_2">

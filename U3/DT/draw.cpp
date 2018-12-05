@@ -11,6 +11,7 @@ Draw::Draw(QWidget *parent) : QWidget(parent)
 
 void Draw::paintEvent(QPaintEvent *e)
 {
+
    QPainter painter(this);
    painter.begin(this);
    painter.setPen(Qt::red);
@@ -19,7 +20,7 @@ void Draw::paintEvent(QPaintEvent *e)
    for(int i = 0; i < points.size(); i++)
    {
        painter.drawEllipse(points[i].x() - 5, points[i].y() - 5, 10, 10);
-       painter.drawText(points[i].x() + 10, points[i].y() + 10, QString::number(points[i].getZ()));
+       //painter.drawText(points[i].x() + 10, points[i].y() + 10, QString::number(points[i].getZ()));
    }
 
    //Draw Delaunay edges
@@ -35,6 +36,14 @@ void Draw::paintEvent(QPaintEvent *e)
    for(int i = 0; i < contours.size(); i++)
    {
        painter.drawLine(contours[i].getS(), contours[i].getE());
+   }
+
+   //Draw main contour lines
+   painter.setPen(QPen(Qt::black, 2));
+
+   for(int i = 0; i < mainContours.size(); i++)
+   {
+       painter.drawLine(mainContours[i].getS(), mainContours[i].getE());
    }
 
    if(slope == TRUE)
@@ -76,7 +85,7 @@ void Draw::paintEvent(QPaintEvent *e)
 
            int count_aspect = t.getAspect();
 
-           if((count_aspect>=0) && (count_aspect<22.5)){
+           if((count_aspect>0) && (count_aspect<22.5)){
                painter.setBrush(QColor(0, 206, 209));
            }
            else if((count_aspect>=22.5) && (count_aspect<67.5)){
@@ -106,6 +115,8 @@ void Draw::paintEvent(QPaintEvent *e)
            else if((count_aspect>=-22.5) && (count_aspect<0)){
                painter.setBrush(QColor(0, 206, 209));
            }
+           else
+               painter.setBrush(QColor(255, 255, 255));
 
 
            //Create and draw the polygon
@@ -141,10 +152,13 @@ void Draw::clearDT()
     dt.clear();
     dtm.clear();
     contours.clear();
+    mainContours.clear();
 }
 
 void Draw::importPolygons(std::string &path, std::vector<QPoint3D> &points,  QSizeF &canvas_size, double &min_z, double &max_z)
 {
+
+
     double x, y, z;
     QPoint3D p;
 

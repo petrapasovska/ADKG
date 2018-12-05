@@ -43,10 +43,27 @@ void Widget::on_pushButton_2_clicked()
 {
     //Create contour lines
     std::vector<Edge> dt = ui->Canvas->getDT();
-    std::vector<Edge> contours = Algorithms::createContours(dt, z_min, z_max, ui->dz->text().toInt());
-    ui->Canvas->setContours(contours);
-    repaint();
+    int dz = readNumber();
+    if(dz < 1){
+        QMessageBox msgBox;
+        msgBox.setText("Warning: The input has to be integer!");
+        msgBox.exec();
+        return;
+    }
+    std::vector<Edge> contours = Algorithms::createContours(dt, z_min, z_max, dz);
+    std::vector<Edge> mainContours = Algorithms::createContours(dt, z_min, z_max, 5*dz);
 
+    ui->Canvas->setContours(contours);
+    ui->Canvas->setMainContours(mainContours);
+    repaint();
+}
+
+int Widget::readNumber(){
+    try{
+        return ui->dz->text().toInt();
+    }catch(int e){
+        return 0;
+    }
 }
 
 void Widget::on_pushButton_4_clicked()
@@ -90,6 +107,10 @@ void Widget::on_pushButton_5_clicked()
           points = Algorithms::generateMountains();
        else if (ui->comboBox->currentIndex()==3)
           points = Algorithms::generateGrid(100);
+       else if (ui->comboBox->currentIndex()==4)
+           points = Algorithms::generateSaddle();
+       else if (ui->comboBox->currentIndex()==5)
+           points = Algorithms::generateCol();
 
        ui->Canvas->setPoints(points);
 

@@ -33,6 +33,8 @@ public:
     static std::vector<QPoint3D> generateValley();
     static std::vector<QPoint3D> generateMountains();
     static std::vector<QPoint3D> generateGrid(int grid);
+    static std::vector<QPoint3D> generateSaddle();
+    static std::vector<QPoint3D> generateCol();
 
 };
 

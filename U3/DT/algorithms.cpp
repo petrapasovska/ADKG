@@ -3,6 +3,7 @@
 #include "sortbyxasc.h"
 #include "algorithms.h"
 #include "QDebug"
+#include "widget.h"
 
 
 Algorithms::Algorithms() {}
@@ -542,4 +543,102 @@ std::vector<QPoint3D> Algorithms::generateGrid(int grid)
      }
      return random_points;
 
+}
+
+std::vector<QPoint3D> Algorithms::generateSaddle(){
+
+    std::vector<QPoint3D> random_points;
+    QPoint3D l, r, u, d; //left, right, up, down
+    QPoint3D p;
+
+    l.setX(50);
+    l.setY(480/2);
+    l.setZ(800);
+
+    random_points.push_back(l);
+    double fi = 2*M_PI/10;
+
+    for(int i = 1; i<3; i++){
+        for (int j = 0; j < 10; j++){
+            p.setX(l.x()+i*(rand()%70)*cos(j*fi) + rand()%20);
+            p.setY(l.y()+i*(rand()%70)*sin(j*fi) + rand()%20);
+            p.setZ(l.getZ()-i*50);
+
+            random_points.push_back(p);
+        }
+    }
+
+    r.setX(490);
+    r.setY(500/2);
+    r.setZ(800);
+
+    for(int i = 1; i<3; i++){
+        for (int j = 0; j < 10; j++){
+            p.setX(r.x()+i*(rand()%70)*cos(j*fi)+ rand()%20);
+            p.setY(r.y()+i*(rand()%70)*sin(j*fi)+ rand()%20);
+            p.setZ(r.getZ()-i*50);
+
+            random_points.push_back(p);
+        }
+    }
+
+    random_points.push_back(r);
+
+    u.setX(530/2);
+    u.setY(60);
+    u.setZ(300);
+
+    for(int i = 1; i<3; i++){
+        for (int j = 0; j < 10; j++){
+            p.setX(u.x()+i*(rand()%70)*cos(j*fi)+ rand()%20);
+            p.setY(u.y()+i*(rand()%70)*sin(j*fi)+ rand()%20);
+            p.setZ(u.getZ()+i*50);
+
+            random_points.push_back(p);
+        }
+    }
+
+    random_points.push_back(u);
+
+    d.setX(500/2);
+    d.setY(500);
+    d.setZ(300);
+
+    for(int i = 1; i<3; i++){
+        for (int j = 0; j < 10; j++){
+            p.setX(d.x()+i*(rand()%70)*cos(j*fi)+ rand()%20);
+            p.setY(d.y()+i*(rand()%70)*sin(j*fi)+ rand()%20);
+            p.setZ(d.getZ()+i*50);
+
+            random_points.push_back(p);
+        }
+    }
+
+    random_points.push_back(d);
+
+    return random_points;
+}
+
+std::vector<QPoint3D> Algorithms::generateCol(){
+
+    std::vector<QPoint3D> random_points;
+    QPoint3D p;
+    QPoint3D q;
+
+    q.setX(530/2);
+    q.setY(60);
+    q.setZ(800);
+
+    double fi = M_PI/10;
+
+    for(int i = 0; i<5; i++){
+        for (int j = 0; j < 5; j++){
+            p.setX(q.x()+i*(rand()%100)*cos(j*fi) + rand()%50);
+            p.setY(q.y()+i*(rand()%150)*sin(j*fi) + rand()%50);
+            p.setZ(q.getZ()-i*50);
+
+            random_points.push_back(p);
+        }
+    }
+    return random_points;
 }
