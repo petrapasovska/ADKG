@@ -125,13 +125,13 @@ void Draw::paintEvent(QPaintEvent *e)
 
 void Draw::mousePressEvent(QMouseEvent *e)
 {
-
+/*
     //Add new point
     int z = (rand()%101);
     QPoint3D p(e->x(), e->y(), z);
     points.push_back(p);
     repaint();
-
+*/
 }
 
 void Draw::clearDT()

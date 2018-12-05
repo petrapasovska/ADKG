@@ -9,6 +9,7 @@
 #include "edge.h"
 #include "qpoint3d.h"
 #include "triangle.h"
+#include "algorithms.h"
 
 class Draw : public QWidget
 {

@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QFileDialog>
+#include "qpoint3d.h"
+#include "algorithms.h"
 
 namespace Ui {
 class Widget;

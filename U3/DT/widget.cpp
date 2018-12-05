@@ -4,9 +4,10 @@
 #include <vector>
 #include <fstream>
 #include <QtGui>
+#include <QMessageBox>
 
 
-//#include "edge.h"
+#include "edge.h"
 #include "algorithms.h"
 #include "triangle.h"
 
@@ -124,5 +125,16 @@ void Widget::on_pushButton_6_clicked()
 
 void Widget::on_Save_clicked()
 {
-    ui->Canvas->grab().save("image.png");
+    QString path = QFileDialog::getSaveFileName(
+                this,
+                tr("Select file"),
+                "/",
+                "Image file (*.png);;All files (*.*)");
+
+    ui->Canvas->grab().save(path);
+
+    QMessageBox msgBox;
+    msgBox.setText("Canvas has been saved!");
+    msgBox.exec();
+
 }

@@ -1,8 +1,8 @@
-#include "algorithms.h"
-
 #include <list>
 
 #include "sortbyxasc.h"
+#include "algorithms.h"
+#include "QDebug"
 
 
 Algorithms::Algorithms() {}
@@ -440,6 +440,7 @@ std::vector<QPoint3D> Algorithms::generateHill()
             p.setY(center.y() + b*sin(i*fi));
             p.setZ(center.getZ()-j*20);
             random_points.push_back(p);
+
         }
         a+=j*50;
         b+=j*50;
@@ -451,6 +452,7 @@ std::vector<QPoint3D> Algorithms::generateValley()
 {
     std::vector<QPoint3D> random_points;
     int n = rand()%30;
+
 
     QPoint3D p;
     QPoint3D p1;
@@ -513,6 +515,7 @@ std::vector<QPoint3D> Algorithms::generateMountains()
              p1.setZ(center.getZ()-a);
 
              random_points.push_back(p1);
+
          }
          a+=j*50;
      }
