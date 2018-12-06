@@ -242,7 +242,7 @@ Jedná se o takový terénní útvar, který se vyznačuje protáhlým tvarem, j
 Hřbet je protáhlá vypuklá terénní plocha se zaoblenou vrcholovou částí. V aplikace je pojmenován jako Ridge.
 
 \subsubsection{Sedlo}
-Sedlo je místo v krajině, které se nachází mezi dvěma vrcholy, z něhož na dva strany svahu sestupují do údolí a na ostatní dvě stoupají směrem k vrcholkům. U vysokých hor se sedlo často označuje jako průsmyk. V aplikace je použito označení Saddle.
+Sedlo je místo v krajině, které se nachází mezi dvěma vrcholy, z něhož na dvě strany svahu sestupují do údolí a na ostatní dvě stoupají směrem k vrcholkům. U vysokých hor se sedlo často označuje jako průsmyk. V aplikace je použito označení Saddle.
 
 \subsubsection{Spočinek}
 Spočinek je vodorovná nebo mírně skloněná část terénního reliéfu na svahovém hřbetu nebo svahu. V aplikaci lze spočinek vygenerovat názvem Col Topographic.
@@ -581,12 +581,12 @@ V aplikaci bohužel nelze nadefinovat povinné hrany, které jsou důležité pr
 
 V aplikaci též nelze nastavit zájmovou oblast, proto je nutné před výpočtem algoritmu odstranit body, nad kterými nechceme provádět triangulaci. Při importu není řešen souřadnicový systém nahraných dat. Pro nahrávání souřadnic se zápornou hodnotou nejsou body řádně vykresleny. Tento problém by se dal vyřešit transformací vstupních bodů volbou souřadnicového systému, ve kterém jsou data uložena v textovém souboru a takového souřadnicového systému, který data vhodně zobrazí ve vykreslovacím okně. V této úloze se však primárně zabýváme tvorbou digitálního modelu, není tedy na transformaci brán ohled a mezi testovanými soubory jsou jen takové body, které se v rozhraní správně vykreslí. \\
 
-Aplikace je užitečná pro výškopisná data v terénu bez povinných hran a kde data nepotřebují být upravována, viz předchozí odstavec. \\
+Aplikace je tedy užitečná pro výškopisná data v terénu bez povinných hran a kde data nepotřebují být upravována.\\
 
 \subsection{Vrstevnice}
 Pro vykreslení vrstevnic byla použita lineární interpolace, která má svá úskalí. Jelikož pro výpočet vrstevnic není řešené vyhlazení vrstevnic, výsledek není vhodný ke chlubení. Pro kvalitní výsledek by bylo vhodnější použít morfologickou interpolaci, která předpokládá plynulou změnu spádu terénu mezi jednotlivými body. Není pro ni však definován žádný exaktní postup, tudíž nelze naimplementovat. Pro morfologickou interpolaci je typické to, že je tvořena "od oka". Je typická pro mapy menšího měřítka, kde je redukován počet zaměřených bodů a využívá zákonitosti terénních tvarů. \\
 
-Pro interval vrstevnic je nutné, aby byl celočíselný. Při vkládání intervalu, který je například typu double nebo zůstane prázdné pole, je uživatel upozorněn na chybu a vykreslení vrstevnic je ukončeno. Tento krok bylo nutné učinit z toho důvodu, že aplikace v opačném případě padala a bylo zdlouhavé při zapomenutí nastavení volby kroku stále aplikaci spouštět znovu. Po konzultaci byla tato část kódu ošetřena jako výjimka, která zabrání pádu aplikace. \\
+Pro interval vrstevnic je nutné, aby byl celočíselný. Při vkládání intervalu, který je například typu double nebo zůstane prázdné pole, je uživatel upozorněn na chybu a vykreslení vrstevnic je ukončeno. Tento krok bylo nutné učinit z toho důvodu, že aplikace v opačném případě padala a bylo zdlouhavé při zapomenutí nastavení volby kroku stále aplikaci spouštět znovu. Tato část kódu byla nakonec ošetřena jako výjimka, která zabrání pádu aplikace. \\
 
 V rámci aplikace byly zvýrazněny hlavní vrstevnice pro lepší přehlednost. 
 
@@ -602,14 +602,14 @@ Uživatel má v aplikaci možnost uložit si vytvořený model naimportovaných 
 
 V rámci bonusových úloh byly také vytvořeny některé terénné útvary, například kupa, sedlo nebo údolí. Při tvorbě hřbetu došlo ke špatné implementaci a shodou náhod byl napsán takový kód, který vygeneruje spočinek. Generování spočinku je ovlivněno celou řadou proměnných, které jej generují. Záleží na zvoleném množství bodů, zadané generované vzdálenosti atd. Tato tvorba je také ovlivněna tím, že body se generují pouze v jednom kvadrantu, čímž se zvýší šance na to, aby byly poblíž sebe body se stejnou výškou a vytvořily tím spočinek. I přesto, že implementace spočinku je zcela náhodná, tudíž není korektní a občas se může stát, že spočinek nebude vygenerován, byla tato volba v kódu ponechána z toho důvodu, aby bylo možné na spočinku demonstrovat tvorbu vrstevnic a výpočet sklonu. \\ 
 
-Co se týče výstupů aplikace, pro některé útvary funguje kód korektně, pro jiné se vyskytují chyby. Ukázky jednotlivých výsledků lze nalézt v kapitole 
- - Aplikace. Níže následuje shrnutí jednotlivých metod a útvarů.\\
+Co se týče výstupů aplikace, pro některé útvary funguje kód korektně, pro jiné se vyskytují chyby. Ukázky jednotlivých výsledků lze nalézt v kapitole 7 
+- Aplikace. Níže následuje shrnutí jednotlivých metod a útvarů.\\
 
 Při detailnějším zkoumání vrstevnic, pro údolí a hřbet jsou vrstevnice znázorněny korektně. Pro znázornění vrstevnic kupy však dochází k chybám a vrstevnice nejsou korektně zobrazeny. Důvodem je to, že body jsou na kružnici a Delaunay triangulace není vytvořena správně. Pro grid byly vrstevnice znázorněny také kvalitně, přestože je z obrázku vidět, že Delaunay triangulace není vytvořena zcela správně a při novém generování je triangulace sama o sobě nejednoznačná (v případě, že jako první testujeme náhodný bod). Vrstevnice pro spočinek jsou také chybně vykresleny, jedna ze zásad vrstevnic je to, že se jedná o uzavřenou linii, vrstevnice se navzájem nesmí křížit a nesmí se dvojit. Bohužel z výstupu aplikace je patrné, že tuto chybu program nedokáže eliminovat. Generování vrstevnic sedla je absolutně špatně. Vrstevnice se kříží, dvojí se, zobrazení sedla, kde by měla být ponechána mezera je vytvořena vrstevnice, která se na obou koncích duplikuje. Poměrně často je při generování sedla vytvořen i spočinek. \\
 
 Pro sklon terénu je vyhodnocení také nejednoznačné. Pro hřbet i údolí je sklon vyobrazen korektně, neboť oblasti podél údolnice a hřbetnice mají shodnou výšku a oblasti směrem od hřbetnic/údolnic konstantně klesají/stoupají. Znázornění spočinku je také korektní, oblast je vykreslena bíle, tedy není zde žádný sklon, neboť oblast má konstantní výšku. Pro kupu je nekorektně vyobrazen střed, neboť v něm nejsou korektně vykresleny Delaunay trojúhelníky. \\
 
-Vykreslení expozice je také nejednoznačné. Největší nedostatek je chybějící legenda, bez níž si uživatel není schopný představit, co která barva znamená. Pro zobrazení expozice kupy je pro vrchol opět špatně vypočtená. Ovšem pro následující místa je korektní a dle nastavených barev. Chybně je vyobrazena expozice i pro údolí a hřbet, kdy nastává stejný problém jako při gridu. Oblasti jsou vykresleny v závislosti na vytvořené triangulace. Pro ukázku je vložena i expozice kresby gridu, která je silně závislá na vytvořené triangulaci. \\
+Vykreslení expozice je také nejednoznačné. Největší nedostatek je chybějící legenda, bez níž si uživatel není schopný představit, co která barva znamená. Pro zobrazení expozice kupy je pro vrchol opět špatně vypočtená. Ovšem pro následující místa je korektní a dle nastavených barev. Chybně je vyobrazena expozice i pro údolí a hřbet, kdy nastává stejný problém jako při gridu. Oblasti jsou vykresleny v závislosti na vytvořené triangulaci. Pro ukázku je vložena i expozice kresby gridu, která je silně závislá na vytvořené triangulaci. \\
 
 Co se týče importovaných dat, textové soubory neobsahují výrazné terénní útvary, které by mohly ovlivnit výpočty. Navíc jsou podrobné body zaměřovány v okolí výrazných terénních útvarů ve větším množství. Vrstevnice, sklon i expozice byly pro importovaná data vykresleny korektně v rámci lineární interpolace. Pro kvalitnější výsledek by bylo vhodné použít nějakou funkci pro vyhlazení vrstevnic či pro tvorbu vrstevnic prostřednictvím morfologické interpolace.
 
@@ -620,11 +620,13 @@ Co se týče importovaných dat, textové soubory neobsahují výrazné terénn�
 V aplikaci by bylo vhodné zobrazit popis jednotlivých vrstevnic dle kartografických zásad, aby měl uživatel jasnou představu o nadmořské výšce dané oblasti. Z důvodu čitelnosti byly totiž odstraněny popisy bodů obsahující nadmořskou výšku. Dále by stálo za zmínku přidat možnost pro nastavení výpočtu vrstevnic v nějakém rozsahu.\\
 
 \subsection{Import dat}
-V rámci aplikace by mohla být možnost volby odstranění bodů, nad kterými nechce uživatel počítat triangulaci. Při geodetickém zaměřování jsou výsledkem měření z totální stanice i orientační body, které výrazně znekvalitní vizualizaci. Pro použití této aplikace je tedy nutné tyto body odstranit ručně.
+V rámci aplikace by mohla být možnost volby odstranění bodů, nad kterými nechce uživatel počítat triangulaci. Při geodetickém zaměřování jsou výsledkem měření z totální stanice i orientační body, které se mohou nalézat ve výrazné vzdálenosti od zaměřovaných podrobných bodů a které značně znekvalitní vizualizaci. Pro použití této aplikace je tedy vhodné tyto body odstranit ručně.\\
 
 \subsection{Sklon terénu}
-Sklon terénu, jak je prostřednictvím aplikace vykreslován, vyvolává jen vizuální efekt. Uživatel si udělá přibližnou představu o terénu, ale tím to končí. Určitě by bylo vhodné sklonitost rozdělit do intervalů. V případě, že by aplikace měla praktické využití, kdy by jí například využívali stavaři, kteří při výkopu musí zkontrolovat sklon vzhledem k druhu horniny a přípustnému sklonu svahu, by bylo rozdělení barev dle intervalů určitě vhodné.
+Sklon terénu, jak je prostřednictvím aplikace vykreslován, vyvolává jen vizuální efekt. Uživatel si udělá přibližnou představu o terénu, ale tím to končí. Určitě by bylo vhodné sklonitost rozdělit do intervalů. V případě, že by aplikace měla praktické využití, kdy by jí například využívali stavaři, kteří při výkopu musí zkontrolovat sklon vzhledem k druhu horniny a přípustnému sklonu svahu, by bylo rozdělení barev dle intervalů určitě vhodné.\\
 
+\subsection{Tlačítka aplikace}
+Jedním z možných vylepšení aplikace je určitě nastavení dostupnosti tlačítek (Unabled, Disabled). V aplikaci je prozatím vyřešen jen neplatný vstup intervalu vrstevnic.\\
 
 
 \clearpage
