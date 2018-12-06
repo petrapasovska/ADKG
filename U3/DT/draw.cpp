@@ -17,14 +17,14 @@ void Draw::paintEvent(QPaintEvent *e)
    painter.setPen(Qt::red);
 
    //Draw points
-   for(int i = 0; i < points.size(); i++)
+   for(unsigned int i = 0; i < points.size(); i++)
    {
        painter.drawEllipse(points[i].x() - 5, points[i].y() - 5, 10, 10);
        //painter.drawText(points[i].x() + 10, points[i].y() + 10, QString::number(points[i].getZ()));
    }
 
    //Draw Delaunay edges
-   for(int i = 0; i < dt.size(); i++)
+   for(unsigned int i = 0; i < dt.size(); i++)
    {
        painter.drawLine(dt[i].getS(), dt[i].getE());
    }
@@ -33,7 +33,7 @@ void Draw::paintEvent(QPaintEvent *e)
    //Draw contour lines
    painter.setPen(Qt::black);
 
-   for(int i = 0; i < contours.size(); i++)
+   for(unsigned int i = 0; i < contours.size(); i++)
    {
        painter.drawLine(contours[i].getS(), contours[i].getE());
    }
@@ -41,7 +41,7 @@ void Draw::paintEvent(QPaintEvent *e)
    //Draw main contour lines
    painter.setPen(QPen(Qt::black, 2));
 
-   for(int i = 0; i < mainContours.size(); i++)
+   for(unsigned int i = 0; i < mainContours.size(); i++)
    {
        painter.drawLine(mainContours[i].getS(), mainContours[i].getE());
    }
@@ -50,7 +50,7 @@ void Draw::paintEvent(QPaintEvent *e)
    {
        //Draw slope
        double c = 255.0/180;
-       for(int i = 0; i < dtm.size(); i++)
+       for(unsigned int i = 0; i < dtm.size(); i++)
        {
            //Get triangle and its vertices
            Triangle t = dtm[i];
@@ -75,7 +75,7 @@ void Draw::paintEvent(QPaintEvent *e)
    if(aspect == TRUE)
    {
        //Draw aspect
-       for(int i =0; i<dtm.size(); i++)
+       for(unsigned int i =0; i<dtm.size(); i++)
        {
            //Get triangle and its vertices
            Triangle t = dtm[i];
