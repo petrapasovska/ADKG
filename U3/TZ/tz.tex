@@ -634,10 +634,24 @@ Pro interval vrstevnic je nutné, aby byl celočíselný. Při vkládání inter
 
 V rámci aplikace byly zvýrazněny hlavní vrstevnice pro lepší přehlednost. 
 
+\begin{figure}[h!]
+\centering
+\includegraphics[width=7cm]{pictures/hill_bad.jpg}
+\includegraphics[width=7cm]{pictures/grid_ok.jpg}
+\caption{Vrstevnice pro kupu vykresleny nekorektně, pro grid korektně}
+\end{figure}
+
 \subsection{Sklon a expozice terénu}
 Při výpočtu sklonu a expozice terénu vzniká problém v rovinatém území. Při výpočtu vznikají zaokrouhlovací chyby, které se promítnou do sklonu a expozice. Proto se terén jeví uživateli nerovinný.\\
 \\
 Při vykreslení sklonu terénu byly pro ilustraci zvoleny odstíny šedi. Sklon nabývá hodnot od 0 do 180 $^\circ$. Vykreslení expozice bylo rozděleno do osmi směrů - S, SV, V, JV, J, JZ, Z, SZ. Barvy znázorňující jednolivé směry byly voleny asociativně s určitou symbolikou. Pro sever byla zvolena chladná modrá, pro jih naopak teplá červená barva. Pro východ byla zvolena žlutá barva reprezentující slunce a pro západ byla fialová, aby byla pokryta celá škála barev. Pro směry tvořené kombinací jiných směrů byla vybrána taková barva, pro kterou lze vidět určitý přechod obou barev. Pro kvalitnější znázornění expozice a jednotlivých přechodů by jistě bylo vhodnější použít více intervalů, neboť v prostředí Qt Creatoru můžeme vytvořit obrovské množství různých odstínů. Přesto by byl výsledek poté nepřehledný a uživatel by se v tom nemusel zcela orientovat. \\
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=7cm]{pictures/spocinek_sklon.jpg}
+\includegraphics[width=7cm]{pictures/hill_aspect.jpg}
+\caption{Sklon pro spočinek vykreslen korektně, expozice pro kupu téměř správě, až na oblasti, kde selhávaly i vrstevnice}
+\end{figure}
 
 Bylo by vhodné do aplikace umístit legendu expozice, neboť barvy samy o sobě uživateli nic neřeknou.
 
