@@ -233,20 +233,64 @@ Pro vyznačení expozice byly voleny syté barvy. Inspirací byla barevná šká
 V aplikaci je možnost automatického generování terénních tvarů. Na výběr je kupa, údolí, hřbet, grid, sedlo a spočinek. Přesto, že grid neoznačuje žádný terénní tvar, byl mezi možnosti přidán z toho důvodu, abychom demonstrovali špatnou implementaci takovéhoto rozmístění bodů. Definice a anglická pojmenování jednotlivých útvarů byla použita ze stránky VÚGTK. [Zdroj: 5]
 
 \subsubsection{Kupa}
-Jedná se o takový terénní útvar, který je vyvýšený nad okolní terén. Běžně bývá tento tvar označován jako kopec či hora. V rámci aplikace je zvoleno pojmenování Hill.
+Jedná se o takový terénní útvar, který je vyvýšený nad okolní terén. Běžně bývá tento tvar označován jako kopec či hora. V rámci aplikace je zvoleno pojmenování Hill. \\
+\\
+Kupa byla generována klasickým způsobem jako elipsa, pro Z souřadnici bylo však navolena, že hodnota postupně klesá. Pro vhodné zobrazení byl krok klesání zvolen 20.\\
+\\
+$ X = X_0 + a * cos(\phi)$ \\
+$ Y = Y_0 + b * sin(\phi) $ \\
+$ Z = Z_0 - j* 20 $ \\
+
 
 \subsubsection{Údolí}
-Jedná se o takový terénní útvar, který se vyznačuje protáhlým tvarem, jehož okraje jsou lemovány vyvýšeným terénem. V rámci aplikace je použito označení Valley.
+Jedná se o takový terénní útvar, který se vyznačuje protáhlým tvarem, jehož okraje jsou lemovány vyvýšeným terénem. V rámci aplikace je použito označení Valley. \\
+\\
+Pro údolí byly vygenerovány přímky od nichž se v zadaném kroku vytváří nové přímky s konstantně stoupající hodnotou výšky. V uvedených vzorcích jsou p1 a p2 označení pro vzniklé přímky.\\
+\\
+$ X_{p1} = X_0 + a $ \\
+$ Y_{p1} = Y_0 + i * 10 $ \\
+$ Z_{p1} = Z_0 + a $ \\
+\\
+$ X_{p2} = X_0 - a $ \\
+$ Y_{p2} = Y_0 + i * 10 $ \\
+$ Z_{p2} = Z_0 + a $ \\
 
 \subsubsection{Hřbet}
-Hřbet je protáhlá vypuklá terénní plocha se zaoblenou vrcholovou částí. V aplikace je pojmenován jako Ridge.
+Hřbet je protáhlá vypuklá terénní plocha se zaoblenou vrcholovou částí. V aplikace je pojmenován jako Ridge. \\
+\\
+Hřbet byl generován podobným způsobem jako údolí, s tím rozdílem, že výška postupně nestoupá, ale klesá. \\
+$ X_{p1} = X_0 + a $ \\
+$ Y_{p1} = Y_0 + i * 10 $ \\
+$ Z_{p1} = Z_0 - a $ \\
+\\
+$ X_{p2} = X_0 - a $ \\
+$ Y_{p2} = Y_0 + i * 10 $ \\
+$ Z_{p2} = Z_0 - a $ \\
 
 \subsubsection{Sedlo}
-Sedlo je místo v krajině, které se nachází mezi dvěma vrcholy, z něhož na dvě strany svahu sestupují do údolí a na ostatní dvě stoupají směrem k vrcholkům. U vysokých hor se sedlo často označuje jako průsmyk. V aplikace je použito označení Saddle.
+Sedlo je místo v krajině, které se nachází mezi dvěma vrcholy, z něhož na dvě strany svahu sestupují do údolí a na ostatní dvě stoupají směrem k vrcholkům. U vysokých hor se sedlo často označuje jako průsmyk. V aplikace je použito označení Saddle. \\
+\\
+Generování sedla zahrnovalo vygenerování dvou vrcholů a dvou ďolíků. Podstatné bylo rozmístění. To se regulovalo zadanými pevnými souřadnicemi vrcholů, případně děr. následně byly kolem těchto středu generovány elipsy s klesající/rostoucí výškou. \\
+\\
+Tvorba vrcholků: \\
+$ X = X_0 + i * rand\%(70) * cos(j*\phi) + rand\%(20) $ \\
+$ Y =  Y_0 + i * rand\%(70) * sin(j*\phi) + rand\%(20) $ \\
+$ Z = Z_0 - i * 50 $ \\
+\\
+Tvorba děr: \\
+$ X = X_0 + i * rand\%(70) * cos(j*\phi) + rand\%(20) $ \\
+$ Y =  Y_0 + i * rand\%(70) * sin(j*\phi) + rand\%(20) $ \\
+$ Z = Z_0 + i * 50 $ \\
 
 \subsubsection{Spočinek}
-Spočinek je vodorovná nebo mírně skloněná část terénního reliéfu na svahovém hřbetu nebo svahu. V aplikaci lze spočinek vygenerovat názvem Col Topographic.
-
+Spočinek je vodorovná nebo mírně skloněná část terénního reliéfu na svahovém hřbetu nebo svahu. V aplikaci lze spočinek vygenerovat názvem Col Topographic. \\
+\\
+Tvorba spočinku se náhodně vytváří proto, že v kódu je tvorba nových bodů pouze v jednom kvadrantu a vzhledem k pravděpodobnosti blízkosti některých bodů se při generování vytváří v některých situacích spočinek. Tato tvorba je však zcela náhodná a neřízená, autoři si za to nenárokují žádné body z této úlohy, spočinek byl v úloze ponechán z toho důvodu, že na něm lze demonstrovat nefunkčnost tvorby vrstevnic, ale funkčnost vytvořeného sklonu a expozice. \\
+\\
+Tvorba spočinku: \\
+$ X = X_0 + i * rand\%(100) * cos(j*\phi) + rand\%(50) $ \\
+$ Y =  Y_0 + i * rand\%(150) * sin(j*\phi) + rand\%(50) $ \\
+$ Z = Z_0 - i * 50 $ \\
 
 
 \section{Vstupní data}

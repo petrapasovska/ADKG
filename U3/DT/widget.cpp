@@ -27,9 +27,19 @@ void Widget::on_pushButton_clicked()
 {
     std::vector<QPoint3D> points = ui->Canvas->getPoints();
 
-    std::vector<Edge> dt = Algorithms::DT(points);
-    ui->Canvas->setDT(dt);
-    repaint();
+    int psize = points.size();
+
+    if(psize == 0){
+        QMessageBox msgBox;
+        msgBox.setText("You need at first to import or generate points!");
+        msgBox.exec();
+    }
+    else{
+        std::vector<Edge> dt = Algorithms::DT(points);
+        ui->Canvas->setDT(dt);
+        repaint();
+    }
+
 }
 
 void Widget::on_pushButton_3_clicked()

@@ -430,6 +430,7 @@ std::vector<QPoint3D> Algorithms::generateHill()
     double b = rand()%200;
     double fi = (2*M_PI)/(n);
 
+    //Create circle where increasing radius gets decreasing height
     center.setX(rand()%300+200);
     center.setY(rand()%300+200);
     center.setZ(rand()%500 + 300);
@@ -465,6 +466,7 @@ std::vector<QPoint3D> Algorithms::generateValley()
     center.setZ(rand()%50);
 
 
+    //Create rectangle where the midline has minimum Z value and bigger distance get bigger height
     for(int j = 0;j<4;j++)
     {
         for(int i = 0;i<n;i++)
@@ -501,6 +503,7 @@ std::vector<QPoint3D> Algorithms::generateMountains()
      center.setY(rand()%300+200);
      center.setZ(rand()%50 + 700);
 
+     //Create rectangle where the midline has maximum Z value and bigger distance from it gets smaller height
      for(int j = 0;j<4;j++)
      {
          for(int i = 0;i<n;i++)
@@ -529,6 +532,7 @@ std::vector<QPoint3D> Algorithms::generateGrid(int grid)
     QPoint3D p;
 
 
+    //Classical grid with regular distance
      for(int j = 0;j<800;j += grid)
      {
          for(int i = 0;i<800;i += grid)
@@ -558,6 +562,7 @@ std::vector<QPoint3D> Algorithms::generateSaddle(){
     random_points.push_back(l);
     double fi = 2*M_PI/10;
 
+    //Create the hill
     for(int i = 1; i<3; i++){
         for (int j = 0; j < 10; j++){
             p.setX(l.x()+i*(rand()%70)*cos(j*fi) + rand()%20);
@@ -572,6 +577,7 @@ std::vector<QPoint3D> Algorithms::generateSaddle(){
     r.setY(500/2);
     r.setZ(800);
 
+    //Create the hill
     for(int i = 1; i<3; i++){
         for (int j = 0; j < 10; j++){
             p.setX(r.x()+i*(rand()%70)*cos(j*fi)+ rand()%20);
@@ -588,6 +594,7 @@ std::vector<QPoint3D> Algorithms::generateSaddle(){
     u.setY(60);
     u.setZ(300);
 
+    //Create the hole
     for(int i = 1; i<3; i++){
         for (int j = 0; j < 10; j++){
             p.setX(u.x()+i*(rand()%70)*cos(j*fi)+ rand()%20);
@@ -604,6 +611,7 @@ std::vector<QPoint3D> Algorithms::generateSaddle(){
     d.setY(500);
     d.setZ(300);
 
+    //Create the hole
     for(int i = 1; i<3; i++){
         for (int j = 0; j < 10; j++){
             p.setX(d.x()+i*(rand()%70)*cos(j*fi)+ rand()%20);
@@ -621,6 +629,7 @@ std::vector<QPoint3D> Algorithms::generateSaddle(){
 
 std::vector<QPoint3D> Algorithms::generateCol(){
 
+    // this shape is created completely randomly
     std::vector<QPoint3D> random_points;
     QPoint3D p;
     QPoint3D q;
@@ -631,6 +640,7 @@ std::vector<QPoint3D> Algorithms::generateCol(){
 
     double fi = M_PI/10;
 
+    //Create in one quadrant where the height gets constantly down
     for(int i = 0; i<5; i++){
         for (int j = 0; j < 5; j++){
             p.setX(q.x()+i*(rand()%100)*cos(j*fi) + rand()%50);
