@@ -236,7 +236,120 @@ Po vytvoření zmíněných dílčích algoritmů jsou funkce postupně volány.
 
 
 \section{Dokumentace}
+\subsection{Třídy}
+\subsubsection{Algorithms}
+Třída Algorithms obsahuje několik metod. Metody jsou určeny pro výpočty použitých algoritmů.
+\\a
 
+\textbf{TPointPolygon getPositionWinding(QPointFB q, std::vector<QPointFB> pol)}\\
+Metoda, která vrátí vztah polohy bodu q a polygonu pol. Návratové hodnoty jsou INSIDE, OUTSIDE, ON .\\
+
+\textbf{TPointLinePosition getPointLinePosition(QPointFB &q, QPointFB &a, QPointFB &b)}\\
+Metoda, která vrátí vztah polohy bodu q a přímky tvořenou body a a b. Návratové hodnoty jsou     LEFT, RIGHT, COL (na hraně).\\
+
+\textbf{double get2LinesAngle(QPointFB &p1,QPointFB &p2,QPointFB &p3, QPointFB &p4)}\\
+Tato metoda slouží k vypočetní hodnoty úhlu mezi dvěma přímkami <p1,p2> a <p3,p4>.\\
+
+\textbf{T2LinesPosition get2LinesPosition(QPointFB &p1,QPointFB &p2,QPointFB &p3, QPointFB &p4, QPointFB &intersection)}\\
+Metoda, která vrátí vztah dvou přímek a do proměné intersection, pokud existuje, spočte průsečík a přiřadí jemu hodnoty do typu QPointFB. Návratové hodnoty jsou PARALLEL, COLINEAR, INTERSECTING, NONINTERSECTING .\\
+
+
+\textbf{void computePolygonIntersections(std::vector<QPointFB> &p1, std::vector<QPointFB> &p2)}\\
+Metoda spočte průsečíky polygonů p1 a p2 a vloží je do oněh polygonů (spustí se metoda processIntersection).\\
+
+\textbf{void processIntersection(QPointFB &b, double t, std::vector<QPointFB> &poly, int &i)}\\
+Metoda vloží bod b do polygonu poly na pozici i+1 , pokud je na hraně daného polygonu a není vrcholem.\\
+
+\textbf{void setPositions (std::vector<QPointFB> &pol1,std::vector<QPointFB> &pol2)}\\
+Metoda nastaví bodu polygonu pol1 třídy QPointFB hodnotu pos, podle vztahu s polygonem pol2 a opačně.\\
+
+\textbf{void createFragments(std::vector<QPointFB> &pol, TPointPolygon posit, bool rev, std::map<QPointFB,std::vector<QPointFB> >  &F)}\\
+Metoda vytvoří fragmenty se stejnou hodnotou posit a uloží je do hasovací tabulky F.\\
+
+\textbf{void mergeFragments(std::map<QPointFB, std::vector<QPointFB> > &Fa,std::map<QPointFB, std::vector<QPointFB> > &Fb, std::vector<std::vector<QPointFB> > &C)}\\
+Metoda sjednotí fragmenty z polygonu A a polygonu C a uloží je do vektoru polygonů C.\\
+
+\textbf{double getPolygonOrientation(std::vector<QPointFB> &pol)}\\
+Metoda vrátí plochu polygonu pol. Pokud je výměra záporná polygon na CCV orientaci.\\
+
+\textbf{std::vector<std::vector<QPointFB> > BooleanOper(std::vector<QPointFB> &A, std::vector<QPointFB> &B, TBooleanOperation oper)}\\
+Metoda nad polygony A a B provede metodu oper: INTERSECTION, UNION, DIFFAB, DIFFBA.\\
+
+
+
+
+\subsubsection{Draw}
+Třída Draw obsahuje několik metod. Metody jsou určeny pro generování a vykreslování proměných.
+\\
+
+\textbf{void paintEvent(QPaintEvent *e)}\\
+Metoda pro kreslení do vykreslovacího okna.\\
+
+\textbf{void drawPol(std::vector<QPointFB> &pol, QPainter &painter)}\\
+Metoda pro vykreslení polygonu.\\
+
+\textbf{void mousePressEvent(QMouseEvent *e)}\\
+Metoda po kliknutí do zobrazovacího okna uoží bod do polygonu podle setAB.\\
+
+\textbf{void setAB()}\\
+Metoda nastaví, kam se budou ukládat vložené body.\\
+
+\textbf{void clearAll();}\\
+Metoda smaže vše ze zobrazovacího okna.\\
+
+\textbf{void clearResults();}\\
+Metoda smaže výsledky Boolovských operací ze zobrazovacího okna.\\
+
+\textbf{void setRes(std::vector<std::vector<QPointFB> > result)}\\
+Metoda nastaví vektor polygonů s výsledky Boolovských operací.\\
+
+\textbf{void setA(std::vector<QPointFB> polA_)}\\
+Metoda nastaví polygonu A.\\
+
+\textbf{void setB(std::vector<QPointFB> polB_)}\\
+Metoda nastaví polygonu B.\\
+
+\textbf{std::vector<QPointFB> getA()}\\
+Metoda vrátí polygonu A.\\
+
+\textbf{std::vector<QPointFB> getB()}\\
+Metoda vrátí polygonu B.\\
+
+
+\subsubsection{QPointFB}
+Nová třída odvozená od třídy QPointF.(double alfa, double beta, bool inters, TPointPolygon pos). Alfa je koeficient alfa, pokud bod leží na přímce A. 
+Beta je koeficient beta, pokud bod leží na přímce B. Inters je true, pokud bod je průsečíkem dvou přímek. Pos nabývá hodnot INSIDE, OUTSIDE, ON vůči danému polygonu.\\
+
+\textbf{double getAlfa()}\\
+Metoda vrátí hodnotu alfa bodu třídy QPointFB.\\
+
+\textbf{void setAlfa(double alfa_)}\\
+Metoda nastaví hodnotu alfa bodu třídy QPointFB.\\
+
+\textbf{double getBeta()}\\
+Metoda vrátí hodnotu beta bodu třídy QPointFB.\\
+
+\textbf{void setBeta(double beta_)}\\
+Metoda nastaví hodnotu beta bodu třídy QPointFB.\\
+
+\textbf{bool getInters()}\\
+Metoda vrátí hodnotu inters bodu třídy QPointFB.\\
+
+\textbf{void setInters(bool inters_)}\\
+Metoda nastaví hodnotu inters bodu třídy QPointFB.\\
+
+\textbf{TPointPolygon getPosition()}\\
+Metoda vrátí hodnotu pos bodu třídy QPointFB.\\
+
+\textbf{void setPosition(TPointPolygon pos_)}\\
+Metoda nastaví hodnotu pos bodu třídy QPointFB.\\
+
+\textbf{bool operator < (const QPointFB &p)}\\
+Přetížený operátor pro porovnání bodů třída QPointFB podle x.\\
+
+\subsubsection{Widget}
+
+\\
 
 
 \clearpage
