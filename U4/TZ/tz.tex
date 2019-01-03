@@ -224,7 +224,12 @@ Po vytvoření zmíněných dílčích algoritmů jsou funkce postupně volány.
 
 
 \section{Vstupní data}
+Vstupní data musí být seřazená, tedy každý polygon v souboru musí začínat bodem jedna a končit n-tým bodem.  Ve vstupních datech je polygon A dán číslem 1 a polygon B číslem jiným než 1. Jednotlivé body se sekvenčně ukládají do proměnné QPointFB a následně polygonu A/B.
 
+Struktura vstupních dat:
+[číslo polygonu, souřadnice X, souřadnice Y]\\
+
+\\
 
 
 \section{Výstupní data}
@@ -239,7 +244,7 @@ Po vytvoření zmíněných dílčích algoritmů jsou funkce postupně volány.
 \subsection{Třídy}
 \subsubsection{Algorithms}
 Třída Algorithms obsahuje několik metod. Metody jsou určeny pro výpočty použitých algoritmů.
-\\a
+\\
 
 \textbf{TPointPolygon getPositionWinding(QPointFB q, std::vector<QPointFB> pol)}\\
 Metoda, která vrátí vztah polohy bodu q a polygonu pol. Návratové hodnoty jsou INSIDE, OUTSIDE, ON .\\
@@ -348,6 +353,24 @@ Metoda nastaví hodnotu pos bodu třídy QPointFB.\\
 Přetížený operátor pro porovnání bodů třída QPointFB podle x.\\
 
 \subsubsection{Widget}
+
+\textbf{void on_pushButton_clicked()}\\
+Po stisknutí tlačítka Polygon A/B, se nastaví kreslení polygonu A nebo B.\\
+
+\textbf{void on_pushButton_2_clicked()}\\
+Po stisknutí tlačítka Boolean Operations, se vypočte a zobrazí výsledek Boolovské operace, dle výběru v combo boxu.\\
+
+\textbf{void on_pushButton_3_clicked()}\\
+Po stisknutí tlačítka Clear results, se vymaže výsledek Boolovské operace.\\
+
+\textbf{void on_pushButton_4_clicked()}\\
+Po stisknutí tlačítka Clear All, se vymaže vše co je v obrazovém okně.\\
+
+\textbf{void on_pushButton_5_clicked()}\\
+Po stisknutí tlačítka Buffer, se vypočte a zobrazí buffer nad objekty v obrazovém okně.\\
+
+\textbf{void on_pushButton_6_clicked()}\\
+Po stisknutí tlačítka Import A/B, lze naimportovat dva polygony pro testování aplikace.\\
 
 \\
 
