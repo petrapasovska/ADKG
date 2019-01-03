@@ -1,5 +1,7 @@
 #include "widget.h"
 #include "ui_widget.h"
+
+#include <QFileDialog>
 #include "algorithms.h"
 
 Widget::Widget(QWidget *parent) :
@@ -52,7 +54,9 @@ void Widget::on_pushButton_2_clicked()
 
 void Widget::on_pushButton_3_clicked()
 {
+    ui->Canvas->clearResults();
 
+    repaint();
 }
 
 void Widget::on_pushButton_5_clicked()
@@ -70,4 +74,30 @@ void Widget::on_pushButton_5_clicked()
 
     repaint();
 
+}
+
+void Widget::on_pushButton_6_clicked()
+{
+    std::vector<QPointFB> A, B;
+
+    QSizeF canvas_size = ui->Canvas->size();
+
+    QString path = QFileDialog::getOpenFileName(
+                this,
+                tr("Select file"),
+                "/",
+                "Text file (*.txt);;All files (*.*)");
+
+    std::string path_utf8 = path.toUtf8().constData();
+
+    QString msg;
+
+
+   Draw::importPolygons(path_utf8, A, B, canvas_size);
+
+   ui->Canvas->setA(A);
+
+   ui->Canvas->setB(B);
+
+   ui->Canvas->repaint();
 }

@@ -3,6 +3,7 @@
 #include <vector>
 #include <QtGui>
 #include <QWidget>
+#include <fstream>
 
 #include "qpointfb.h"
 
@@ -32,6 +33,7 @@ public:
     std::vector<QPointFB> getA(){return polA;}
     std::vector<QPointFB> getB(){return polB;}
     void setBuff(std::vector<std::vector<QPointFB> > buff_) {buff=buff_;}
+    static void importPolygons(std::string &path, std::vector<QPointFB> &A, std::vector<QPointFB> &B,  QSizeF &canvas_size);
 
 
 
