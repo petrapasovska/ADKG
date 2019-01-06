@@ -79,7 +79,7 @@ void Widget::on_pushButton_3_clicked()
     repaint();
 }
 
-
+/*
 void Widget::on_pushButton_5_clicked()
 {
     // Create buffer over polygons
@@ -96,7 +96,7 @@ void Widget::on_pushButton_5_clicked()
     repaint();
 
 }
-
+*/
 
 void Widget::on_pushButton_6_clicked()
 {
