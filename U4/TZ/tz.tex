@@ -92,7 +92,6 @@ Níže uvedené zadání je kopie ze stránek předmětu.
 	\includegraphics[width=17cm]{zadani.pdf}
 \end{figure}
 
-\subsection{Údaje o bonusových úlohách}
 
 
 
@@ -219,8 +218,6 @@ Po vytvoření zmíněných dílčích algoritmů jsou funkce postupně volány.
 
 
 
-\section{Informace o bonusových úlohách}
-
 
 
 \section{Vstupní data}
@@ -229,7 +226,7 @@ Vstupní data musí být seřazená, tedy každý polygon v souboru musí začí
 Struktura vstupních dat:
 [číslo polygonu, souřadnice X, souřadnice Y]\\
 
-\\
+
 
 
 \section{Výstupní data}
@@ -246,41 +243,40 @@ Struktura vstupních dat:
 Třída Algorithms obsahuje několik metod. Metody jsou určeny pro výpočty použitých algoritmů.
 \\
 
-\textbf{TPointPolygon getPositionWinding(QPointFB q, std::vector<QPointFB> pol)}\\
+\textbf{TPointPolygon getPositionWinding(QPointFB q, std::vector\textless QPointFB\textgreater pol)}\\
 Metoda, která vrátí vztah polohy bodu q a polygonu pol. Návratové hodnoty jsou INSIDE, OUTSIDE, ON .\\
 
-\textbf{TPointLinePosition getPointLinePosition(QPointFB &q, QPointFB &a, QPointFB &b)}\\
-Metoda, která vrátí vztah polohy bodu q a přímky tvořenou body a a b. Návratové hodnoty jsou     LEFT, RIGHT, COL (na hraně).\\
+\textbf{TPointLinePosition getPointLinePosition(QPointFB \&q, QPointFB \&a, QPointFB \&b)}\\
+Metoda, která vrátí vztah polohy bodu q a přímky tvořenou body a a b. Návratové hodnoty jsou LEFT, RIGHT, COL (na hraně).\\
 
-\textbf{double get2LinesAngle(QPointFB &p1,QPointFB &p2,QPointFB &p3, QPointFB &p4)}\\
-Tato metoda slouží k vypočetní hodnoty úhlu mezi dvěma přímkami <p1,p2> a <p3,p4>.\\
+\textbf{double get2LinesAngle(QPointFB \&p1,QPointFB \&p2,QPointFB \&p3, QPointFB \&p4)}\\
+Tato metoda slouží k vypočetní hodnoty úhlu mezi dvěma přímkami \textless p1,p2\textgreater a \textless p3,p4\textgreater .\\
 
-\textbf{T2LinesPosition get2LinesPosition(QPointFB &p1,QPointFB &p2,QPointFB &p3, QPointFB &p4, QPointFB &intersection)}\\
+\textbf{T2LinesPosition get2LinesPosition(QPointFB \&p1,QPointFB \&p2,QPointFB \&p3, QPointFB \&p4, QPointFB \&intersection)}\\
 Metoda, která vrátí vztah dvou přímek a do proměné intersection, pokud existuje, spočte průsečík a přiřadí jemu hodnoty do typu QPointFB. Návratové hodnoty jsou PARALLEL, COLINEAR, INTERSECTING, NONINTERSECTING .\\
 
 
-\textbf{void computePolygonIntersections(std::vector<QPointFB> &p1, std::vector<QPointFB> &p2)}\\
+\textbf{void computePolygonIntersections(std::vector\textless QPointFB\textgreater \&p1, \\
+std::vector\textless QPointFB\textgreater \&p2)}\\
 Metoda spočte průsečíky polygonů p1 a p2 a vloží je do oněh polygonů (spustí se metoda processIntersection).\\
 
-\textbf{void processIntersection(QPointFB &b, double t, std::vector<QPointFB> &poly, int &i)}\\
+\textbf{void processIntersection(QPointFB \&b, double t, std::vector\textless QPointFB\textgreater \&poly, int \&i)}\\
 Metoda vloží bod b do polygonu poly na pozici i+1 , pokud je na hraně daného polygonu a není vrcholem.\\
 
-\textbf{void setPositions (std::vector<QPointFB> &pol1,std::vector<QPointFB> &pol2)}\\
+\textbf{void setPositions (std::vector\textless QPointFB\textgreater \&pol1,std::vector\textless QPointFB\textgreater \&pol2)}\\
 Metoda nastaví bodu polygonu pol1 třídy QPointFB hodnotu pos, podle vztahu s polygonem pol2 a opačně.\\
 
-\textbf{void createFragments(std::vector<QPointFB> &pol, TPointPolygon posit, bool rev, std::map<QPointFB,std::vector<QPointFB> >  &F)}\\
+\textbf{void createFragments(std::vector\textless QPointFB\textgreater \&pol, TPointPolygon posit, bool rev, std::map\textless QPointFB,std::vector\textless QPointFB\textgreater \textgreater  \&F)}\\
 Metoda vytvoří fragmenty se stejnou hodnotou posit a uloží je do hasovací tabulky F.\\
 
-\textbf{void mergeFragments(std::map<QPointFB, std::vector<QPointFB> > &Fa,std::map<QPointFB, std::vector<QPointFB> > &Fb, std::vector<std::vector<QPointFB> > &C)}\\
+\textbf{void mergeFragments(std::map\textless QPointFB, std::vector\textless QPointFB\textgreater \textgreater \&Fa,\\std::map\textless QPointFB, std::vector\textless QPointFB\textgreater \textgreater \&Fb, std::vector\textless std::vector\\ \textless QPointFB\textgreater \textgreater \&C)}\\
 Metoda sjednotí fragmenty z polygonu A a polygonu C a uloží je do vektoru polygonů C.\\
 
-\textbf{double getPolygonOrientation(std::vector<QPointFB> &pol)}\\
+\textbf{double getPolygonOrientation(std::vector\textless QPointFB\textgreater \&pol)}\\
 Metoda vrátí plochu polygonu pol. Pokud je výměra záporná polygon na CCV orientaci.\\
 
-\textbf{std::vector<std::vector<QPointFB> > BooleanOper(std::vector<QPointFB> &A, std::vector<QPointFB> &B, TBooleanOperation oper)}\\
+\textbf{std::vector\textless std::vector\textless QPointFB\textgreater \textgreater BooleanOper(std::vector\textless QPointFB\textgreater \&A, std::vector\textless QPointFB\textgreater \&B, TBooleanOperation oper)}\\
 Metoda nad polygony A a B provede metodu oper: INTERSECTION, UNION, DIFFAB, DIFFBA.\\
-
-
 
 
 \subsubsection{Draw}
@@ -290,7 +286,7 @@ Třída Draw obsahuje několik metod. Metody jsou určeny pro generování a vyk
 \textbf{void paintEvent(QPaintEvent *e)}\\
 Metoda pro kreslení do vykreslovacího okna.\\
 
-\textbf{void drawPol(std::vector<QPointFB> &pol, QPainter &painter)}\\
+\textbf{void drawPol(std::vector\textless QPointFB> \&pol, QPainter \&painter)}\\
 Metoda pro vykreslení polygonu.\\
 
 \textbf{void mousePressEvent(QMouseEvent *e)}\\
@@ -305,19 +301,19 @@ Metoda smaže vše ze zobrazovacího okna.\\
 \textbf{void clearResults();}\\
 Metoda smaže výsledky Boolovských operací ze zobrazovacího okna.\\
 
-\textbf{void setRes(std::vector<std::vector<QPointFB> > result)}\\
+\textbf{void setRes(std::vector\textless std::vector\textless QPointFB> > result)}\\
 Metoda nastaví vektor polygonů s výsledky Boolovských operací.\\
 
-\textbf{void setA(std::vector<QPointFB> polA_)}\\
+\textbf{void setA(std::vector\textless QPointFB\textgreater polA\_)}\\
 Metoda nastaví polygonu A.\\
 
-\textbf{void setB(std::vector<QPointFB> polB_)}\\
+\textbf{void setB(std::vector\textless QPointFB\textgreater polB\_)}\\
 Metoda nastaví polygonu B.\\
 
-\textbf{std::vector<QPointFB> getA()}\\
+\textbf{std::vector\textless QPointFB\textgreater getA()}\\
 Metoda vrátí polygonu A.\\
 
-\textbf{std::vector<QPointFB> getB()}\\
+\textbf{std::vector\textless QPointFB\textgreater getB()}\\
 Metoda vrátí polygonu B.\\
 
 
@@ -328,51 +324,51 @@ Beta je koeficient beta, pokud bod leží na přímce B. Inters je true, pokud b
 \textbf{double getAlfa()}\\
 Metoda vrátí hodnotu alfa bodu třídy QPointFB.\\
 
-\textbf{void setAlfa(double alfa_)}\\
+\textbf{void setAlfa(double alfa\_)}\\
 Metoda nastaví hodnotu alfa bodu třídy QPointFB.\\
 
 \textbf{double getBeta()}\\
 Metoda vrátí hodnotu beta bodu třídy QPointFB.\\
 
-\textbf{void setBeta(double beta_)}\\
+\textbf{void setBeta(double beta\_)}\\
 Metoda nastaví hodnotu beta bodu třídy QPointFB.\\
 
 \textbf{bool getInters()}\\
 Metoda vrátí hodnotu inters bodu třídy QPointFB.\\
 
-\textbf{void setInters(bool inters_)}\\
+\textbf{void setInters(bool inters\_)}\\
 Metoda nastaví hodnotu inters bodu třídy QPointFB.\\
 
 \textbf{TPointPolygon getPosition()}\\
 Metoda vrátí hodnotu pos bodu třídy QPointFB.\\
 
-\textbf{void setPosition(TPointPolygon pos_)}\\
+\textbf{void setPosition(TPointPolygon pos\_)}\\
 Metoda nastaví hodnotu pos bodu třídy QPointFB.\\
 
-\textbf{bool operator < (const QPointFB &p)}\\
+\textbf{bool operator \textless (const QPointFB \&p)}\\
 Přetížený operátor pro porovnání bodů třída QPointFB podle x.\\
 
 \subsubsection{Widget}
 
-\textbf{void on_pushButton_clicked()}\\
+\textbf{void on\_pushButton\_clicked()}\\
 Po stisknutí tlačítka Polygon A/B, se nastaví kreslení polygonu A nebo B.\\
 
-\textbf{void on_pushButton_2_clicked()}\\
+\textbf{void on\_pushButton\_2\_clicked()}\\
 Po stisknutí tlačítka Boolean Operations, se vypočte a zobrazí výsledek Boolovské operace, dle výběru v combo boxu.\\
 
-\textbf{void on_pushButton_3_clicked()}\\
+\textbf{void on\_pushButton\_3\_clicked()}\\
 Po stisknutí tlačítka Clear results, se vymaže výsledek Boolovské operace.\\
 
-\textbf{void on_pushButton_4_clicked()}\\
+\textbf{void on\_pushButton\_4\_clicked()}\\
 Po stisknutí tlačítka Clear All, se vymaže vše co je v obrazovém okně.\\
 
-\textbf{void on_pushButton_5_clicked()}\\
+\textbf{void on\_pushButton\_5\_clicked()}\\
 Po stisknutí tlačítka Buffer, se vypočte a zobrazí buffer nad objekty v obrazovém okně.\\
 
-\textbf{void on_pushButton_6_clicked()}\\
+\textbf{void on\_pushButton\_6\_clicked()}\\
 Po stisknutí tlačítka Import A/B, lze naimportovat dva polygony pro testování aplikace.\\
 
-\\
+
 
 
 \clearpage

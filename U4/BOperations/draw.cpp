@@ -37,7 +37,8 @@ void Draw::paintEvent(QPaintEvent *e)
     drawPol(polB, painter);
 
     //Draw result
-    painter.setPen(Qt::red);
+    painter.setPen(QPen(Qt::magenta, 3));
+    painter.setBrush(Qt::BDiagPattern);
     for(std::vector<QPointFB> vec: res)
     {
         drawPol(vec, painter);

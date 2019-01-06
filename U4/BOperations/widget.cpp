@@ -47,6 +47,26 @@ void Widget::on_pushButton_2_clicked()
 
     std::vector<std::vector<QPointFB>> result = Algorithms::BooleanOper(A, B, operation);
 
+    std::vector<QPointFB> singVec;
+    if(result.empty()){
+        for(int i =0; i < A.size(); i++){
+            for(int j = 0; j<B.size(); j++){
+
+                if(A[i] == B[j]){
+                    singVec.push_back(A[i]);
+                }
+
+            }
+        }
+    }
+
+    if(!singVec.empty()){
+        result.push_back(singVec);
+    }
+
+    qDebug() << result;
+
+
     ui->Canvas->setRes(result);
 
     repaint();
@@ -58,6 +78,7 @@ void Widget::on_pushButton_3_clicked()
 
     repaint();
 }
+
 
 void Widget::on_pushButton_5_clicked()
 {
@@ -75,6 +96,7 @@ void Widget::on_pushButton_5_clicked()
     repaint();
 
 }
+
 
 void Widget::on_pushButton_6_clicked()
 {

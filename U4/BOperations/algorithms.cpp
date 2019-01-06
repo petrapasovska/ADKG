@@ -337,6 +337,7 @@ bool Algorithms::createPolygonFromFragments(QPointFB &start, std::map<QPointFB, 
             //Add to the polygon
             pol.insert(pol.end(), fr->second.second.begin() + 1, fr->second.second.end());
 
+
             //Both points are analogous
             if (next == start)
                 return true;
@@ -409,6 +410,8 @@ std::vector<std::vector<QPointFB> > Algorithms::BooleanOper(std::vector<QPointFB
     //    A[i].setInters(false);
     //    for (int i = 0; i < B.size();i++)
     //        B[i].setInters(false);
+
+
 
     return res;
 }
