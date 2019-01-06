@@ -221,19 +221,68 @@ Po vytvoření zmíněných dílčích algoritmů jsou funkce postupně volány.
 
 
 \section{Vstupní data}
-Vstupní data musí být seřazená, tedy každý polygon v souboru musí začínat bodem jedna a končit n-tým bodem.  Ve vstupních datech je polygon A dán číslem 1 a polygon B číslem jiným než 1. Jednotlivé body se sekvenčně ukládají do proměnné QPointFB a následně polygonu A/B.
-
+Vstupní data musí být seřazená, tedy každý polygon v souboru musí začínat bodem jedna a končit n-tým bodem.  Ve vstupních datech je polygon A dán číslem 1 a polygon B číslem jiným než 1. Jednotlivé body se sekvenčně ukládají do proměnné QPointFB a následně polygonu A/B.\\
+\\
 Struktura vstupních dat:
-[číslo polygonu, souřadnice X, souřadnice Y]\\
-
-
+[číslo polygonu, souřadnice X, souřadnice Y]
 
 
 \section{Výstupní data}
+Výstupem aplikace je grafické znázornění jednotlivých booleovských metod na načtených polygonech, případně ručně vložených polygonech.
 
 
 \clearpage
 \section{Aplikace}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{pictures/polygons.jpg}
+\caption{Vzhled aplikace a ruční vložení obou polygonů}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{pictures/import.jpg}
+\caption{Ukázka naimportovaných polygonů}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{pictures/union.jpg}
+\caption{Výsledek operace sjednocení (UNION)}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{pictures/intersection.jpg}
+\caption{Výsledek operace průnik (INTERSECTION}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{pictures/diffAB.jpg}
+\caption{Výsledek operace rozdílu A a B (DIFFERENCE A - B)}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{pictures/diffBA.jpg}
+\caption{Výsledek operace rozdílu B a A (DIFFERENCE B - A)}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{pictures/1D.jpg}
+\caption{Ukázka aplikace v případě, že výsledek je linie (1D entita)}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{pictures/0D.jpg}
+\caption{Ukázka aplikace v případě, že výsledek je bod (0D entita)}
+\end{figure}
+
+\clearpage
 
 
 
@@ -373,13 +422,25 @@ Po stisknutí tlačítka Import A/B, lze naimportovat dva polygony pro testován
 
 \clearpage
 \section{Závěr}
-V rámci úlohy byla vytvořena aplikace pro výpočet Boolovských operací nad dvěma polygony. Polygony lze ručně naklikat v obrazovém okně, nebo naimportovat z textového souboru. Pak je možné vypočítat průnik, sjednocení, rozdíl A-B a rozdíl B-A polygonů. Výsledek se vykreslí v zobrazovací okně.
+V rámci úlohy byla vytvořena aplikace pro výpočet Boolovských operací nad dvěma polygony. Polygony lze ručně naklikat v obrazovém okně, nebo naimportovat z textového souboru. Následně je možné vypočítat průnik, sjednocení, rozdíl A-B a rozdíl B-A polygonů. Výsledek se vykreslí v zobrazovací okně a je vyšrafován a ohraničen silnější linií, aby byl na první pohled jasně zřejmý.\\
 \\
+V této aplikaci bylo zapotřebí ošetřit i případy, kdy je výsledkem linie či bod. Pro testování těchto případů byly vytvořeny testovací textové soubory, na kterých si může uživatel sám vyzkoušet funkčnost. Přesto pro případ, kdy je výsledkem 0D entita - bod, tak není bod zřetelně vyznačen. Po spouštění aplikace a volbě jednotlivých operací pro tento případ je bod správně vyhodnocen, což lze vidět na ukázce aplikace, kde je ve frameworku Qt v konzolovém řádku po příkazu qDebug vypsán. \\
+
 
 \section{Náměty na vylepšení}
-Načítání polygonů ze souboru by mohlo být oddělené. Uživatel by načetl polygony ze dvou různých textových souborů a přitom by si zvolil, kam chce načtený polygon uložit A/B.\\
-Výsledek výpočtu by mohl být víc zvýrazněn, třeba šrafou.\\
-Bohužel operace buffer nebyl z dostatku času zprovozněna, proto je z aplikace byla vyřazena. Při vylepšovaní aplikace by se mohla operace buffer opravit a zprovoznit.\\
+\subsection{Import polygonů}
+Načítání polygonů ze souboru by mohlo být oddělené. Uživatel by načetl polygony ze dvou různých textových souborů a přitom by si zvolil, kam chce načtený polygon uložit A/B.
+
+\subsection{Buffer}
+Bohužel operace buffer nebyla z důvodu nedostatku času zprovozněna, proto byla z aplikace vyřazena, aby v ní nezůstávaly nefunkční části. Přesto by bylo určitě vhodné buffer dokončit. 
+
+\subsection{Vykreslení 0D výsledku}
+Bylo by vhodné ošetřit, že v případě, že výsledkem je 0D entita (bod), tak bude graficky lépe zvýrazněn, aby byl uživateli na první pohled výsledek zřejmý.
+
+\subsection{Přehlednost}
+Pro přehlednost by bylo určitě vhodné, aby byly jednotlivé polygony popsány, zda se jedná o polygon A nebo B. Případně aby bylo i v aplikaci vidět, zda uživatel vykresluje polygon A nebo B. V případě, že je poté zvolena operace rozdílu, tak nemusí být uživateli na první pohled jasné, od kterého polygonu se který odečítá.
+
+
 
 \clearpage
 \section{Reference}
@@ -388,7 +449,8 @@ Bohužel operace buffer nebyl z dostatku času zprovozněna, proto je z aplikace
 \item TSAGARIS, Antonis. Vector ilustration basics for Android developers [online][cit. 21. 12.2018]. \\
 Dostupné z: https://hackernoon.com/vector-illustration-basics-for-android-developers-part-3-boolean-operations-8a0ced922030 \\
 
-
+\item  BAYER, Tomáš. Geometrické vyhledávání [online][cit. 3. 1. 2018]. \\
+Dostupné z: https://web.natur.cuni.cz/~bayertom/images/courses/Adk/adk9.pdf  \\
 
 
 \end{enumerate}
