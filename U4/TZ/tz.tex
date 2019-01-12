@@ -108,6 +108,30 @@ Množinové operace mají v kartografii velké využití, zejména v prostředí
 	\caption{Přehled základních množinových operací [zdroj: 1]}
 \end{figure}
 
+\subsection{Problematické situace}
+Problematické situace vznikají při:
+
+\begin{enumerate}
+\item Společný vrchol
+\item Společné vrcholy
+\item Vrchol leží na hraně druhého polygonu
+\item Společná část elementu
+\item Společný element
+\item Element leží v elementu druhého polygonu
+\end{enumerate}
+
+Pokud by měly polygony společný vrchol/vrcholy/vrchol na hraně, tak výsledkem operace UNION by byla prázdná množina. Polygon, který by měl vrchol větší než stupeň dva, by byl nekorektní.\\
+
+Při operaci INTERSECT výše zmíněných situací, by výsledek byl bud 0D entita (bod) nebo 1D entita (úsečka).
+
+Výsledek operace DIFFERENCE výše zmíněných situací by měl být jeden ze vstupních polygonů.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=7cm]{pictures/problem.png}
+	\caption{Problémové situace}
+\end{figure}
+
 \section{Popis použitých algoritmů}
 V této úloze byl vytvořen nový datový typ - QPointFB. Pro tvorbu této aplikace bylo použito několik dílčích algoritmů. Obecně lze postup rozdělit na tyto fáze:
 
@@ -118,6 +142,7 @@ V této úloze byl vytvořen nový datový typ - QPointFB. Pro tvorbu této apli
 \item Výběr vrcholů dle ohodnocení
 \item Vytvoření fragmentů
 \item Vytvoření oblastí z fragmentů
+\item Nastavení orientace polygonů
 \end{enumerate}
 
 \subsection{Výpočet průsečíků A, B + setřídění}
@@ -141,8 +166,35 @@ V rámci výpočtu průsečíků se prochází jednotlivé body polygonů a poro
 \subsection{Update A, B}
 S nalezením každého průsečíku je nutné updatovat seznam bodů obou polygonů. K tomu slouží funkce ProcessIntersection. Při nalezení správné pozice je nový bod vložen za pomoci defaultní funkce insert, do níž vstupuje nejprve pozice umístění a následně hodnota, která se vkládá.
 
+\subsubsection{Implementace metody}
+Do metody ProcessIntersection vstupuje bod, který je průsečíkem, koeficient přímky alfa nebo beta, polygon a index, prvního bodu přímky, na kterém leží průsečík.
+
+
+\begin{enumerate}
+\item Pokud koeficient t se blíží nule. $ if( abs(t) < eps )$
+\subitem Označ počáteční vrchol přímky jako průsečík. $ poly[i] is INTERSECT $
+\item Pokud koeficient t je blíží k jedné. $if( abs(abs(t)-1) < eps ) $
+\subitem Označ koncový vrchol přímky jako průsečík. $ poly[i+1] is INTERSECT $
+\item Je-li koeficient mezi nulou a jednou. $ else $
+\subitem Vlož průsečík na následují pozici po indexu. $ insert INTERSECT to poly[i+1] $
+\end{enumerate}
+
 \subsection{Ohodnocení vrcholů A, B, dle pozice vůči B, A}
 Pro možnost ohodnocení vrcholů vůči jednotlivým polygonům byl vytvořen nový datový typ. Tento datový typ nabývá hodnot podle toho, zda se bod nachází uvnitř polygonu, na hranici či mimo polygon. 
+
+\subsubsection{Implementace metody}
+Do metody setPositions vstupují oba polygony.
+
+\begin{enumerate}
+\item Pro všechny body polygonu A. $ for( all points in polygon A ) $
+\subitem Vypočti střed hrany polygonu. $ x/y = (poly[i] + poly[i+1])/2 $
+\subitem Zjisti pozici středu oproti polygonu B . $ getPossitionWinding() $
+\subitem Nastav pozici počátečnímu bodu hrany . $ set loc = IN/OUT/BOUNDARY $
+\item Pro všechny body polygonu B. $ for( all points in polygon B ) $
+\subitem Vypočti střed hrany polygonu. $ x/y = (poly[i] + poly[i+1])/2 $
+\subitem Zjisti pozici středu oproti polygonu A . $ getPossitionWinding() $
+\subitem Nastav pozici počátečnímu bodu hrany . $ set loc = IN/OUT/BOUNDARY $
+\end{enumerate}
 
 
 \subsection{Vytvoření fragmentů}
@@ -201,6 +253,18 @@ Z oblastí jsou následně vytvářeny polygony funkcí createPolygonFromFragmen
 \item Přidání bez počátečního bodu: $P \leftarrow f.second.second - \{ f.second.second[0]\} $
 \item Při vrácení se na začátek: $if (n \equiv s) \rightarrow return TRUE$
 \end{enumerate}
+
+\subsection{Nastavení orientace polygonů}
+Pro správný výpočet Boolovských operací je potřeba, aby polygony měli CCW orientaci.
+
+\subsubsection{Implementace metody}
+\begin{enumerate}
+\item Zjisti orientaci polygonu pomocí L´Huillierových vzorců.
+\subsubitem Spočti výměru.
+\item Pokud je výměra záporná prohoď orientaci polygonu.
+
+\end{enumerate}
+
 
 \subsection{Výsledný algoritmus}
 Po vytvoření zmíněných dílčích algoritmů jsou funkce postupně volány.
