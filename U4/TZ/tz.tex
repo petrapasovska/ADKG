@@ -148,6 +148,18 @@ V této úloze byl vytvořen nový datový typ - QPointFB. Pro tvorbu této apli
 \subsection{Výpočet průsečíků A, B + setřídění}
 V rámci výpočtu průsečíků se prochází jednotlivé body polygonů a porovnává se jejich vzájemný vztah. K určení vztahu byla použita již existující funkce s názvem Get2LinesPosition. Pokud byly linie vyhodnoceny tak, že se protínají, byl průsečík uložen do nově vytvořené proměnné o datovém typu mapa. V rámci proměnné mapa se ukládá výsledek a tzv. klíč, který k dané hodnotě odkazuje. Klíč je označen jako $\alpha$. Časová náročnost tohoto výpočtu je rovna O(m,n).
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=7cm]{pictures/prusecik.png}
+	\caption{Druhy průsečíků segmentů [zdroj: 2]}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=7cm]{pictures/prusecikypolygon.png}
+	\caption{Průsečíky mezi polygony [zdroj: 2]}
+\end{figure}
+
 \subsubsection{Implementace metody}
 \begin{enumerate}
 \item Pro všechna i: $for (i = 0; i < n; i++)$
@@ -182,6 +194,19 @@ Do metody ProcessIntersection vstupuje bod, který je průsečíkem, koeficient 
 \subsection{Ohodnocení vrcholů A, B, dle pozice vůči B, A}
 Pro možnost ohodnocení vrcholů vůči jednotlivým polygonům byl vytvořen nový datový typ. Tento datový typ nabývá hodnot podle toho, zda se bod nachází uvnitř polygonu, na hranici či mimo polygon. 
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=7cm]{pictures/ohodnocenivrcholu.png}
+	\caption{Ohodnocení středu hrany a vrcholů polygonu [zdroj: 2]}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=7cm]{pictures/ohodnocenihran.png}
+	\caption{Ohodnocení hrany polygonu [zdroj: 2]}
+\end{figure}
+
+
 \subsubsection{Implementace metody}
 Do metody setPositions vstupují oba polygony.
 
@@ -199,6 +224,13 @@ Do metody setPositions vstupují oba polygony.
 
 \subsection{Vytvoření fragmentů}
 Vrcholy se stejným ohodnocením byly přidány do polylinie, respektive do fragmentu. Body jsou uloženy včetně pozice, na níž se nachází. Každý fragment začíná průsečíkem a končí prvním bodem s jiným ohodnocením. Pro diferenci má fragment opačné pořadí vrcholů - po směru hodinových ručiček. 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=7cm]{pictures/fragmenty.png}
+	\caption{Ukázka fragmentů [zdroj: 2]}
+\end{figure}
+
 
 \subsubsection{Implementace metody}
 Do této metody vstupuje polygon P o n velikosti, ohodnocením vrcholů g, změnou orientace s a seznamem fragmentů F. 
@@ -256,6 +288,12 @@ Z oblastí jsou následně vytvářeny polygony funkcí createPolygonFromFragmen
 
 \subsection{Nastavení orientace polygonů}
 Pro správný výpočet Boolovských operací je potřeba, aby polygony měli CCW orientaci.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=7cm]{pictures/orientace.png}
+	\caption{Ukázka vliv orientace polygonů [zdroj: 2]}
+\end{figure}
 
 \subsubsection{Implementace metody}
 \begin{enumerate}
