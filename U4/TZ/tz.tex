@@ -109,7 +109,7 @@ Množinové operace mají v kartografii velké využití, zejména v prostředí
 \end{figure}
 
 \subsection{Problematické situace}
-Problematické situace vznikají při:
+Problematické situace vznikají při následujících situacích:
 
 \begin{enumerate}
 \item Společný vrchol
@@ -120,9 +120,9 @@ Problematické situace vznikají při:
 \item Element leží v elementu druhého polygonu
 \end{enumerate}
 
-Pokud by měly polygony společný vrchol/vrcholy/vrchol na hraně, tak výsledkem operace UNION by byla prázdná množina. Polygon, který by měl vrchol větší než stupeň dva, by byl nekorektní.\\
+Pokud by měly polygony společný vrchol/vrcholy na hraně, tak výsledkem operace UNION by byla prázdná množina. Polygon, který by měl vrchol větší než stupeň dva, by byl nekorektní.\\
 
-Při operaci INTERSECT výše zmíněných situací, by výsledek byl bud 0D entita (bod) nebo 1D entita (úsečka).
+Při operaci INTERSECT výše zmíněných situací, by výsledek byl buď 0D entita (bod) nebo 1D entita (úsečka). \\
 
 Výsledek operace DIFFERENCE výše zmíněných situací by měl být jeden ze vstupních polygonů.
 
@@ -297,7 +297,7 @@ Pro správný výpočet Boolovských operací je potřeba, aby polygony měli CC
 
 \subsubsection{Implementace metody}
 \begin{enumerate}
-\item Zjisti orientaci polygonu pomocí L´Huillierových vzorců.
+\item Zjisti orientaci polygonu pomocí L'Huillierových vzorců.
 \subsubitem Spočti výměru.
 \item Pokud je výměra záporná prohoď orientaci polygonu.
 
@@ -527,6 +527,8 @@ Po stisknutí tlačítka Import A/B, lze naimportovat dva polygony pro testován
 V rámci úlohy byla vytvořena aplikace pro výpočet Boolovských operací nad dvěma polygony. Polygony lze ručně naklikat v obrazovém okně, nebo naimportovat z textového souboru. Následně je možné vypočítat průnik, sjednocení, rozdíl A-B a rozdíl B-A polygonů. Výsledek se vykreslí v zobrazovací okně a je vyšrafován a ohraničen silnější linií, aby byl na první pohled jasně zřejmý.\\
 \\
 V této aplikaci bylo zapotřebí ošetřit i případy, kdy je výsledkem linie či bod. Pro testování těchto případů byly vytvořeny testovací textové soubory, na kterých si může uživatel sám vyzkoušet funkčnost. Přesto pro případ, kdy je výsledkem 0D entita - bod, tak není bod zřetelně vyznačen. Po spouštění aplikace a volbě jednotlivých operací pro tento případ je bod správně vyhodnocen, což lze vidět na ukázce aplikace, kde je ve frameworku Qt v konzolovém řádku po příkazu qDebug vypsán. \\
+\\
+Bohužel se po několika pokusech nepodařilo vyřešit singulární případ pro společný segment. Z toho důvodu byla tato část odstraněna a je to pro autory příležitost pro vylepšení aplikace. Odstranění proběhlo po domluvě mezi autory také z toho důvodu, že určení společného segmentu bylo nad rámec úlohy a ani ostatní studenti si nevěděli s touto problematickou situací rady.
 
 
 \section{Náměty na vylepšení}
